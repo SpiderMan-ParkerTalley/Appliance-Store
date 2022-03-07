@@ -13,6 +13,7 @@ public class Result extends DataTransfer {
 	private static final int BACK_ORDER_NOT_FOUND = 3;
 	private static final int OPERATION_SUCCESSFUL = 4;
 	private static final int OPERATION_FAILED = 5;
+    private static final int BACKORDER_CREATED = 6;
 
 	private int resultCode;
 
