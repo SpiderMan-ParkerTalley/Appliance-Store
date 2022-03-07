@@ -207,6 +207,9 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void purchaseModel() {
 		Request.instance().setCustomerId(getToken("Enter customer id"));
 		Result result = applianceStore.searchCustomer(Request.instance());
@@ -226,6 +229,8 @@ public class UserInterface {
 			}
 		} while (yesOrNo("Purchase more models?"));
 	}
+
+
 
 
 

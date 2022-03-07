@@ -49,6 +49,11 @@ public class ApplianceStore implements Serializable {
 			return applianceStore;
 	}
 
+	/**
+	 * 
+	 * @param request
+	 * @return
+	 */
 	public Result addModel(Request request) {
 		Result result = new Result();
 		int type = request.getApplianceType();
@@ -111,6 +116,11 @@ public class ApplianceStore implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Searches for a given customer
+	 * @param customerId of the customer
+	 * @return true iff the customer is in the customer list collection
+	 */
 	public Result searchCustomer(Request request){
 		Result result = new Result();
 		Customer customer = customers.search(request.getCustomerId());
@@ -145,41 +155,31 @@ public class ApplianceStore implements Serializable {
 		Result result = new Result();
         Customer customer = customers.search(request.getCustomerId());
         Appliance appliance = models.search(request.getApplianceID());
-        int backOrdersNeeded = 0;
-
-        // check for valid entries
-        if (customer == null) {
-            result.setResultCode(2);
-            return result;
-        }
-        else if (appliance == null) {
-            result.setResultCode(1);
-            return result;
-        }
-        else if (quantity < 1) {
-            result.setResultCode(7);
-        }
-
-        /*
-        This block makes the purchase and checks to see if there is a need to create a backOrder. 
-        If there is, a backOrder is created for the amount of appliances that are not in stock via the
-        return value of purchase, which returns the number of appliances in the order that are not
-        fulfilled. This amount is then sent to a backOrder object and added to the backOrder list.
-        .
-        */
-        backOrdersNeeded = appliance.purchase(quantity);
-        if (backOrdersNeeded > 0) {
-            BackOrder tempBackOrder = new BackOrder(customer, appliance, backOrdersNeeded);
-            backOrders.insertBackOrder(tempBackOrder);
-            result.setResultCode(6);
-            return result;
-        }
-        else {
-            customer.addTransaction(appliance, quantity);
-            result.setResultCode(4);
-            return result;
-        }
+        
+        if(appliance.getQuantity() >= request.getQuantity()) {
+			customer.addTransaction(appliance, request.getQuantity());
+			models.search(request.getApplianceID()).setQuantity(appliance.getQuantity() - request.getQuantity());
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		} else {
+			if (appliance.eligibleForBackOrder()) {
+				int backOrdersNeeded = request.getQuantity() - appliance.getQuantity();
+				if(backOrdersNeeded != request.getQuantity()) {
+					customer.addTransaction(appliance, appliance.getQuantity());
+					models.search(request.getApplianceID()).setQuantity(0);
+				} else {
+					BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
+					backOrders.insertBackOrder(backOrder);
+					result.setResultCode(Result.BACKORDER_CREATED);
+				}
+			} else {
+				customer.addTransaction(appliance, appliance.getQuantity());
+				models.search(request.getApplianceID()).setQuantity(0);
+				result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			}
+		}
+		return result;
 	}
+
 
     /**
      * Charges all repair plans for all customers. The method acquires an iterator
