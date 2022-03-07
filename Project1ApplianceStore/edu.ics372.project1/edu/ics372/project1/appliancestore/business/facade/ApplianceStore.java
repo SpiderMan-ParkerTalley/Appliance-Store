@@ -127,9 +127,7 @@ public class ApplianceStore implements Serializable {
         backOrdersNeeded = appliance.purchase(quantity);
         if (backOrdersNeeded > 0) {
             BackOrder tempBackOrder = new BackOrder(customer, appliance, backOrdersNeeded);
-            // tempBackOrder will need to be added to the customers back order list
-            // AND the ApplianceStore's backorder list.
-            result = backOrders.insertBackOrder(tempBackOrder);
+            backOrders.insertBackOrder(tempBackOrder);
             customer.addTransaction(appliance, quantity - backOrdersNeeded);
             result.setResultCode(6);
             return result;
