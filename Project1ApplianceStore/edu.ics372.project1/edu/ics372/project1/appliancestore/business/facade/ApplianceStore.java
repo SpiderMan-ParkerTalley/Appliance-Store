@@ -92,6 +92,7 @@ public class ApplianceStore implements Serializable {
 		return result;
 	}
 
+
 	/**
 	 * Searches for a given appliance model
 	 * @param applianceId of the appliance
@@ -105,6 +106,18 @@ public class ApplianceStore implements Serializable {
 		} else {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			result.setApplianceFields(appliance);
+		}
+		return result;
+	}
+
+	public Result searchCustomer(Request request){
+		Result result = new Result();
+		Customer customer = customers.search(request.getCustomerId());
+		if(customer == null) {
+			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
+		} else {
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			result.setCustomerFields(customer);
 		}
 		return result;
 	}
@@ -127,10 +140,10 @@ public class ApplianceStore implements Serializable {
 	 * @param quantity    - the amount of appliances being purchased.
 	 * @return A Result object with the appropriate information.
 	 */
-	public Result purchaseAppliance(String applianceId, String customerId, int quantity) {
+	public Result purchaseModel(Request request) {
 		Result result = new Result();
-        Customer customer = customers.search(customerId);
-        Appliance appliance = models.search(applianceId);
+        Customer customer = customers.search(request.getCustomerId());
+        Appliance appliance = models.search(request.getApplianceID());
         int backOrdersNeeded = 0;
 
         // check for valid entries

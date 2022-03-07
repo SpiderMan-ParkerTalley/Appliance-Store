@@ -207,6 +207,26 @@ public class UserInterface {
 		}
 	}
 
+	public void purchaseModel() {
+		Request.instance().setCustomerId(getToken("Enter customer id"));
+		Result result = applianceStore.searchCustomer(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("No customer with id " + Request.instance().getCustomerId());
+			return;
+		}
+		do {
+			Request.instance().setApplianceID(getToken("Enter appliance id"));
+			Request.instance().setQuantity(getNumber("Enter amount to buy"));
+			result = applianceStore.purchaseModel(Request.instance());
+			if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
+				System.out.println("Model " + result.getModelName() + " bought by " + result.getCustomerName()
+				+ " on " + result.getTimeStamp());
+			} else {
+				System.out.println("Model could not be purchased");
+			}
+		} while (yesOrNo("Purchase more models?"));
+	}
+
 
 
 	public static void main(String args[]) {
