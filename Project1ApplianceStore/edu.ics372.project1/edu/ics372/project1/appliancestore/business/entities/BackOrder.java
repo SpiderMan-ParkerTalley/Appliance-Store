@@ -24,7 +24,7 @@ public class BackOrder {
 
     /**
      * 
-     * @param customer Customer
+     * @param customer Customer 
      * @param appliance Appliance
      * @param quantity int 
      */

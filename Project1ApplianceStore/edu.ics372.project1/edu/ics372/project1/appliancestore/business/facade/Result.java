@@ -16,7 +16,7 @@ public class Result extends DataTransfer {
     public static final int BACKORDER_CREATED = 6;
     public static final int NOT_A_VALID_QUANTITY = 7;
 
-	public int resultCode;
+	private int resultCode;
 
 	public int getResultCode() {
 		return resultCode;
