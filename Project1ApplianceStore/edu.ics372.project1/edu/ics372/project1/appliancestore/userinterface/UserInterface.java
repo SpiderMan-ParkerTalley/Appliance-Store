@@ -140,7 +140,10 @@ public class UserInterface {
 		System.out.println(HELP + " for help");
 	}
 
-
+	/**
+	 * Method to be called for adding a model. The user inputs the prompted valued and 
+	 * uses the appropriate ApplicationStore method for adding the model.
+	 */
 	public void addModel() {
 		System.out.println("1 for washer");
 		System.out.println("2 for dryer");
@@ -181,6 +184,15 @@ public class UserInterface {
 		} else {
 			System.out.println(result.getCustomerName() + "'s id is " + result.getCustomerId());
 		}
+	}
+
+	/**
+	 * Method to be called for adding inventory to a single model. The user inputs the prompted 
+	 * values and uses the appropriate ApplicationStore method for adding the customer.
+	 */
+	public void addInventory() {
+		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		Result result = 
 	}
 
 
