@@ -10,14 +10,13 @@ public class Appliance {
 	private boolean hasRepairPlan;
 	private int idCounter = 0;
 	
-	public Appliance(String brandName, String model, double price, int quantity, Timestamp createdAt,
+	public Appliance(String brandName, String model, double price, int quantity,
 			boolean hasRepairPlan) {
 		this.applianceId = createId();
 		this.brandName = brandName;
 		this.model = model;
 		this.price = price;
 		this.quantity = quantity;
-		this.createdAt = createdAt;
 		this.createdAt = new Timestamp(System.currentTimeMillis());
 		this.hasRepairPlan = hasRepairPlan;
 	}
@@ -31,9 +30,6 @@ public class Appliance {
 		return applianceId;
 	}
 
-	public void setApplianceId(int applianceId) {
-		this.applianceId = applianceId;
-	}
 
 	public String getBrandName() {
 		return brandName;
