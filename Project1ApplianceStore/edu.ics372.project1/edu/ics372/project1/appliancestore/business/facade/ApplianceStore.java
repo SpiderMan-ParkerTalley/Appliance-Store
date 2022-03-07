@@ -101,9 +101,9 @@ public class ApplianceStore implements Serializable {
         }
 
         /*
-        This block makes the purchase and checks to see if there is a need to create a backOrder. If there is,
-        a backOrder is created for the amount of appliances that are not in stock via the 
-        return of purchase, which returns the number of appliances in the order that are not
+        This block makes the purchase and checks to see if there is a need to create a backOrder. 
+        If there is, a backOrder is created for the amount of appliances that are not in stock via the
+        return value of purchase, which returns the number of appliances in the order that are not
         fulfilled. This amount is then sent to a backOrder object and added to the backOrder list.
         .
         */
