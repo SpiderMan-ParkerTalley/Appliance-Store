@@ -6,10 +6,11 @@ import java.util.List;
 public class Customer {
     // Fields
     private static int idCounter;
+    private static final String CUSTOMER_STRING = "C";
     /**
      * Stores the customer's identification number.
      */
-    private String customerID;
+    private String id;
     
     /**
      * Stores the customer's name.
@@ -50,7 +51,7 @@ public class Customer {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.customerID = "CUST" + idCounter++;
+        this.id = CUSTOMER_STRING + idCounter++;
     }
 
     // Setters
@@ -81,8 +82,8 @@ public class Customer {
         return accountBalance;
     }
 
-    public String getCustomerID() {
-        return customerID;
+    public String getId() {
+        return id;
     }
 
 
