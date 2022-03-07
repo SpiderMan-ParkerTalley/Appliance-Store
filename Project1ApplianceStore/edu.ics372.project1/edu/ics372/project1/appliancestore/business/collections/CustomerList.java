@@ -24,10 +24,10 @@ public class CustomerList {
     }
 
     /**
-     * Checks whether a customer with a gven customer id exists.
+     * Checks whether a customer with a given customer id exists.
      * 
      * @param customerId String the id of the customer.
-     * @return boolean true if customer exist; false otherwise.
+     * @return Customer customer object if found, null otherwise.
      */
     public Customer search(String customerId) {
         for (Iterator<Customer> iterator = customers.iterator(); iterator.hasNext();) {

@@ -3,7 +3,8 @@ package edu.ics372.project1.appliancestore.business.entities;
 import java.sql.Timestamp;
 
 public class Appliance {
-	private int applianceId;
+	private static final String APPLIANCE_STRING = "APP";
+	private String id;
 	private String brandName;
 	private String model;
 	private double price;
@@ -13,7 +14,7 @@ public class Appliance {
 	private int idCounter = 0;
 
 	public Appliance(String brandName, String model, double price, int quantity) {
-		this.applianceId = createId();
+		id = createId();
 		this.brandName = brandName;
 		this.model = model;
 		this.price = price;
@@ -21,17 +22,16 @@ public class Appliance {
 		this.createdAt = new Timestamp(System.currentTimeMillis());
 	}
 
-	private int createId() {
-		idCounter++;
-		return idCounter;
+	private String createId() {
+		return APPLIANCE_STRING + idCounter++;
 	}
 
-	public int getApplianceId() {
-		return applianceId;
+	public String getId() {
+		return id;
 	}
 
-	public void setApplianceId(int applianceId) {
-		this.applianceId = applianceId;
+	public void setApplianceId(String applianceId) {
+		id = applianceId;
 	}
 
 	public String getBrandName() {
