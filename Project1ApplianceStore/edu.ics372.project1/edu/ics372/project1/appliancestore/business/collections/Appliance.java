@@ -1,4 +1,4 @@
-package edu.ics372.project1.appliancestore.business.entities;
+package edu.ics372.project1.appliancestore.business.collections;
 
 import java.sql.Timestamp;
 
