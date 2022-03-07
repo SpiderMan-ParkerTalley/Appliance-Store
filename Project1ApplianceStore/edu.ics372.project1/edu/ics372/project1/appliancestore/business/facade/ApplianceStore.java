@@ -40,10 +40,9 @@ public class ApplianceStore implements Serializable {
 	 */
 	public ApplianceStore instance() {
 		if (applianceStore == null) {
-			return applianceStore = new ApplianceStore();
-		} else {
+			applianceStore = new ApplianceStore();
+        }  
 			return applianceStore;
-		}
 	}
 
 	/**

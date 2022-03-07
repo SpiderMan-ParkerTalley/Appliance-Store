@@ -1,5 +1,57 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
-public class Request {
+/**
+ * The Request class is used to ferry data between the UI and the
+ * ApplianceStore facade. It is a singleton.
+ * @author Jim Sawicki and Sharon Shin
+ */
+public class Request extends DataTransfer {
+    private static Request request;
+    private double repairPlanAmount;
+    private double capacity;
+    private double maxheatingOutput;
+
+    /**
+     * Private constructor to support the singleton pattern.
+     */
+    private Request() {
+    }
+    
+    /**
+     * Returns the only allowed instance of the class.
+     * @return the only instance
+     */
+    public Request instance() {
+        if (request == null) {
+            request =  new Request();
+        }
+            return request;
+    }
+
+    public double getRepairPlanAmount() {
+        return repairPlanAmount;
+    }
+
+    public void setRepairPlanAmount(double repairPlanAmount) {
+        this.repairPlanAmount = repairPlanAmount;
+    }
+
+    public double getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(double capacity) {
+        this.capacity = capacity;
+    }
+
+    public double getMaxheatingOutput() {
+        return maxheatingOutput;
+    }
+
+    public void setMaxheatingOutput(double maxheatingOutput) {
+        this.maxheatingOutput = maxheatingOutput;
+    } 
+
+    
 
 }
