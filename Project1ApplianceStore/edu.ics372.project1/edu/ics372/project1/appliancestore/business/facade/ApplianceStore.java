@@ -1,9 +1,11 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
 import java.io.Serializable;
+import java.util.Iterator;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
+import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.collections.ModelList;
@@ -77,14 +79,41 @@ public class ApplianceStore implements Serializable {
             return result;
         }
 
-        // check to see if a back order is needed
+        /*
+        This block checks to see if there is a need to create a backOrder. If there is,
+        a backOrder is created for the amount of appliances that are not in stock via the 
+        return of purchase, which returns the number of appliances in the order that are not
+        fulfilled. This amount is then sent to a backOrder object and added to the backOrder list.
+        .
+        */
         backOrdersNeeded = appliance.purchase(quantity);
         if (backOrdersNeeded > 0) {
-            return BackOrderList.createBackOrder(customerId, applianceId, quantity);
+            result = BackOrderList.createBackOrder(customerId, applianceId, backOrdersNeeded);
+            result.setResultCode(6);
+            return result;
         }
         else {
             result.setResultCode(4);
             return result;
         }
 	}
+
+    /**
+     * Charges all repair plans for all customers. The method acquires an iterator
+     * from the customerList and then examines each customer. It grabs a repairPlan iterator
+     * from each customer and charges each repair plan it finds. With each repair plan charge,
+     * it generates a transaction object and stores it in the customer's transactionList .
+     */
+    public void chargeRepairPlans() {
+        for (Iterator<Customer> customerIterator = CustomerList.getCustomerIterator(); 
+            customerIterator.hasNext() ) {
+                Customer customer = customerIterator.next();
+            for (Iterator<RepairPlan> repairPlanIterator = customer.getRepairPlanIterator(); 
+            repairPlanIterator.hasNext()) {
+                RepairPlan currentPlan = repairPlanIterator.next();
+                customer.transactionList.addTransaction(); // TODO. FLESH OUT addTransaction for repair plans and finish
+            }
+        }
+
+    }
 }
