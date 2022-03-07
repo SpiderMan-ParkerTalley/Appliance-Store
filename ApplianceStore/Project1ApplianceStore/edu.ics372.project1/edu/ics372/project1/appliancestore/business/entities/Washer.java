@@ -1,8 +1,9 @@
-import java.sql.Timestamp;
+package edu.ics372.project1.appliancestore.business.entities;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Washer extends Appliance {
+public class Washer {
 	private double repairPlanAmount;
 	private List<Washer> itemsOnStock;
 
@@ -11,7 +12,4 @@ public class Washer extends Appliance {
 		this.repairPlanAmount = repairPlanAmount;
 		this.itemsOnStock = new ArrayList<Washer>();
 	}
-	
-
-
 }
