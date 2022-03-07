@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Customer {
+    // stupid comment
     // Fields
     private static int idCounter;
     private static final String CUSTOMER_STRING = "C";
