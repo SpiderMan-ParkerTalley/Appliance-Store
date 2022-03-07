@@ -97,10 +97,10 @@ public class ApplianceStore implements Serializable {
 	 * @param quantity    - the amount of appliances being purchased.
 	 * @return A Result object with the appropriate information.
 	 */
-	public Result purchaseAppliance(String applianceId, String customerId, int quantity) {
+	public Result purchaseAppliance(Request request) {
 		Result result = new Result();
-        Customer customer = customers.search(customerId);
-        Appliance appliance = models.search(applianceId);
+        Customer customer = customers.search(request.getCustomerId());
+        Appliance appliance = models.search(request.getApplianceID());
         int backOrdersNeeded = 0;
 
         // check for valid entries
@@ -112,7 +112,7 @@ public class ApplianceStore implements Serializable {
             result.setResultCode(1);
             return result;
         }
-        else if (quantity < 1) {
+        else if (request.getQuantity() < 1) {
             result.setResultCode(7);
         }
 
@@ -123,15 +123,15 @@ public class ApplianceStore implements Serializable {
         fulfilled. This amount is then sent to a backOrder object and added to the backOrder list.
         .
         */
-        backOrdersNeeded = appliance.purchase(quantity);
+        backOrdersNeeded = appliance.purchase(request.getQuantity());
         if (backOrdersNeeded > 0) {
-            result = BackOrderList.createBackOrder(customerId, applianceId, backOrdersNeeded);
-            customer.addTransaction(appliance, quantity - backOrdersNeeded);
+            result = BackOrderList.createBackOrder(request.getCustomerId(), request.getApplianceID(), backOrdersNeeded);
+            customer.addTransaction(appliance, request.getQuantity() - backOrdersNeeded);
             result.setResultCode(6);
             return result;
         }
         else {
-            customer.addTransaction(appliance, quantity);
+            customer.addTransaction(appliance, request.getQuantity());
             result.setResultCode(4);
             return result;
         }
