@@ -171,7 +171,6 @@ public class ApplianceStore implements Serializable {
         if (backOrdersNeeded > 0) {
             BackOrder tempBackOrder = new BackOrder(customer, appliance, backOrdersNeeded);
             backOrders.insertBackOrder(tempBackOrder);
-            customer.addTransaction(appliance, quantity - backOrdersNeeded);
             result.setResultCode(6);
             return result;
         }
