@@ -7,9 +7,10 @@ public class Dryer extends Appliance {
 	private double repairPlanAmount;
 	private List<Washer> itemsOnStock;
 
-	public Dryer(String brandName, String model, double price, int quantity, boolean hasRepairPlan, double repairPlanAmount) {
-		super(brandName, model, price, quantity, hasRepairPlan);
+	public Dryer(String brandName, String model, double price, int quantity, double repairPlanAmount) {
+		super(brandName, model, price, quantity);
 		this.repairPlanAmount = repairPlanAmount;
 		this.itemsOnStock = new ArrayList<Washer>();
+		this.setHasRepairPlan(true);
 	}
 }

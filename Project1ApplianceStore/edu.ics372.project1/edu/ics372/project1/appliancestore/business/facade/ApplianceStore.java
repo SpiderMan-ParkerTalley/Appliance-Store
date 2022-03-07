@@ -24,8 +24,8 @@ public class ApplianceStore implements Serializable {
 	private static ApplianceStore applianceStore;
 
 	private CustomerList customers = CustomerList.getInstance();
-	private static ModelList models = ModelList.instance();
-	private static BackOrderList backOrders = BackOrderList.instance();
+	private ModelList models = ModelList.instance();
+	private BackOrderList backOrders = BackOrderList.instance();
 
 	/**
 	 * The constructor is private in order to implement the singleton design
@@ -45,6 +45,19 @@ public class ApplianceStore implements Serializable {
 			applianceStore = new ApplianceStore();
         }  
 			return applianceStore;
+	}
+
+	public Result addModel(Request request) {
+		Result result = new Result();
+		int type = request.getApplianceType();
+		Appliance appliance = ApplianceFactory.createAppliance(type, request);
+		if (models.insertModel(appliance)) {
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			result.setApplianceFields(appliance);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
 	}
 
 	/**
@@ -143,6 +156,7 @@ public class ApplianceStore implements Serializable {
     }
 
     public Result addModel(int applianceType, String brandName, String model, double price) {
+        return null;
 
     }
 }

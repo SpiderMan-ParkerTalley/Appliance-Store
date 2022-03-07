@@ -4,13 +4,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Customer {
+    // stupid comment
     // Fields
     private static int idCounter;
     private static final String CUSTOMER_STRING = "C";
     /**
      * Stores the customer's identification number.
      */
-    private String id;
+    private String customerId;
     
     /**
      * Stores the customer's name.
@@ -51,11 +52,27 @@ public class Customer {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.id = CUSTOMER_STRING + idCounter++;
+        this.customerId = CUSTOMER_STRING + idCounter++;
     }
 
+    /**
+     * Creates and adds a transaction to customer.
+     * @param appliance Appliance appliance 
+     * @param quantity int
+     * @return boolean true if the transaction was sucessfully added.
+     */
     public boolean addTransaction(Appliance appliance, int quantity) {
         transactions.add(new Transaction(this, appliance, quantity));
+        return true;
+    }
+
+    /**
+     * Creates and adds a repair plan to customer.
+     * @param appliance Appliance
+     * @return boolean true if repair plan was sucessfully added.
+     */
+    public boolean addRepairPlan(Appliance appliance) {
+        repairPlans.add(new RepairPlan(this, appliance));
         return true;
     }
  
@@ -88,7 +105,7 @@ public class Customer {
     }
 
     public String getId() {
-        return id;
+        return customerId;
     }
 
 
