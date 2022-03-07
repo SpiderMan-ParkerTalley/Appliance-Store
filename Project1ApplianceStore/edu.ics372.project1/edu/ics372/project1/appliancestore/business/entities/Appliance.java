@@ -11,15 +11,13 @@ public class Appliance {
 	private Timestamp createdAt;
 	private boolean hasRepairPlan;
 	private int idCounter = 0;
-	
-	public Appliance(String brandName, String model, double price, int quantity, Timestamp createdAt,
-			boolean hasRepairPlan) {
+
+	public Appliance(String brandName, String model, double price, int quantity, boolean hasRepairPlan) {
 		this.applianceId = createId();
 		this.brandName = brandName;
 		this.model = model;
 		this.price = price;
 		this.quantity = quantity;
-		this.createdAt = createdAt;
 		this.createdAt = new Timestamp(System.currentTimeMillis());
 		this.hasRepairPlan = hasRepairPlan;
 	}
@@ -84,7 +82,7 @@ public class Appliance {
 	public void setHasRepairPlan(boolean hasRepairPlan) {
 		this.hasRepairPlan = hasRepairPlan;
 	}
-	
+
 	/*
 	 * Returns the amount of appliances purchased and which ones were backorders?
 	 * @params quantity of desired appliances
@@ -94,7 +92,7 @@ public class Appliance {
 		System.out.println("the purchase function runs!");
 		return 0;
 	}
-	
+
 	/*
 	 * Returns a boolean if the appliance is eligible for a repair plan
 	 * @params none
@@ -104,5 +102,4 @@ public class Appliance {
 		System.out.println("the check for the repair plan works!");
 		return false;
 	}
-	
-}
+} 
