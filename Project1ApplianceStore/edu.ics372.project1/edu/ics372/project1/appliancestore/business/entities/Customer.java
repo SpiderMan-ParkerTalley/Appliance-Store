@@ -1,5 +1,6 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,8 +34,15 @@ public class Customer {
      */
     private double accountBalance;
 
-    private double repairPlansTotalCost; // not sure if this should be kept
-    private double transactionTotalCost; // not sure if this should be kept
+    /**
+     * Stores the total amount the customer has paid in repair plans.
+     */
+    private double repairPlansTotalCost;
+
+    /**
+     * 
+     */
+    private double transactionTotalCost;
 
     // Lists
     /**
@@ -58,18 +66,18 @@ public class Customer {
     /**
      * Creates and adds a transaction to customer.
      * @param appliance Appliance appliance 
-     * @param quantity int
+     * @param quantity int quantity of appliance being purchases.
      * @return boolean true if the transaction was sucessfully added.
      */
     public boolean addTransaction(Appliance appliance, int quantity) {
         transactions.add(new Transaction(this, appliance, quantity));
-        transactionTotalCost =+ appliance.getPrice() * quantity;
+        transactionTotalCost += appliance.getPrice() * quantity;
         return true;
     }
 
     /**
      * Creates and adds a repair plan to customer.
-     * @param appliance Appliance
+     * @param appliance Appliance appliance to be assoicated with repair plan.
      * @return boolean true if repair plan was sucessfully added.
      */
     public boolean addRepairPlan(Appliance appliance) {
@@ -77,8 +85,15 @@ public class Customer {
         return true;
     }
 
+    /**
+     * Charges the customer for all active repair plans.
+     */
     public void chargeRepairPlans() {
-        for()
+        for(Iterator<RepairPlan> iterator = repairPlans.iterator(); iterator.hasNext();) {
+            RepairPlan repairPlan = iterator.next();
+            repairPlansTotalCost += repairPlan.getCost();
+            // TODO: Might need to add the repair plan as a transaction. Not sure..
+        }
     }
  
     // Setters
@@ -111,6 +126,14 @@ public class Customer {
 
     public String getId() {
         return customerId;
+    }
+
+    public double getRepairPlansTotalCost() {
+        return repairPlansTotalCost;
+    }
+
+    public double getTransactionTotalCost() {
+        return transactionTotalCost;
     }
 
 
