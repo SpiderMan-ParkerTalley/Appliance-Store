@@ -99,6 +99,9 @@ public class ApplianceStore implements Serializable {
             result.setResultCode(1);
             return result;
         }
+        else if (quantity < 1) {
+            result.setResultCode(7);
+        }
 
         /*
         This block makes the purchase and checks to see if there is a need to create a backOrder. 
@@ -110,10 +113,12 @@ public class ApplianceStore implements Serializable {
         backOrdersNeeded = appliance.purchase(quantity);
         if (backOrdersNeeded > 0) {
             result = BackOrderList.createBackOrder(customerId, applianceId, backOrdersNeeded);
+            customer.addTransaction(new Transaction(applianceId, customerId, quantity - backOrdersNeeded));
             result.setResultCode(6);
             return result;
         }
         else {
+            customer.addTransaction(new Transaction(applianceId, customerId, quantity));
             result.setResultCode(4);
             return result;
         }
@@ -123,7 +128,7 @@ public class ApplianceStore implements Serializable {
      * Charges all repair plans for all customers. The method acquires an iterator
      * from the customerList and then examines each customer. It grabs a repairPlan iterator
      * from each customer and charges each repair plan it finds. With each repair plan charge,
-     * it generates a transaction object and stores it in the customer's transactionList .
+     * it generates a transaction object and stores it in the customer's transactionList.
      */
     public void chargeRepairPlans() {
         for (Iterator<Customer> customerIterator = CustomerList.getCustomerIterator(); 
