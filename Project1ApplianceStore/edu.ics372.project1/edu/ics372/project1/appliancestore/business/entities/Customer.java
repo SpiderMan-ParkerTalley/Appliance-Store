@@ -34,7 +34,14 @@ public class Customer {
      */
     private double accountBalance;
 
+    /**
+     * Stores the total amount the customer has paid in repair plans.
+     */
     private double repairPlansTotalCost;
+
+    /**
+     * 
+     */
     private double transactionTotalCost;
 
     // Lists

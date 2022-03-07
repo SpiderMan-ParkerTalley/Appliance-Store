@@ -10,6 +10,7 @@ public class Appliance {
 	private double price;
 	private int quantity;
 	private Timestamp createdAt;
+	private boolean eligibleForBackOrder;
 	private boolean hasRepairPlan;
 	private int idCounter = 0;
 
@@ -74,8 +75,12 @@ public class Appliance {
 		this.createdAt = createdAt;
 	}
 
-	public boolean isHasRepairPlan() {
+	public boolean eligibleForRepairPlan() {
 		return hasRepairPlan;
+	}
+
+	public boolean eligibleForBackOrder() {
+		return eligibleForBackOrder;
 	}
 
 	public void setHasRepairPlan(boolean hasRepairPlan) {
