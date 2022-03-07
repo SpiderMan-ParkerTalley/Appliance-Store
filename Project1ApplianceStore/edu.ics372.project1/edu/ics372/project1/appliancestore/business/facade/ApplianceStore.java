@@ -79,6 +79,35 @@ public class ApplianceStore implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Adds inventory for a single model
+	 * @param request
+	 * @return result object
+	 */
+	public Result addInventory(Request request) {
+		Result result = new Result();
+		models.search(request.getApplianceID()).setQuantity(request.getQuantity());
+		result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		return result;
+	}
+
+	/**
+	 * Searches for a given appliance model
+	 * @param applianceId of the appliance
+	 * @return true iff the appliance is in the model list collection
+	 */
+	public Result searchModel(Request request) {
+		Result result = new Result();
+		Appliance appliance = models.search(request.getApplianceID());
+		if(appliance == null) {
+			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
+		} else {
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			result.setApplianceFields(appliance);
+		}
+		return result;
+	}
+
 
 
 	/**
