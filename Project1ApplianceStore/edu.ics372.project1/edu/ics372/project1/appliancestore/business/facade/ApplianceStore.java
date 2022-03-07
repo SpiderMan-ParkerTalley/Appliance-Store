@@ -99,8 +99,8 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result purchaseAppliance(String applianceId, String customerId, int quantity) {
 		Result result = new Result();
-        Customer customer = CustomerList.search(customerId);
-        Appliance appliance = ModelList.search(applianceId);
+        Customer customer = customers.search(customerId);
+        Appliance appliance = models.search(applianceId);
         int backOrdersNeeded = 0;
 
         // check for valid entries
