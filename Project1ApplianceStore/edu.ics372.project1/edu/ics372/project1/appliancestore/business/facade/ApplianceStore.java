@@ -47,6 +47,11 @@ public class ApplianceStore implements Serializable {
 			return applianceStore;
 	}
 
+	public Result addModel(Request request) {
+		Result result = new Result();
+		
+	}
+
 	/**
 	 * Organizes the operations for adding a member.
 	 * @param customer name

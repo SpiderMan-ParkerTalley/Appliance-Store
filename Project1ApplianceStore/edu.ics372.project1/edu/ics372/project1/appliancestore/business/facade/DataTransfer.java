@@ -11,6 +11,7 @@ import edu.ics372.project1.appliancestore.business.entities.Customer;
  *
  */
 public abstract class DataTransfer {
+
 	private String applianceID;
 	private String brandName;
 	private String modelName;
@@ -22,10 +23,28 @@ public abstract class DataTransfer {
 	private String customerPhoneNumber;
 	private String timeStamp;
 	private int transactionType;
+	private int applianceType;
+	private boolean hasRepairPlan;
 	
 
 	public DataTransfer(){
 		reset();
+	}
+
+	public boolean isHasRepairPlan() {
+		return hasRepairPlan;
+	}
+
+	public void setHasRepairPlan(boolean hasRepairPlan) {
+		this.hasRepairPlan = hasRepairPlan;
+	}
+
+	public int getApplianceType() {
+		return applianceType;
+	}
+
+	public void setApplianceType(int applianceType) {
+		this.applianceType = applianceType;
 	}
 
 	public String getApplianceID() {

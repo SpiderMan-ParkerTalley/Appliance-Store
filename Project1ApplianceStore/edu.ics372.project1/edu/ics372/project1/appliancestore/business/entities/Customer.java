@@ -9,7 +9,7 @@ public class Customer {
     /**
      * Stores the customer's identification number.
      */
-    private String customerID;
+    private String customerId;
     
     /**
      * Stores the customer's name.
@@ -50,7 +50,7 @@ public class Customer {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.customerID = "CUST" + idCounter++;
+        this.customerId = "CUST" + idCounter++;
     }
 
     // Setters
@@ -82,7 +82,7 @@ public class Customer {
     }
 
     public String getCustomerID() {
-        return customerID;
+        return customerId;
     }
 
 

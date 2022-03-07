@@ -7,9 +7,10 @@ public class Furnace extends Appliance {
 	private double maxHeatingOuput;
 	private List<Furnace> itemsOnStock;
 	
-	public Furnace(String brandName, String model, double price, int quantity, boolean hasRepairPlan, double maxHeatingOuput) {
-		super(brandName, model, price, quantity, hasRepairPlan);
+	public Furnace(String brandName, String model, double price, int quantity, double maxHeatingOuput) {
+		super(brandName, model, price, quantity);
 		this.itemsOnStock = new ArrayList<Furnace>();
+		this.setHasRepairPlan(false);
 	}
 	
 }

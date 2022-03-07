@@ -140,12 +140,27 @@ public class UserInterface {
 		System.out.println(HELP + " for help");
 	}
 
-
+	/**
+	 * Method to be called for adding a model. Promts the user for the appropriate
+	 * values and uses the appropriate ApplianceStore method for adding a model.
+	 */
 	public void addModel() {
+		System.out.println("1 for washer");
+		System.out.println("2 for dryer");
+		System.out.println("3 for kitchen range");
+		System.out.println("4 for refridgerator");
+		System.out.println("5 for furnace");
+		System.out.println("6 for dishwasher");
+		Request.instance().setApplianceType(getNumber("Enter appliance type number"));
 		Request.instance().setModelName(getName("Enter model name"));
 		Request.instance().setBrandName(getName("Enter brand name"));
 		Request.instance().setPrice(getNumber("Enter price"));
-		Result result = applianceStore.addCustomer(Request.instance());
+		Result result = applianceStore.addModel(Request.instance());
+		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("Could not add appliance model");
+		} else {
+			System.out.println("Appliance model " + result.getApplianceID() + " has been added");
+		}
 	}
 
 	/**
