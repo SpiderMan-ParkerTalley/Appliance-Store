@@ -17,7 +17,7 @@ public class CustomerList {
 	}
 
     public static CustomerList getInstance(){
-        if(customerList == null){
+        if (customerList == null){
             customerList = new CustomerList();
         }
         return customerList;

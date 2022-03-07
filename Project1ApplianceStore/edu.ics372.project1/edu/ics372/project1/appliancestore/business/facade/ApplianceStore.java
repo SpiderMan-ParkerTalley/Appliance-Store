@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
@@ -25,7 +26,7 @@ public class ApplianceStore implements Serializable {
 
 	private CustomerList customers = CustomerList.getInstance();
 	private ModelList models = ModelList.getInstance();
-//	private static backOrders = BackOrderList.instance();
+    private BackOrderList backOrders = BackOrderList.getInstance();
 
 	/**
 	 * The constructor is private in order to implement the singleton design
@@ -154,7 +155,8 @@ public class ApplianceStore implements Serializable {
         */
         backOrdersNeeded = appliance.purchase(quantity);
         if (backOrdersNeeded > 0) {
-            result = BackOrderList.createBackOrder(customerId, applianceId, backOrdersNeeded);
+            BackOrder tempBackOrder = new BackOrder(customer, appliance, backOrdersNeeded);
+            backOrders.insertBackOrder(tempBackOrder);
             customer.addTransaction(appliance, quantity - backOrdersNeeded);
             result.setResultCode(6);
             return result;

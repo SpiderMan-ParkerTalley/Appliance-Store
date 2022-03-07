@@ -63,6 +63,7 @@ public class Customer {
      */
     public boolean addTransaction(Appliance appliance, int quantity) {
         transactions.add(new Transaction(this, appliance, quantity));
+        transactionTotalCost =+ appliance.getPrice() * quantity;
         return true;
     }
 
@@ -74,6 +75,10 @@ public class Customer {
     public boolean addRepairPlan(Appliance appliance) {
         repairPlans.add(new RepairPlan(this, appliance));
         return true;
+    }
+
+    public void chargeRepairPlans() {
+        for()
     }
  
     // Setters
