@@ -142,10 +142,29 @@ public class UserInterface {
 
 
 	public void addModel() {
+		System.out.println("1 for washer");
+		System.out.println("2 for dryer");
+		System.out.println("3 for kitchen range");
+		System.out.println("4 for refridgerator");
+		System.out.println("5 for furnace");
+		System.out.println("6 for dishwasher");
+		Request.instance().setApplianceType(getNumber("Enter appliance type number"));
+		if(Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2){
+			Request.instance().setRepairPlanAmount(getNumber("Enter repair plan price amount"));
+		}else if(Request.instance().getApplianceType() == 4){
+			Request.instance().setCapacity(getNumber("Enter capacity in liters"));
+		}else if(Request.instance().getApplianceType() == 5) {
+			Request.instance().setMaxheatingOutput(getNumber("Enter max heating output in BTU"));
+		}
 		Request.instance().setModelName(getName("Enter model name"));
 		Request.instance().setBrandName(getName("Enter brand name"));
 		Request.instance().setPrice(getNumber("Enter price"));
-		Result result = applianceStore.addCustomer(Request.instance());
+		Result result = applianceStore.addModel(Request.instance());
+		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("Could not add appliance model");
+		} else {
+			System.out.println("Appliance model " + result.getApplianceID() + " has been added");
+		}
 	}
 
 	/**

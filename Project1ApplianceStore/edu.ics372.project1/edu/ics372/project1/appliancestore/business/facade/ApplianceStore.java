@@ -24,7 +24,7 @@ public class ApplianceStore implements Serializable {
 	private static ApplianceStore applianceStore;
 
 	private CustomerList customers = CustomerList.getInstance();
-//	private static models = ModelList.instance();
+	private ModelList models = ModelList.getInstance();
 //	private static backOrders = BackOrderList.instance();
 
 	/**
@@ -45,6 +45,19 @@ public class ApplianceStore implements Serializable {
 			applianceStore = new ApplianceStore();
         }  
 			return applianceStore;
+	}
+
+	public Result addModel(Request request) {
+		Result result = new Result();
+		int type = request.getApplianceType();
+		Appliance appliance = ApplianceFactory.createAppliance(type, request);
+		if (models.insertModel(appliance)) {
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			result.setApplianceFields(appliance);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
 	}
 
 	/**

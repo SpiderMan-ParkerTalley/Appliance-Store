@@ -10,7 +10,7 @@ public class Customer {
     /**
      * Stores the customer's identification number.
      */
-    private String id;
+    private String customerId;
     
     /**
      * Stores the customer's name.
@@ -51,7 +51,7 @@ public class Customer {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.id = CUSTOMER_STRING + idCounter++;
+        this.customerId = CUSTOMER_STRING + idCounter++;
     }
 
     public boolean addTransaction(Appliance appliance, int quantity) {
@@ -88,7 +88,7 @@ public class Customer {
     }
 
     public String getId() {
-        return id;
+        return customerId;
     }
 
 
