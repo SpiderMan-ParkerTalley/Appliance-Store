@@ -1,10 +1,11 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Customer {
+public class Customer implements Serializable {
     // Fields
     private static int idCounter;
     private static final String CUSTOMER_STRING = "C";

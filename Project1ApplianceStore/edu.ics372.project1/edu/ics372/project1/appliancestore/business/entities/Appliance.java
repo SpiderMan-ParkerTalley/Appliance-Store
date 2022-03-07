@@ -1,8 +1,9 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Appliance {
+public class Appliance implements Serializable {
 	private static final String APPLIANCE_STRING = "APP";
 	private String id;
 	private String brandName;
