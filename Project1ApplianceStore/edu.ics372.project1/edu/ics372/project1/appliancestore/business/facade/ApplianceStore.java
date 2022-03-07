@@ -99,8 +99,8 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result purchaseAppliance(String applianceId, String customerId, int quantity) {
 		Result result = new Result();
-        Customer customer = CustomerList.search(customerId);
-        Appliance appliance = ModelList.search(applianceId);
+        Customer customer = customers.search(customerId);
+        Appliance appliance = models.search(applianceId);
         int backOrdersNeeded = 0;
 
         // check for valid entries
@@ -126,12 +126,12 @@ public class ApplianceStore implements Serializable {
         backOrdersNeeded = appliance.purchase(quantity);
         if (backOrdersNeeded > 0) {
             result = BackOrderList.createBackOrder(customerId, applianceId, backOrdersNeeded);
-            customer.addTransaction(new Transaction(applianceId, customerId, quantity - backOrdersNeeded));
+            customer.addTransaction(appliance, quantity - backOrdersNeeded);
             result.setResultCode(6);
             return result;
         }
         else {
-            customer.addTransaction(new Transaction(applianceId, customerId, quantity));
+            customer.addTransaction(appliance, quantity);
             result.setResultCode(4);
             return result;
         }
