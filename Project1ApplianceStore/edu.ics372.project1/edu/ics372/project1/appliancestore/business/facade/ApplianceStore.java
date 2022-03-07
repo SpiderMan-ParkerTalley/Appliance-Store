@@ -23,7 +23,7 @@ public class ApplianceStore implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static ApplianceStore applianceStore;
 
-//	private static customers = CustomerList.instance();
+	private CustomerList customers = CustomerList.getInstance();
 //	private static models = ModelList.instance();
 //	private static backOrders = BackOrderList.instance();
 
@@ -46,6 +46,27 @@ public class ApplianceStore implements Serializable {
         }  
 			return applianceStore;
 	}
+
+	/**
+	 * Organizes the operations for adding a member.
+	 * @param customer name
+	 * @param customer address
+	 * @param customer phone number
+	 * @return the Customer objected created
+	 */
+	public Result addCustomer(Request request) {
+		Result result = new Result();
+		Customer customer = new Customer(request.getCustomerName(), request.getCustomerAddress(), request.getCustomerPhoneNumber());
+		if (customers.insertCustomer(customer)) {
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			result.setCustomerFields(customer);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
+	}
+
+
 
 	/**
 	 * This method allows for the purchase for a single appliance type for a single

@@ -1,5 +1,8 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
+import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.Customer;
+
 /**
  * Superclass for Result and Request. Provides a safe way to share data between
  * the UI and the Facade.
@@ -14,10 +17,59 @@ public abstract class DataTransfer {
 	private double price;
 	private int quantity;
 	private String customerId;
-//	private Timestamp createdAt; // Not sure if this the right type? Do we want a gregorian calendar?
+	private String customerName;
+	private String customerAddress;
+	private String customerPhoneNumber;
+	private String timeStamp;
+	private int transactionType;
+	
+
+	public DataTransfer(){
+		reset();
+	}
 
 	public String getApplianceID() {
 		return applianceID;
+	}
+
+	public int getTransactionType() {
+		return transactionType;
+	}
+
+	public void setTransactionType(int transactionType) {
+		this.transactionType = transactionType;
+	}
+
+	public String getTimeStamp() {
+		return timeStamp;
+	}
+
+	public void setTimeStamp(String timeStamp) {
+		this.timeStamp = timeStamp;
+	}
+
+	public String getCustomerPhoneNumber() {
+		return customerPhoneNumber;
+	}
+
+	public void setCustomerPhoneNumber(String phoneNumber) {
+		this.customerPhoneNumber = phoneNumber;
+	}
+
+	public String getCustomerAddress() {
+		return customerAddress;
+	}
+
+	public void setCustomerAddress(String address) {
+		this.customerAddress = address;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String name) {
+		this.customerName = name;
 	}
 
 	public void setApplianceID(String applianceID) {
@@ -63,6 +115,41 @@ public abstract class DataTransfer {
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
+
+	public void setCustomerFields(Customer customer) {
+		customerId = customer.getCustomerId();
+		customerName = customer.getName();
+		customerPhoneNumber = customer.getPhoneNumber();
+		customerAddress = customer.getAddress();
+	}
+
+	/*
+	Not sure about this part.
+	public void setTransacionFields(Transaction transaction) {
+		setTransactionType(transaction.getType());
+		setTransactionDate(transaction.getDate());
+		setBookTitle(transaction.getTitle());
+	}
+	*/
+
+	public void setApplianceFields(Appliance appliance){
+		//TBD
+	}
+
+	public void reset() {
+		applianceID = "Invalid appliance id";
+		modelName = "No such model";
+		price = 0;
+		timeStamp = "Not applicable (not processed)";
+		brandName = "No such brand";
+		customerId = "Invalid customer id";
+		customerName = "No such customer";
+		customerPhoneNumber = "No such customer";
+		customerAddress = "No such customer";
+		quantity = 0;
+	}
+
+
 
 }
 
