@@ -7,6 +7,7 @@ import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
+import edu.ics372.project1.appliancestore.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.collections.ModelList;
@@ -146,14 +147,9 @@ public class ApplianceStore implements Serializable {
      * it generates a transaction object and stores it in the customer's transactionList.
      */
     public void chargeRepairPlans() {
-        for (Iterator<Customer> customerIterator = CustomerList.getCustomerIterator(); 
-            customerIterator.hasNext() ) {
-                Customer customer = customerIterator.next();
-            for (Iterator<RepairPlan> repairPlanIterator = customer.getRepairPlanIterator(); 
-            repairPlanIterator.hasNext()) {
-                RepairPlan currentPlan = repairPlanIterator.next();
-                customer.transactionList.addTransaction(); // TODO. FLESH OUT addTransaction for repair plans and finish
-            }
+        for (Iterator<Customer> customerIterator = customers.iterator(); 
+            customerIterator.hasNext();) {
+                customerIterator.next().chargeRepairPlans();
         }
 
     }

@@ -1,5 +1,6 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,8 +34,8 @@ public class Customer {
      */
     private double accountBalance;
 
-    private double repairPlansTotalCost; // not sure if this should be kept
-    private double transactionTotalCost; // not sure if this should be kept
+    private double repairPlansTotalCost;
+    private double transactionTotalCost;
 
     // Lists
     /**
@@ -63,7 +64,7 @@ public class Customer {
      */
     public boolean addTransaction(Appliance appliance, int quantity) {
         transactions.add(new Transaction(this, appliance, quantity));
-        transactionTotalCost =+ appliance.getPrice() * quantity;
+        transactionTotalCost += appliance.getPrice() * quantity;
         return true;
     }
 
@@ -77,8 +78,15 @@ public class Customer {
         return true;
     }
 
+    /**
+     * Charges the customer for all active repair plans.
+     */
     public void chargeRepairPlans() {
-        for()
+        for(Iterator<RepairPlan> iterator = repairPlans.iterator(); iterator.hasNext();) {
+            RepairPlan repairPlan = iterator.next();
+            repairPlansTotalCost += repairPlan.getCost();
+            // TODO: Might need to add the repair plan as a transaction. Not sure..
+        }
     }
  
     // Setters
@@ -111,6 +119,14 @@ public class Customer {
 
     public String getId() {
         return customerId;
+    }
+
+    public double getRepairPlansTotalCost() {
+        return repairPlansTotalCost;
+    }
+
+    public double getTransactionTotalCost() {
+        return transactionTotalCost;
     }
 
 

@@ -1,12 +1,13 @@
 package edu.ics372.project1.appliancestore.business.collections;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 
-public class BackOrderList {
+public class BackOrderList implements Iterable<BackOrder>, Serializable {
     private List<BackOrder> backOrders = new LinkedList<BackOrder>();
     private static BackOrderList backOrderList;
 
@@ -45,5 +46,10 @@ public class BackOrderList {
     public boolean insertBackOrder(BackOrder backOrder) {
         backOrders.add(backOrder);
         return true;
+    }
+
+    @Override
+    public Iterator<BackOrder> iterator() {
+        return backOrders.iterator();
     }
 }

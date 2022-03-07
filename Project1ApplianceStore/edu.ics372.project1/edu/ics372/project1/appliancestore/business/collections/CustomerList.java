@@ -1,12 +1,13 @@
 package edu.ics372.project1.appliancestore.business.collections;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 
-public class CustomerList {
+public class CustomerList implements Iterable<Customer>, Serializable {
 
     private static final long serialVersionUID = 1L;
 	private List<Customer> customers = new LinkedList<Customer>();
@@ -49,4 +50,11 @@ public class CustomerList {
 		customers.add(customer);
 		return true;
 	}
+
+    @Override
+    public Iterator<Customer> iterator() {
+        return customers.iterator();
+    } 
+
+    
 }
