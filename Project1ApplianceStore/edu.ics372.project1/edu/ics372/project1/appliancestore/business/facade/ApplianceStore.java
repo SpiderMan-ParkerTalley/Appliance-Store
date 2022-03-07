@@ -24,8 +24,8 @@ public class ApplianceStore implements Serializable {
 	private static ApplianceStore applianceStore;
 
 	private CustomerList customers = CustomerList.getInstance();
-//	private static models = ModelList.instance();
-//	private static backOrders = BackOrderList.instance();
+	private static ModelList models = ModelList.instance();
+	private static BackOrderList backOrders = BackOrderList.instance();
 
 	/**
 	 * The constructor is private in order to implement the singleton design
@@ -113,12 +113,12 @@ public class ApplianceStore implements Serializable {
         backOrdersNeeded = appliance.purchase(quantity);
         if (backOrdersNeeded > 0) {
             result = BackOrderList.createBackOrder(customerId, applianceId, backOrdersNeeded);
-            customer.addTransaction(new Transaction(applianceId, customerId, quantity - backOrdersNeeded));
+            customer.addTransaction(appliance, quantity - backOrdersNeeded);
             result.setResultCode(6);
             return result;
         }
         else {
-            customer.addTransaction(new Transaction(applianceId, customerId, quantity));
+            customer.addTransaction(appliance, quantity);
             result.setResultCode(4);
             return result;
         }
@@ -135,11 +135,14 @@ public class ApplianceStore implements Serializable {
             customerIterator.hasNext() ) {
                 Customer customer = customerIterator.next();
             for (Iterator<RepairPlan> repairPlanIterator = customer.getRepairPlanIterator(); 
-            repairPlanIterator.hasNext()) {
+            repairPlanIterator.hasNext() ) {
                 RepairPlan currentPlan = repairPlanIterator.next();
-                customer.transactionList.addTransaction(); // TODO. FLESH OUT addTransaction for repair plans and finish
+                customer.addTransaction(appliance, quantity); // TODO. FLESH OUT addTransaction for repair plans and finish
             }
         }
+    }
+
+    public Result addModel(int applianceType, String brandName, String model, double price) {
 
     }
 }
