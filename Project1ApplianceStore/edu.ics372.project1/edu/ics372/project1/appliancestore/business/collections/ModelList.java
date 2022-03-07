@@ -59,4 +59,5 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 
 
 
+
 }

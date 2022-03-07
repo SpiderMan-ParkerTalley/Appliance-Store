@@ -192,7 +192,19 @@ public class UserInterface {
 	 */
 	public void addInventory() {
 		Request.instance().setApplianceID(getToken("Enter appliance id"));
-		Result result = 
+		Result result = applianceStore.searchModel(Request.instance());
+		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("No appliance with id " + Request.instance().getApplianceID());
+			return;
+		} else {
+			Request.instance().setQuantity(getNumber("Enter quantity to add"));
+			result = applianceStore.addInventory(Request.instance());
+			if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+				System.out.println("Quantity " + Request.instance().getQuantity() + "could not be added");
+			} else {
+				System.out.println("Quantity " + Request.instance().getQuantity() + " added");
+			}
+		}
 	}
 
 
