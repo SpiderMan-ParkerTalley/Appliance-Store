@@ -152,6 +152,13 @@ public class UserInterface {
 		System.out.println("5 for furnace");
 		System.out.println("6 for dishwasher");
 		Request.instance().setApplianceType(getNumber("Enter appliance type number"));
+		if(Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2){
+			Request.instance().setRepairPlanAmount(getNumber("Enter repair plan price amount"));
+		}else if(Request.instance().getApplianceType() == 4){
+			Request.instance().setCapacity(getNumber("Enter capacity in liters"));
+		}else if(Request.instance().getApplianceType() == 5) {
+			Request.instance().setMaxheatingOutput(getNumber("Enter max heating output in BTU"));
+		}
 		Request.instance().setModelName(getName("Enter model name"));
 		Request.instance().setBrandName(getName("Enter brand name"));
 		Request.instance().setPrice(getNumber("Enter price"));
