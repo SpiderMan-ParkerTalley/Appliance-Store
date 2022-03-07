@@ -1,5 +1,6 @@
 package edu.ics372.project1.appliancestore.business.collections;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -22,6 +23,28 @@ public class CustomerList {
         return customerList;
     }
 
+    /**
+     * Checks whether a customer with a gven customer id exists.
+     * 
+     * @param customerId String the id of the customer.
+     * @return boolean true if customer exist; false otherwise.
+     */
+    public Customer search(String customerId) {
+        for (Iterator<Customer> iterator = customers.iterator(); iterator.hasNext();) {
+            Customer customer = iterator.next();
+            if(customer.getId().equals(customerId)) {
+                return customer;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Inserts a customer into the collection.
+     * 
+     * @param customer Customer the customer to be inserted.
+     * @return boolean true if the customer could be inserted.
+     */
     public boolean insertCustomer(Customer customer) {
 		customers.add(customer);
 		return true;
