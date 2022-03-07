@@ -22,10 +22,28 @@ public abstract class DataTransfer {
 	private String customerPhoneNumber;
 	private String timeStamp;
 	private int transactionType;
+	private int applianceType;
+	private boolean hasRepairPlan;
 	
 
 	public DataTransfer(){
 		reset();
+	}
+
+	public int getApplianceType() {
+		return applianceType;
+	}
+
+	public void setApplianceType(int applianceType) {
+		this.applianceType = applianceType;
+	}
+
+	public boolean isHasRepairPlan() {
+		return hasRepairPlan;
+	}
+
+	public void setHasRepairPlan(boolean hasRepairPlan) {
+		this.hasRepairPlan = hasRepairPlan;
 	}
 
 	public String getApplianceID() {
@@ -117,7 +135,7 @@ public abstract class DataTransfer {
 	}
 
 	public void setCustomerFields(Customer customer) {
-		customerId = customer.getCustomerId();
+		customerId = customer.getId();
 		customerName = customer.getName();
 		customerPhoneNumber = customer.getPhoneNumber();
 		customerAddress = customer.getAddress();

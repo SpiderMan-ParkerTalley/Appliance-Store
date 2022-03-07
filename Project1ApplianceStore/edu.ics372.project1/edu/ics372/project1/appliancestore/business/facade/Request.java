@@ -21,7 +21,7 @@ public class Request extends DataTransfer {
      * Returns the only allowed instance of the class.
      * @return the only instance
      */
-    public Request instance() {
+    public static Request instance() {
         if (request == null) {
             request =  new Request();
         }

@@ -7,10 +7,12 @@ public class Refrigerator extends Appliance{
 	private double capacity;
 	private List<Refrigerator> itemsOnStock;
 	
-	public Refrigerator(String brandName, String model, double price, int quantity, boolean hasRepairPlan, double capacity) {
-		super(brandName, model, price, quantity, hasRepairPlan);
+	public Refrigerator(String brandName, String model, double price, int quantity, double capacity) {
+		super(brandName, model, price, quantity);
 		this.capacity = capacity;
 		this.itemsOnStock = new ArrayList<Refrigerator>();
+		this.setHasRepairPlan(false);
 	}
-	
+
+}
 }
