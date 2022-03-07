@@ -54,6 +54,11 @@ public class Customer {
         this.id = CUSTOMER_STRING + idCounter++;
     }
 
+    public boolean addTransaction(Appliance appliance, int quantity) {
+        transactions.add(new Transaction(this, appliance, quantity));
+        return true;
+    }
+ 
     // Setters
     public void setName(String name) {
         this.name = name;
