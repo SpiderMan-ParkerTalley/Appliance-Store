@@ -1,5 +1,7 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
+import edu.ics372.project1.appliancestore.business.entities.BackOrder;
+
 /**
  * Ferries the results of operations in the facade to the UI.
  * 
@@ -24,7 +26,8 @@ public class Result extends DataTransfer {
 
 	public void setResultCode(int resultCode) {
 		this.resultCode = resultCode;
-	};
+	}
+
 
 }
 

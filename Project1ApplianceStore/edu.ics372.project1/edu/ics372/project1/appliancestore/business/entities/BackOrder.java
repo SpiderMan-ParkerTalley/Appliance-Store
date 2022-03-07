@@ -30,10 +30,34 @@ public class BackOrder {
      * @param quantity int 
      */
     public BackOrder(Customer customer, Appliance appliance, int quantity) {
-        this.customer = customer;
-        this.appliance = appliance;
-        this.quantity = quantity;
+        this.setCustomer(customer);
+        this.setAppliance(appliance);
+        this.setQuantity(quantity);
         id = BACKORDER_STRING + idCounter++;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public Appliance getAppliance() {
+        return appliance;
+    }
+
+    public void setAppliance(Appliance appliance) {
+        this.appliance = appliance;
     }
 
     // Getters

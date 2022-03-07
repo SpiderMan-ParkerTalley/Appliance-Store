@@ -1,6 +1,7 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 
 /**
@@ -24,10 +25,19 @@ public abstract class DataTransfer {
 	private int transactionType;
 	private int applianceType;
 	private boolean hasRepairPlan;
+	private String backorderId;
 	
 
 	public DataTransfer(){
 		reset();
+	}
+
+	public String getBackorderId() {
+		return backorderId;
+	}
+
+	public void setBackorderId(String backorderId) {
+		this.backorderId = backorderId;
 	}
 
 	public int getApplianceType() {
@@ -140,6 +150,10 @@ public abstract class DataTransfer {
 		customerPhoneNumber = customer.getPhoneNumber();
 		customerAddress = customer.getAddress();
 	}
+
+	public void setBackOrderFields(BackOrder backorder) {
+		backorderId = backorder.getId();
+	};
 
 	/*
 	Not sure about this part.

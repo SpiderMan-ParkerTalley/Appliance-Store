@@ -208,7 +208,9 @@ public class UserInterface {
 	}
 
 	/**
-	 * 
+	 * Method to be called for purchasing one or more models for a single customer.
+	 * The user inputs the promted values and uses the appropriate ApplicationStore 
+	 * method for adding the customer.
 	 */
 	public void purchaseModel() {
 		Request.instance().setCustomerId(getToken("Enter customer id"));
@@ -228,6 +230,23 @@ public class UserInterface {
 				System.out.println("Model could not be purchased");
 			}
 		} while (yesOrNo("Purchase more models?"));
+	}
+
+	/**
+	 * Method to be called for fulfilling the backorders associated with the backorder id.
+	 * The user inputs the backorder id and uses the appropriate ApplicationStore 
+	 * method for adding the customer.
+	 */
+	public void fulfillBackorder() {
+		Request.instance().setBackorderId(getToken("Enter backorder id"));
+		Result result = applianceStore.searchBackorder(Request.instance()); 
+		if (result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("No backorder with id " + Request.instance().getBackorderId());
+			return;
+		} else {
+			result = applianceStore.fulfillBackorder(Request.instance());
+			if(result.getResultCode() == Result.OPERATION_FAILED)
+		}
 	}
 
 

@@ -27,7 +27,7 @@ public class ApplianceStore implements Serializable {
 
 	private CustomerList customers = CustomerList.getInstance();
 	private ModelList models = ModelList.getInstance();
-    private BackOrderList backOrders = BackOrderList.getInstance();
+    private BackOrderList backorders = BackOrderList.getInstance();
 
 	/**
 	 * The constructor is private in order to implement the singleton design
@@ -98,6 +98,27 @@ public class ApplianceStore implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Fulfills backorders, given the inventory has enough to do so. If not, it will return a
+	 * result code stating that is not able to do so.
+	 * @param request
+	 * @return
+	 */
+	public Result fulfillBackorder(Request request) {
+		Result result = new Result();
+		BackOrder backorder = backorders.search(request.getBackorderId());
+		if(backorder.getQuantity() > models.search(backorder.getAppliance().getId()).getQuantity()) {
+			result.setResultCode(Result.NOT_A_VALID_QUANTITY);
+		} else {
+			backorder.getCustomer().addTransaction(backorder.getAppliance(), backorder.getQuantity());
+			backorders.removeBackOrder(backorder);
+			int newQuantity = models.search(backorder.getAppliance().getId()).getQuantity() - backorder.getQuantity();
+			models.search(backorder.getAppliance().getId()).setQuantity(newQuantity);
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		}
+		return result;
+	}
+
 
 	/**
 	 * Searches for a given appliance model
@@ -129,6 +150,23 @@ public class ApplianceStore implements Serializable {
 		} else {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			result.setCustomerFields(customer);
+		}
+		return result;
+	}
+
+	/**
+	 * Searches for a given backorder
+	 * @param backorderId of the backorder
+	 * @return true iff the backorder is in the backorder list collection
+	 */
+	public Result searchBackorder(Request request) {
+		Result result = new Result();
+		BackOrder backorder = backorders.search(request.getBackorderId());
+		if(backorder == null) {
+			result.setResultCode(Result.BACK_ORDER_NOT_FOUND);
+		} else {
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			result.setBackOrderFields(backorder);
 		}
 		return result;
 	}
@@ -168,7 +206,7 @@ public class ApplianceStore implements Serializable {
 					models.search(request.getApplianceID()).setQuantity(0);
 				} else {
 					BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
-					backOrders.insertBackOrder(backOrder);
+					backorders.insertBackOrder(backOrder);
 					result.setResultCode(Result.BACKORDER_CREATED);
 				}
 			} else {
@@ -179,6 +217,7 @@ public class ApplianceStore implements Serializable {
 		}
 		return result;
 	}
+
 
 
     /**
@@ -195,3 +234,4 @@ public class ApplianceStore implements Serializable {
 
     }
 }
+

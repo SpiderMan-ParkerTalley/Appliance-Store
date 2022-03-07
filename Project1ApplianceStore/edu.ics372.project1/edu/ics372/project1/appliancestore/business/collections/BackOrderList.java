@@ -48,6 +48,19 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
         return true;
     }
 
+    /**
+     * Removes a backorder from a collection.
+     * @param backOrder BackOrder the back order to be removed.
+     * @return returns true if the back order was found and removed, false if not.
+     */
+    public boolean removeBackOrder(BackOrder backOrder) {
+        if (backOrders.contains(backOrder)) {
+            backOrders.remove(backOrder);
+            return true;
+        }
+        return false;
+    }
+
     @Override
     public Iterator<BackOrder> iterator() {
         return backOrders.iterator();
