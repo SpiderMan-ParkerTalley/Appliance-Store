@@ -66,7 +66,7 @@ public class Customer {
     /**
      * Creates and adds a transaction to customer.
      * @param appliance Appliance appliance 
-     * @param quantity int
+     * @param quantity int quantity of appliance being purchases.
      * @return boolean true if the transaction was sucessfully added.
      */
     public boolean addTransaction(Appliance appliance, int quantity) {
@@ -77,7 +77,7 @@ public class Customer {
 
     /**
      * Creates and adds a repair plan to customer.
-     * @param appliance Appliance
+     * @param appliance Appliance appliance to be assoicated with repair plan.
      * @return boolean true if repair plan was sucessfully added.
      */
     public boolean addRepairPlan(Appliance appliance) {
