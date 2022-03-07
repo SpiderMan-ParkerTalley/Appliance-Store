@@ -2,6 +2,14 @@ package edu.ics372.project1.appliancestore.business.facade;
 
 import java.io.Serializable;
 
+import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.Customer;
+import edu.ics372.project1.appliancestore.business.collections.CustomerList;
+import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
+import edu.ics372.project1.appliancestore.business.collections.ModelList;
+
+
+
 /**
  * This is the facade class. It handles all requests from users.
  * 
@@ -54,9 +62,30 @@ public class ApplianceStore implements Serializable {
 	 * @param quantity    - the amount of appliances being purchased.
 	 * @return A Result object with the appropriate information.
 	 */
-	public Result purchaseAppliance(String applianceId, String CustomerId, int quantity) {
-		Result result;
+	public Result purchaseAppliance(String applianceId, String customerId, int quantity) {
+		Result result = new Result();
+        Customer customer = CustomerList.search(customerId);
+        Appliance appliance = ModelList.search(applianceId);
+        int backOrdersNeeded = 0;
 
-		return result;
+        // check for valid entries
+        if (customer == null) {
+            result.setResultCode(2);
+            return result;
+        }
+        else if (appliance == null) {
+            result.setResultCode(1);
+            return result;
+        }
+
+        // check to see if a back order is needed
+        backOrdersNeeded = appliance.purchase(quantity);
+        if (backOrdersNeeded > 0) {
+            return BackOrderList.createBackOrder(customerId, applianceId, quantity);
+        }
+        else {
+            result.setResultCode(4);
+            return result;
+        }
 	}
 }
