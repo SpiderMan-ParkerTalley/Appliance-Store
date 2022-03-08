@@ -358,6 +358,24 @@ public class ApplianceStore implements Serializable {
         return result;
     }
 
+	/**
+	 * Computes the total revenue from trascations and repair plans.
+	 * @return Result result containing total revenue.
+	 */
+	public Result getTotalRevenue() {
+		double totalRevenueFromTransactions = 0;
+		double totalRevenueFromRepairPlans = 0;
+		for (Iterator<Customer> customerIterator = customers.iterator(); 
+            customerIterator.hasNext();) {
+				Customer customer = customerIterator.next();
+                totalRevenueFromTransactions =+ customer.getTransactionTotalCost();
+				totalRevenueFromRepairPlans =+ customer.getRepairPlansTotalCost();
+        }
+		Result result = new Result();
+		//TODO: add totalRevenueFromTransactions and totalRevenueFromRepairPlans to result.
+		return result;
+	}
+
     /**
      * Gets a List<Customer> object of all the customers from the customers List
      * and returns it in the Result singleton.
@@ -379,6 +397,7 @@ public class ApplianceStore implements Serializable {
         result.setBackOrders(backorders.getBackOrderList());
         return result;
     }
+
     /**
      * Saves the data to file ApplianceStoreData,
      * @return true if successful, false if not.
@@ -397,6 +416,7 @@ public class ApplianceStore implements Serializable {
             return false;
         }
     }
+
     /**
      * Retrieves the data from the file ApplianceStoreData
      * @return The ApplianceStore object if successful, otherwise null.
