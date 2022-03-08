@@ -1,8 +1,13 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-public class Appliance {
+/*
+ * @author Cristian Zendejas
+ * The parent class for all appliances within the store.
+ */
+public class Appliance implements Serializable {
 	private static final String APPLIANCE_STRING = "APP";
 	private String id;
 	private String brandName;
@@ -10,7 +15,8 @@ public class Appliance {
 	private double price;
 	private int quantity;
 	private Timestamp createdAt;
-	private boolean hasRepairPlan;
+	private boolean eligibleForBackOrder = false;
+	private boolean eligibleForRepairPlan = false;
 	private int idCounter = 0;
 
 	public Appliance(String brandName, String model, double price, int quantity) {
@@ -26,60 +32,78 @@ public class Appliance {
 		return APPLIANCE_STRING + idCounter++;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setApplianceId(String applianceId) {
+	// Setters
+	public void setId(String applianceId) {
 		id = applianceId;
-	}
-
-	public String getBrandName() {
-		return brandName;
 	}
 
 	public void setBrandName(String brandName) {
 		this.brandName = brandName;
 	}
 
-	public String getModel() {
-		return model;
-	}
-
 	public void setModel(String model) {
 		this.model = model;
 	}
-
-	public double getPrice() {
-		return price;
-	}
-
+	
 	public void setPrice(double price) {
 		this.price = price;
-	}
-
-	public int getQuantity() {
-		return quantity;
 	}
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
-	public Timestamp getCreatedAt() {
-		return createdAt;
-	}
-
 	public void setCreatedAt(Timestamp createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public boolean isHasRepairPlan() {
-		return hasRepairPlan;
+	public void setElilgibleForRepairPlan(boolean eligibleForRepairPlan) {
+		this.eligibleForRepairPlan = eligibleForRepairPlan;
 	}
 
-	public void setHasRepairPlan(boolean hasRepairPlan) {
-		this.hasRepairPlan = hasRepairPlan;
+	public void setElilgibleForBackOrder(boolean eligibleForBackOrder) {
+		this.eligibleForBackOrder = eligibleForBackOrder;
+	}
+
+	// Getters
+	public String getId() {
+		return id;
+	}
+
+	public String getBrandName() {
+		return brandName;
+	}
+
+	public String getModel() {
+		return model;
+	}
+
+	public double getPrice() {
+		return price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public Timestamp getCreatedAt() {
+		return createdAt;
+	}
+
+	/**
+	 * Check if the appliance is eligible for repair plan.
+	 * @return boolean true if eligible, false otherwise.
+	 */
+	public boolean eligibleForRepairPlan() {
+		return eligibleForRepairPlan;
+	}
+
+	/**
+	 * Check if the appliance is eligible for back order plan.
+	 * @return boolean true if eligible, false otherwise.
+	 */
+	public boolean eligibleForBackOrder() {
+		return eligibleForBackOrder;
 	}
 
 	/*
@@ -91,15 +115,4 @@ public class Appliance {
 		System.out.println("the purchase function runs!");
 		return 0;
 	}
-
-	/*
-	 * Returns a boolean if the appliance is eligible for a repair plan
-	 * @params none
-	 * @returns boolean
-	 */
-	public boolean eligibleRepairPlan() {
-		System.out.println("the check for the repair plan works!");
-		return false;
-	}
-
 } 

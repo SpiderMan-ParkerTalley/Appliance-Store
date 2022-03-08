@@ -1,5 +1,7 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
+import edu.ics372.project1.appliancestore.business.entities.BackOrder;
+
 /**
  * Ferries the results of operations in the facade to the UI.
  * 
@@ -15,6 +17,8 @@ public class Result extends DataTransfer {
 	public static final int OPERATION_FAILED = 5;
     public static final int BACKORDER_CREATED = 6;
     public static final int NOT_A_VALID_QUANTITY = 7;
+	public static final int REPAIR_PLAN_NOT_FOUND = 8;
+	public static final int NOT_ELIGABLE_FOR_REPAIR_PLAN = 9;
 
 	private int resultCode;
 
@@ -24,7 +28,8 @@ public class Result extends DataTransfer {
 
 	public void setResultCode(int resultCode) {
 		this.resultCode = resultCode;
-	};
+	}
+
 
 }
 

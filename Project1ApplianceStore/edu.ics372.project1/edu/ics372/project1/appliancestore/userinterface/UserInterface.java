@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
+import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
@@ -188,11 +189,133 @@ public class UserInterface {
 
 	/**
 	 * Method to be called for adding inventory to a single model. The user inputs the prompted 
-	 * values and uses the appropriate ApplicationStore method for adding the customer.
+	 * values and uses the appropriate ApplicationStore method for adding the model inventory.
 	 */
 	public void addInventory() {
 		Request.instance().setApplianceID(getToken("Enter appliance id"));
-		Result result = 
+		Result result = applianceStore.searchModel(Request.instance());
+		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("No appliance with id " + Request.instance().getApplianceID());
+		} else {
+			Request.instance().setQuantity(getNumber("Enter quantity to add"));
+			result = applianceStore.addInventory(Request.instance());
+		}
+		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("Quantity " + Request.instance().getQuantity() + "could not be added");
+		} else {
+			System.out.println("Quantity " + Request.instance().getQuantity() + " added");
+		}
+	}
+
+	/**
+	 * Method to be called for purchasing one or more models for a single customer.
+	 * The user inputs the promted values and uses the appropriate ApplicationStore 
+	 * method purchasing the model.
+	 */
+	public void purchaseModel() {
+		Request.instance().setCustomerId(getToken("Enter customer id"));
+		Result result = applianceStore.searchCustomer(Request.instance());
+		if (result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("No customer with id " + Request.instance().getCustomerId());
+			return;
+		}
+		do {
+			Request.instance().setApplianceID(getToken("Enter appliance id"));
+			Request.instance().setQuantity(getNumber("Enter amount to buy"));
+			result = applianceStore.purchaseModel(Request.instance());
+			if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
+				System.out.println("Model " + result.getModelName() + " bought by " + result.getCustomerName()
+				+ " on " + result.getTimeStamp());
+			} else {
+				System.out.println("Model could not be purchased");
+			}
+		} while (yesOrNo("Purchase more models?"));
+	}
+
+	/**
+	 * Method to be called for fulfilling the backorders associated with the backorder id.
+	 * The user inputs the backorder id and uses the appropriate ApplicationStore 
+	 * method for fulfilling the backorder.
+	 */
+	public void fulfillBackorder() {
+		Request.instance().setBackorderId(getToken("Enter backorder id"));
+		Result result = applianceStore.searchBackorder(Request.instance()); 
+		result = applianceStore.fulfillBackorder(Request.instance());
+		if(result.getResultCode() == Result.NOT_A_VALID_QUANTITY){
+			System.out.println("Backorder could not be fulfilled due to insufficient inventory");
+		} else if(result.getResultCode() == Result.BACK_ORDER_NOT_FOUND) {
+			System.out.println("Backorder could not be found");
+		} else {
+			System.out.println("Backorder fulfilled.");
+		}
+	}
+
+
+	//TODO Might have to redo
+	/**
+	 * Method to be called for enrolling a customer in a repair plan for a single appliance.
+	 * The user inputs the customer id and appliance id and uses the appropriate ApplicationStore
+	 * method for enrolling the customer in the repair plan.
+	 */
+	public void enrollRepairPlan() {
+		Request.instance().setCustomerId(getToken("Enter customer id"));
+		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		Result result = applianceStore.enrollRepairPlan(Request.instance());
+		if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+			System.out.println("Could not find customer id");
+		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			System.out.println("Could not find appliance id");
+		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
+			System.out.println("Could not enroll customer in repair plan");
+		} else {
+			System.out.println("Customer " + Request.instance().getCustomerAddress() + " succesfully " + 
+			"enrolled in repair plan for " + Request.instance().getApplianceID());
+		}
+	}
+
+	/**
+	 * Method for withdrawing a customer from a repair plan for a single appliance.
+	 * The user inputs the promted values and uses the appropriate ApplicationStore
+	 * methods for withdrawing the customer from the repair plan.
+	 */
+	public void withdrawRepairPlan() {
+		Request.instance().setCustomerId(getToken("Enter customer id"));
+		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		Result result = applianceStore.withdrawRepairPlan(Request.instance());
+		if(result.getResultCode() == Result.NOT_ELIGABLE_FOR_REPAIR_PLAN) {
+			System.out.println("Appliance not eligable for repair plan");
+		} else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+			System.out.println("Could not find customer id");
+		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			System.out.println("Could not find appliance id");
+		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
+			System.out.println("Could not enroll customer in repair plan");
+		} else {
+			System.out.println("Customer " + Request.instance().getCustomerAddress() + " successfully " + 
+			"enrolled in repair plan for " + Request.instance().getApplianceID());
+			}
+		}
+
+	public void listAppliances() {
+		do {
+			System.out.println("1 for washer");
+			System.out.println("2 for dryer");
+			System.out.println("3 for kitchen range");
+			System.out.println("4 for refridgerator");
+			System.out.println("5 for furnace");
+			System.out.println("6 for dishwasher");
+			System.out.println("7 for all");
+			Request.instance().setApplianceType(getNumber("Enter appliance type number"));
+			Result result = applianceStore.listAppliances(Request.instance());
+			if(result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+				System.out.println("No such models in inventory");
+			} else {
+				for(Appliance appliance: result.getAppliances()) {
+					System.out.println(appliance);
+					//Appliance needs toString
+				}
+			}
+		} while (yesOrNo("List another type of appliance models?"));
 	}
 
 

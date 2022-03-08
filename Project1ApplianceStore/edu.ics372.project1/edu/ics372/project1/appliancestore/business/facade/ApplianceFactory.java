@@ -16,7 +16,7 @@ public class ApplianceFactory {
 	public static final int FURNACE = 5;
 	public static final int DISHWASHER = 6;
 
-    public static Appliance createAppliance(int type, Request request){
+    public static Appliance createAppliance(int type, Request request ){
         Appliance appliance = null;
         switch(type) {
             case WASHER:  appliance = new Washer(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
@@ -36,5 +36,24 @@ public class ApplianceFactory {
             case DISHWASHER: appliance =  new Dishwasher(request.getBrandName(), request.getModelName(), request.getPrice(), 0); 
         }
         return appliance;
+    }
+
+    public static Appliance findApplianceType(int type) {
+        Appliance appliance = null;
+        switch(type) {
+            case WASHER:  appliance = new Washer("", "", 0, 0, 0);
+            
+            case DRYER: appliance =  new Dryer("", "", 0, 0, 0);
+
+            case KITCHENRANGE: appliance =  new KitchenRange("", "", 0, 0);
+
+            case REFRIGERATOR: appliance =  new Refrigerator("", "", 0, 0, 0);
+
+            case FURNACE: appliance =  new Furnace("", "", 0, 0, 0);
+
+            case DISHWASHER: appliance =  new Dishwasher("", "", 0, 0); 
+        }
+        return appliance;
+    
     }
 }

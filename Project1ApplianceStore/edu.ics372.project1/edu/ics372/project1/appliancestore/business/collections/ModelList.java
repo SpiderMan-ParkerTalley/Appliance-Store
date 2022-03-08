@@ -1,5 +1,6 @@
 package edu.ics372.project1.appliancestore.business.collections;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 
 
-public class ModelList {
+public class ModelList implements Iterable<Appliance>, Serializable {
     private static final long serialVersionUID = 1L;
 	private List<Appliance> models = new LinkedList<Appliance>();
 	private static ModelList modelList;
@@ -49,6 +50,12 @@ public class ModelList {
 		models.add(appliance);
 		return true;
 	}
+
+    @Override
+    public Iterator<Appliance> iterator() {
+        return models.iterator();
+    }
+
 
 
 

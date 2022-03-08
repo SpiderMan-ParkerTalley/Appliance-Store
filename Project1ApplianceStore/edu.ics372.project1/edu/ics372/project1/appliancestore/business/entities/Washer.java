@@ -11,6 +11,17 @@ public class Washer extends Appliance {
 		super(brandName, model, price, quantity);
 		this.repairPlanAmount = repairPlanAmount;
 		this.itemsOnStock = new ArrayList<Washer>();
-		this.setHasRepairPlan(true);
+		this.setElilgibleForRepairPlan(true);
+		this.setElilgibleForBackOrder(true);
 	}
+
+	public double getRepairPlanAmount() {
+		return repairPlanAmount;
+	}
+
+	public void setRepairPlanAmount(double repairPlanAmount) {
+		this.repairPlanAmount = repairPlanAmount;
+	}
+	
+	
 }
