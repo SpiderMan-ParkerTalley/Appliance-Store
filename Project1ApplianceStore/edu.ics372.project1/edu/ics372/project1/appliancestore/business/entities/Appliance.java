@@ -111,8 +111,4 @@ public class Appliance implements Serializable {
 		System.out.println("the purchase function runs!");
 		return 0;
 	}
-
-	
-
-
 } 

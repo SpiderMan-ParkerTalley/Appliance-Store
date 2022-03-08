@@ -9,7 +9,16 @@ public class Furnace extends Appliance {
 	
 	public Furnace(String brandName, String model, double price, int quantity, double maxHeatingOuput) {
 		super(brandName, model, price, quantity);
+		this.maxHeatingOuput = maxHeatingOuput;
 		this.itemsOnStock = new ArrayList<Furnace>();
+	}
+
+	public double getMaxHeatingOuput() {
+		return maxHeatingOuput;
+	}
+
+	public void setMaxHeatingOuput(double maxHeatingOuput) {
+		this.maxHeatingOuput = maxHeatingOuput;
 	}
 
 }

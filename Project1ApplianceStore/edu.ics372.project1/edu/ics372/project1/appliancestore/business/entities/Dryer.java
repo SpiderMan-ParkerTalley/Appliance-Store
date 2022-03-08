@@ -15,7 +15,12 @@ public class Dryer extends Appliance {
 		this.setElilgibleForBackOrder(true);
 	}
 
-	// Setters
+	public double getRepairPlanAmount() {
+		return repairPlanAmount;
+	}
 
-	// Getters
+	public void setRepairPlanAmount(double repairPlanAmount) {
+		this.repairPlanAmount = repairPlanAmount;
+	}
+
 }
