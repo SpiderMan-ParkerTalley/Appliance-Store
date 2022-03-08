@@ -1,6 +1,5 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
-import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 

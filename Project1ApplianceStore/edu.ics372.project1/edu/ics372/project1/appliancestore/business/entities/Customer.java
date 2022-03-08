@@ -1,5 +1,8 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -167,4 +170,18 @@ public class Customer implements Serializable {
         return false;
     }
 
+    /**
+     * Saves the static idCounter.
+     * @param output
+     */
+    public static void save(ObjectOutputStream output) throws IOException {
+        output.writeObject(idCounter);
+    }
+    /**
+    * Retrieves the static id counter
+    */
+public static void retrieve(ObjectInputStream input) throws IOException, 
+                            ClassNotFoundException {
+    idCounter = (int) input.readObject();
+    }
 }

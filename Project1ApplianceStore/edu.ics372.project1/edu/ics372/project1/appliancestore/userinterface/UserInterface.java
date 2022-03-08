@@ -3,14 +3,11 @@ package edu.ics372.project1.appliancestore.userinterface;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
-import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
@@ -240,7 +237,7 @@ public class UserInterface {
 	 * The user inputs the backorder id and uses the appropriate ApplicationStore 
 	 * method for fulfilling the backorder.
 	 */
-	public void fulfillBackorder() {
+	public void fullFillBackorder() {
 		Request.instance().setBackorderId(getToken("Enter backorder id"));
 		Result result = applianceStore.searchBackorder(Request.instance()); 
 		result = applianceStore.fulfillBackorder(Request.instance());
@@ -334,7 +331,7 @@ public class UserInterface {
 	/**
 	 * Finds all customers with repair plans and prints them out.
 	 */
-	public void findAllRepairPlanCustomers() {
+	public void ListAllRepairPlanCustomers() {
 		Result result = applianceStore.getAllRepairPlanCustomers();
 		for (Customer customer : result.getCustomers()) {
 			System.out.println(customer);
@@ -359,8 +356,93 @@ public class UserInterface {
 		System.out.println(backOrder.getAppliance() + " " +
 		backOrder.getCustomer() + " " + backOrder.getQuantity());
 	}
-
+	/**
+	 * Saves the data to a file.
+	 */
+	private void save() {
+		if (ApplianceStore.save()) {
+			System.out.println("The system has been successfully saved in the file ApplianceStoreData");
+		} else {
+			System.out.println("There has been an error in saving.");
+		}
+	}
+	/**
+	 * Retrieves the data from a a file
+	 */
+	private void retrieve()  {
+		try {
+			if (applianceStore == null) {
+				applianceStore = ApplianceStore.retrieve();
+				if (applianceStore != null) {
+					System.out.println(" The applianceStore has been successfully retrieved from the file LibraryData \n");
+				} else {
+					System.out.println("File doesnt exist; creating new applianceStore");
+					applianceStore = ApplianceStore.instance();
+				}
+			}
+		} catch (Exception cnfe) {
+			cnfe.printStackTrace();
+		}
+	}
+/**
+	 * Orchestrates the whole process. Calls the appropriate method for the
+	 * different functionalities.
+	 * 
+	 */
+	public void process() {
+		int command;
+		help();
+		while ((command = getCommand()) != EXIT) {
+			switch (command) {
+			case ADD_MODEL:
+				addModel();
+				break;
+			case ADD_CUSTOMER:
+				addCustomer();
+				break;
+			case ADD_INVENTORY:
+				addInventory();
+				break;
+			case PURCHASE_MODEL:
+				purchaseModel();
+				break;
+			case FULFILL_BACKORDER:
+				fullFillBackorder();
+				break;
+			case ENROLL_REPAIR_PLAN:
+				enrollRepairPlan();
+				break;
+			case WITHDRAW_REPAIR_PLAN:
+				withdrawRepairPlan();
+				break;
+			case CHARGE_REPAIR_PLANS:
+				chargeAllRepairPlans();
+				break;
+			case PRINT_REVENUE:
+				// TODO
+				break;
+			case LIST_APPLIANCES:
+				listAppliances();
+				break;
+			case LIST_REPAIR_PLAN_USERS:
+				ListAllRepairPlanCustomers();
+				break;
+			case LIST_CUSTOMERS:
+				printAllCustomers();
+				break;
+			case LIST_BACKORDERS:
+				printAllBackOrders();
+				break;
+			case SAVE:
+				save();
+				break;
+			case HELP:
+				help();
+				break;
+			}
+		}
+	}
 	public static void main(String args[]) {
-		
+		UserInterface.instance().process();
 	}
 }

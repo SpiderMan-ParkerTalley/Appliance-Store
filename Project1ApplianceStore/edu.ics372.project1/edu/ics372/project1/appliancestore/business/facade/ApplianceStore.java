@@ -1,5 +1,10 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,7 +15,6 @@ import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
-import edu.ics372.project1.appliancestore.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.collections.ModelList;
@@ -375,5 +379,42 @@ public class ApplianceStore implements Serializable {
         result.setBackOrders(backorders.getBackOrderList());
         return result;
     }
+    /**
+     * Saves the data to file ApplianceStoreData,
+     * @return true if successful, false if not.
+     */
+    public static boolean save() {
+        try {
+            FileOutputStream file = new FileOutputStream("ApplianceStoreData");
+            ObjectOutputStream output = new ObjectOutputStream(file);
+            output.writeObject(applianceStore);
+            //TODO: Any static field needs to get saved
+            Customer.save(output);
+            file.close();
+            return true;
+        } catch (Exception ioexception) {
+            ioexception.printStackTrace();
+            return false;
+        }
+    }
+    /**
+     * Retrieves the data from the file ApplianceStoreData
+     * @return The ApplianceStore object if successful, otherwise null.
+     */
+    public static ApplianceStore retrieve() {
+		try {
+			FileInputStream file = new FileInputStream("ApplianceStoreData");
+			ObjectInputStream input = new ObjectInputStream(file);
+			applianceStore = (ApplianceStore) input.readObject();
+			Customer.retrieve(input); // TODO RETRIEVE ALL STORED STATIC VARS
+			return applianceStore;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return null;
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+			return null;
+		}
+	}
 }
 
