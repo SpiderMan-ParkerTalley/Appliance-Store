@@ -1,5 +1,7 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
+import java.util.List;
+
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
@@ -30,10 +32,20 @@ public abstract class DataTransfer {
 	private Customer transactionCustomer;
     private Appliance transactionAppliance;
     private int transactionQuantity;
+	//Safe way to list appliances?
+	private List<Appliance> appliances;
 	
 
 	public DataTransfer(){
 		reset();
+	}
+
+	public List<Appliance> getAppliances() {
+		return appliances;
+	}
+
+	public void setAppliances(List<Appliance> appliances) {
+		this.appliances = appliances;
 	}
 
 	public int getTransactionQuantity() {

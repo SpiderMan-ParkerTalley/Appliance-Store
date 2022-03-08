@@ -2,6 +2,8 @@ package edu.ics372.project1.appliancestore.business.facade;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
@@ -166,6 +168,13 @@ public class ApplianceStore implements Serializable {
 		return result;
 	}
 
+	/**
+	 * Withdraws a customer from a repair plan for a single model. If the customer withdraws,
+	 * it returns a success operation code, if something goes wrong, it returns the associated
+	 * error code.
+	 * @param request
+	 * @return
+	 */
 	public Result withdrawRepairPlan(Request request) { 
 		Result result = new Result();
 		Customer customer = customers.search(request.getCustomerId());
@@ -191,6 +200,37 @@ public class ApplianceStore implements Serializable {
 			return result;
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
+	}
+	
+	/**
+	 * Lists all models of a single appliance or all appliances based on user input. 
+	 * If there are no such models, it returns an error code, but if there are models,
+	 * it returns the list of models.
+	 * @param request
+	 * @return
+	 */
+	public Result listAppliances(Request request) {
+		Result result = new Result();
+		List<Appliance> appliances = new LinkedList<Appliance>();
+		if(request.getApplianceType() == 7) {
+			for(Appliance model : models) {
+				appliances.add(model);
+			}
+		} else {
+			Appliance appliance = ApplianceFactory.findApplianceType(request.getApplianceType());
+			for(Appliance model : models) {
+				if(model.getClass().equals(appliance.getClass())) {
+					appliances.add(model);
+				}
+			}
+		}
+		if(appliances.isEmpty()) {
+			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
+			return result;
+			}
+		result.setAppliances(appliances);
+		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		return result;
 	}
 

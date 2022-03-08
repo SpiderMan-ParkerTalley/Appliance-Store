@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
+import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
@@ -254,7 +255,7 @@ public class UserInterface {
 	/**
 	 * Method to be called for enrolling a customer in a repair plan for a single appliance.
 	 * The user inputs the customer id and appliance id and uses the appropriate ApplicationStore
-	 * method for 
+	 * method for enrolling the customer in the repair plan.
 	 */
 	public void enrollRepairPlan() {
 		Request.instance().setCustomerId(getToken("Enter customer id"));
@@ -272,6 +273,11 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * Method for withdrawing a customer from a repair plan for a single appliance.
+	 * The user inputs the promted values and uses the appropriate ApplicationStore
+	 * methods for withdrawing the customer from the repair plan.
+	 */
 	public void withdrawRepairPlan() {
 		Request.instance().setCustomerId(getToken("Enter customer id"));
 		Request.instance().setApplianceID(getToken("Enter appliance id"));
@@ -285,12 +291,32 @@ public class UserInterface {
 		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
 			System.out.println("Could not enroll customer in repair plan");
 		} else {
-			System.out.println("Customer " + Request.instance().getCustomerAddress() + " succesfully " + 
+			System.out.println("Customer " + Request.instance().getCustomerAddress() + " successfully " + 
 			"enrolled in repair plan for " + Request.instance().getApplianceID());
 			}
 		}
 
-
+	public void listAppliances() {
+		do {
+			System.out.println("1 for washer");
+			System.out.println("2 for dryer");
+			System.out.println("3 for kitchen range");
+			System.out.println("4 for refridgerator");
+			System.out.println("5 for furnace");
+			System.out.println("6 for dishwasher");
+			System.out.println("7 for all");
+			Request.instance().setApplianceType(getNumber("Enter appliance type number"));
+			Result result = applianceStore.listAppliances(Request.instance());
+			if(result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+				System.out.println("No such models in inventory");
+			} else {
+				for(Appliance appliance: result.getAppliances()) {
+					System.out.println(appliance);
+					//Appliance needs toString
+				}
+			}
+		} while (yesOrNo("List another type of appliance models?"));
+	}
 
 
 
