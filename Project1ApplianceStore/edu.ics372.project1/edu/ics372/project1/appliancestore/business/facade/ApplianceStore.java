@@ -352,5 +352,17 @@ public class ApplianceStore implements Serializable {
         result.setCustomers(customers.getAllCustomersInRepairPlan());
         return result;
     }
+
+    /**
+     * Gets a List<Customer> object of all the customers from the customers List
+     * and returns it in the Result singleton.
+     * Used to print all customers to the UI.
+     * @return
+     */
+    public Result getAllCustomers() {
+        Result result = new Result();
+        result.setCustomers(customers.getCustomers());
+        return result;
+    }
 }
 

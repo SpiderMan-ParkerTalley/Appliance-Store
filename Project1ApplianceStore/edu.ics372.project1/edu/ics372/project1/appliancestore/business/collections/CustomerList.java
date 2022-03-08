@@ -63,8 +63,10 @@ public class CustomerList implements Iterable<Customer>, Serializable {
                 customersWithRepairPlans.add(customer);
             }
         }
-        return customersWithRepairPlans;
-        
+        return customersWithRepairPlans;        
+    }
+    public List<Customer> getCustomers() {
+        return this.customers;
     }
     @Override
     public Iterator<Customer> iterator() {
