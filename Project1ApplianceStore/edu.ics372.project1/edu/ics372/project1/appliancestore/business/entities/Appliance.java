@@ -9,16 +9,55 @@ import java.sql.Timestamp;
  */
 public class Appliance implements Serializable {
 	private static final String APPLIANCE_STRING = "APP";
-	private String id;
-	private String brandName;
-	private String model;
-	private double price;
-	private int quantity;
-	private Timestamp createdAt;
-	private boolean eligibleForBackOrder = false;
-	private boolean eligibleForRepairPlan = false;
-	private int idCounter = 0;
+	private static int idCounter = 1;
 
+	/**
+	 * Stores the appliance identification number.
+	 */
+	private String id;
+
+	/**
+	 * Stores the appliance brand name.
+	 */
+	private String brandName;
+
+	/**
+	 * Stores the appliance model.
+	 */
+	private String model;
+
+	/**
+	 * Stores the appliance price.
+	 */
+	private double price;
+
+	/**
+	 * Stores the appliance quantity available.
+	 */
+	private int quantity;
+
+	/**
+	 * Stores date/time the appliance was added to the system.
+	 */
+	private Timestamp createdAt;
+
+	/**
+	 * Stores the appliance eligibility for back order.
+	 */
+	private boolean eligibleForBackOrder = false;
+
+	/**
+	 * Stores the appliance eligibility for repair plan.
+	 */
+	private boolean eligibleForRepairPlan = false;
+
+	/**
+	 * Constructor for appliance.
+	 * @param brandName String the brand name of the appliance.
+	 * @param model String the model of the appliance.
+	 * @param price double the price of the appliance.
+	 * @param quantity int the quantity available of the appliance.
+	 */
 	public Appliance(String brandName, String model, double price, int quantity) {
 		id = createId();
 		this.brandName = brandName;
@@ -28,6 +67,10 @@ public class Appliance implements Serializable {
 		this.createdAt = new Timestamp(System.currentTimeMillis());
 	}
 
+	/**
+	 * Generates a ID for the appliance.
+	 * @return String a generated ID.
+	 */
 	private String createId() {
 		return APPLIANCE_STRING + idCounter++;
 	}

@@ -2,7 +2,7 @@ package edu.ics372.project1.appliancestore.business.entities;
 
 public class BackOrder {
     private static final String BACKORDER_STRING = "BCKORD";
-    private static int idCounter;
+    private static int idCounter = 0;
 
     /**
      * Stores the back order identification number.
@@ -36,24 +36,13 @@ public class BackOrder {
         id = BACKORDER_STRING + idCounter++;
     }
 
-    public Customer getCustomer() {
-        return customer;
-    }
-
+    // Setters
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
     public void setQuantity(int quantity) {
         this.quantity = quantity;
-    }
-
-    public Appliance getAppliance() {
-        return appliance;
     }
 
     public void setAppliance(Appliance appliance) {
@@ -63,6 +52,18 @@ public class BackOrder {
     // Getters
     public String getId() {
         return id;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Appliance getAppliance() {
+        return appliance;
     }
 
 }

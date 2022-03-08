@@ -15,7 +15,7 @@ public class Customer implements Serializable {
     /**
      * Stores the customer's identification number.
      */
-    private String customerId;
+    private String id;
     
     /**
      * Stores the customer's name.
@@ -63,7 +63,7 @@ public class Customer implements Serializable {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        this.customerId = CUSTOMER_STRING + idCounter++;
+        id = CUSTOMER_STRING + idCounter++;
     }
 
     /**
@@ -88,6 +88,12 @@ public class Customer implements Serializable {
         return true;
     }
 
+    /**
+     * Removes a repair plan from customer.
+     * @param repairPlan RepairPlan the repair plan to be removed.
+     * @return boolean true if the repair plan was removed, false if no repair 
+     * plan was removed.
+     */
     public boolean removeRepairPlan(RepairPlan repairPlan) {
         repairPlans.remove(repairPlan);
         return true;
@@ -104,14 +110,23 @@ public class Customer implements Serializable {
         }
     }
 
+    /**
+     * Getter for repair plan list iterator.
+     * @return iterator for repair plans.
+     */
     public Iterator<RepairPlan> getRepairPlans() {
 		return repairPlans.iterator();
 	}
 
-    public RepairPlan searchRepairPlan(String customerId, String applianceId) {
+    /**
+     * Searches a customer for a repair plan matching the applianceId.
+     * @param applianceId String appliance id for search.
+     * @return RepairPlan repair plan if a match is found, otherwise null.
+     */
+    public RepairPlan searchRepairPlan(String applianceId) {
         for (Iterator<RepairPlan> iterator = repairPlans.iterator(); iterator.hasNext();) {
             RepairPlan repairPlan = iterator.next();
-            if(repairPlan.getCustomer().customerId.compareToIgnoreCase(customerId) == 0 && 
+            if(repairPlan.getCustomer().id.compareToIgnoreCase(this.id) == 0 && 
             repairPlan.getAppliance().getId().compareToIgnoreCase(applianceId) == 0) {
                 return repairPlan;
             }
@@ -148,7 +163,7 @@ public class Customer implements Serializable {
     }
 
     public String getId() {
-        return customerId;
+        return id;
     }
 
     public double getRepairPlansTotalCost() {
@@ -160,8 +175,8 @@ public class Customer implements Serializable {
     }
 
     /**
-     * Boolean check for a repair plan in the Customer object's repairPlans list.
-     * @return
+     * Checks if a customer has one or more repair plans.
+     * @return boolean true customer has repair plan, false otherwise.
      */
     public boolean hasRepairPlan() {
         if (!this.repairPlans.isEmpty()) {
@@ -178,9 +193,9 @@ public class Customer implements Serializable {
         output.writeObject(idCounter);
     }
     /**
-    * Retrieves the static id counter
+    * Retrieves the static id counter.
     */
-public static void retrieve(ObjectInputStream input) throws IOException, 
+    public static void retrieve(ObjectInputStream input) throws IOException, 
                             ClassNotFoundException {
     idCounter = (int) input.readObject();
     }

@@ -10,13 +10,24 @@ import edu.ics372.project1.appliancestore.business.entities.Appliance;
 
 public class ModelList implements Iterable<Appliance>, Serializable {
     private static final long serialVersionUID = 1L;
+
+    /**
+     *  A list for storing Appliance(s).
+     */
 	private List<Appliance> models = new LinkedList<Appliance>();
+
+    /**
+     * Stores the singleton of ModelList.
+     */
 	private static ModelList modelList;
 
 	private ModelList() {
-
 	}
 
+    /**
+     * Retrieves a singleton of BackOrderList.
+     * @return ModelList singleton of ModelList.
+     */
 	public static ModelList getInstance() {
 		if (modelList == null) {
 			modelList = new ModelList();

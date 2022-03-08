@@ -194,7 +194,7 @@ public class ApplianceStore implements Serializable {
 			return result;
 		}
 		result.setApplianceFields(appliance);
-		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getCustomerId(), request.getApplianceID()); 
+		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceID()); 
 		if(repairPlan == null) {
 			result.setResultCode(Result.REPAIR_PLAN_NOT_FOUND);
 			return result;
@@ -366,7 +366,7 @@ public class ApplianceStore implements Serializable {
      */
     public Result getAllCustomers() {
         Result result = new Result();
-        result.setCustomers(customers.getCustomers());
+        result.setCustomers(customers.getCustomerList());
         return result;
     }
 

@@ -10,13 +10,24 @@ import edu.ics372.project1.appliancestore.business.entities.Customer;
 public class CustomerList implements Iterable<Customer>, Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * A list for storing customer(s).
+     */
 	private List<Customer> customers = new LinkedList<Customer>();
+
+    /**
+     * Stores the singleton of CustomerList.
+     */
 	private static CustomerList customerList;
 
 	private CustomerList() {
-
 	}
 
+    /**
+     * Retrieves a singleton of CustomerList.
+     * @return CustomerList singleton of CustomerList.
+     */
     public static CustomerList getInstance(){
         if (customerList == null){
             customerList = new CustomerList();
@@ -65,9 +76,15 @@ public class CustomerList implements Iterable<Customer>, Serializable {
         }
         return customersWithRepairPlans;        
     }
-    public List<Customer> getCustomers() {
+
+    /**
+     * Retrieves list containing all customers.
+     * @return List<Customer> list of customers.
+     */
+    public List<Customer> getCustomerList() {
         return this.customers;
     }
+
     @Override
     public Iterator<Customer> iterator() {
         return customers.iterator();
