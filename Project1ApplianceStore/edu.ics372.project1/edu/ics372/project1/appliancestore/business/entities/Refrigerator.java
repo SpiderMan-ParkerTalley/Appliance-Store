@@ -11,7 +11,7 @@ public class Refrigerator extends Appliance{
 		super(brandName, model, price, quantity);
 		this.capacity = capacity;
 		this.itemsOnStock = new ArrayList<Refrigerator>();
-		this.setElilgibleForBackOrder(true);
+		this.setEligibleForBackOrder(true);
 	}
 
 	public double getCapacity() {

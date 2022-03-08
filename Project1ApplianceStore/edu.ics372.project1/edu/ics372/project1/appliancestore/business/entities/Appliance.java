@@ -57,11 +57,11 @@ public class Appliance implements Serializable {
 		this.createdAt = createdAt;
 	}
 
-	public void setElilgibleForRepairPlan(boolean eligibleForRepairPlan) {
+	public void setEligibleForRepairPlan(boolean eligibleForRepairPlan) {
 		this.eligibleForRepairPlan = eligibleForRepairPlan;
 	}
 
-	public void setElilgibleForBackOrder(boolean eligibleForBackOrder) {
+	public void setEligibleForBackOrder(boolean eligibleForBackOrder) {
 		this.eligibleForBackOrder = eligibleForBackOrder;
 	}
 
