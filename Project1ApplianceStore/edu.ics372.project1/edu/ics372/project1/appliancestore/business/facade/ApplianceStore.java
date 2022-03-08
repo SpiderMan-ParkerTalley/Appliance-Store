@@ -7,6 +7,7 @@ import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
+import edu.ics372.project1.appliancestore.business.entities.Transaction;
 import edu.ics372.project1.appliancestore.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
@@ -94,6 +95,8 @@ public class ApplianceStore implements Serializable {
 	public Result addInventory(Request request) {
 		Result result = new Result();
 		models.search(request.getApplianceID()).setQuantity(request.getQuantity());
+		Appliance appliance = models.search(request.getApplianceID());
+		result.setApplianceFields(appliance);
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		return result;
 	}
@@ -107,15 +110,87 @@ public class ApplianceStore implements Serializable {
 	public Result fulfillBackorder(Request request) {
 		Result result = new Result();
 		BackOrder backorder = backorders.search(request.getBackorderId());
-		if(backorder.getQuantity() > models.search(backorder.getAppliance().getId()).getQuantity()) {
-			result.setResultCode(Result.NOT_A_VALID_QUANTITY);
+		if(backorder == null) {
+			result.setResultCode(Result.BACK_ORDER_NOT_FOUND);
 		} else {
-			backorder.getCustomer().addTransaction(backorder.getAppliance(), backorder.getQuantity());
-			backorders.removeBackOrder(backorder);
-			int newQuantity = models.search(backorder.getAppliance().getId()).getQuantity() - backorder.getQuantity();
-			models.search(backorder.getAppliance().getId()).setQuantity(newQuantity);
-			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			if(backorder.getQuantity() > models.search(backorder.getAppliance().getId()).getQuantity()) {
+				result.setResultCode(Result.NOT_A_VALID_QUANTITY);
+			} else {
+				Transaction transaction = new Transaction(backorder.getCustomer(), backorder.getAppliance(), backorder.getQuantity());
+				if(backorder.getCustomer().addTransaction(transaction)) {
+					result.setBackOrderFields(backorder);
+					result.setCustomerFields(backorder.getCustomer());
+					backorders.removeBackOrder(backorder);
+					result.setTransactionFields(transaction);
+					int newQuantity = models.search(backorder.getAppliance().getId()).getQuantity() - backorder.getQuantity();
+					models.search(backorder.getAppliance().getId()).setQuantity(newQuantity);
+					Appliance appliance = models.search(backorder.getAppliance().getId());
+					result.setApplianceFields(appliance);
+					result.setResultCode(Result.OPERATION_SUCCESSFUL);
+				}
+			}
 		}
+		return result;
+	}
+
+	/**
+	 * Enrolls a customer into a repair plan. If the customer sucessfully enrolls, it returns a 
+	 * success operation code, and if not, it returns a failed operation code. 
+	 * @param request
+	 * @return
+	 */
+	public Result enrollRepairPlan(Request request) {
+		Result result = new Result();
+		Appliance appliance = models.search(request.getApplianceID());
+		if(appliance == null) {
+			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
+			return result;
+		} else if (appliance.eligibleForRepairPlan() == false) {
+			result.setResultCode(Result.NOT_ELIGABLE_FOR_REPAIR_PLAN);
+			return result;
+		}
+		result.setApplianceFields(appliance);
+		Customer customer = customers.search(request.getCustomerId());
+		if(customer == null) {
+			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
+			return result;
+		}
+		result.setCustomerFields(customer);
+		if(models.search(request.getApplianceID()).eligibleForRepairPlan()) {
+			if(customers.search(request.getCustomerId()).addRepairPlan(models.search(request.getApplianceID()))) {
+				result.setResultCode(Result.OPERATION_SUCCESSFUL);
+				return result;
+			}
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
+		return result;
+	}
+
+	public Result withdrawRepairPlan(Request request) { 
+		Result result = new Result();
+		Customer customer = customers.search(request.getCustomerId());
+		if(customer == null) {
+			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
+			return result;
+		}
+		result.setCustomerFields(customer);
+		Appliance appliance = models.search(result.getApplianceID());
+		if(appliance == null) {
+			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
+			return result;
+		}
+		result.setApplianceFields(appliance);
+		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getCustomerId(), request.getApplianceID()); 
+		if(repairPlan == null) {
+			result.setResultCode(Result.REPAIR_PLAN_NOT_FOUND);
+			return result;
+		}
+		//Do we want to add repairPlan info and Backorder info to result that we return?
+		if(customer.removeRepairPlan(repairPlan)) {
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+			return result;
+		}
+		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
 

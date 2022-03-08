@@ -69,9 +69,9 @@ public class Customer implements Serializable {
      * @param quantity int quantity of appliance being purchases.
      * @return boolean true if the transaction was sucessfully added.
      */
-    public boolean addTransaction(Appliance appliance, int quantity) {
-        transactions.add(new Transaction(this, appliance, quantity));
-        transactionTotalCost += appliance.getPrice() * quantity;
+    public boolean addTransaction(Transaction transaction) {
+        transactions.add(transaction);
+        transactionTotalCost += transaction.getAppliance().getPrice() * transaction.getQuantity();
         return true;
     }
 
@@ -85,6 +85,11 @@ public class Customer implements Serializable {
         return true;
     }
 
+    public boolean removeRepairPlan(RepairPlan repairPlan) {
+        repairPlans.remove(repairPlan);
+        return true;
+    }
+
     /**
      * Charges the customer for all active repair plans.
      */
@@ -94,6 +99,21 @@ public class Customer implements Serializable {
             repairPlansTotalCost += repairPlan.getCost();
             // TODO: Might need to add the repair plan as a transaction. Not sure..
         }
+    }
+
+    public Iterator<RepairPlan> getRepairPlans() {
+		return repairPlans.iterator();
+	}
+
+    public RepairPlan searchRepairPlan(String customerId, String applianceId) {
+        for (Iterator<RepairPlan> iterator = repairPlans.iterator(); iterator.hasNext();) {
+            RepairPlan repairPlan = iterator.next();
+            if(repairPlan.getCustomer().customerId.compareToIgnoreCase(customerId) == 0 && 
+            repairPlan.getAppliance().getId().compareToIgnoreCase(applianceId) == 0) {
+                return repairPlan;
+            }
+        }
+        return null;
     }
  
     // Setters

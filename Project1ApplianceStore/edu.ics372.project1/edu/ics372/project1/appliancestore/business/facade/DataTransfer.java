@@ -3,6 +3,7 @@ package edu.ics372.project1.appliancestore.business.facade;
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
+import edu.ics372.project1.appliancestore.business.entities.Transaction;
 
 /**
  * Superclass for Result and Request. Provides a safe way to share data between
@@ -26,10 +27,37 @@ public abstract class DataTransfer {
 	private int applianceType;
 	private boolean hasRepairPlan;
 	private String backorderId;
+	private Customer transactionCustomer;
+    private Appliance transactionAppliance;
+    private int transactionQuantity;
 	
 
 	public DataTransfer(){
 		reset();
+	}
+
+	public int getTransactionQuantity() {
+		return transactionQuantity;
+	}
+
+	public void setTransactionQuantity(int transactionQuantity) {
+		this.transactionQuantity = transactionQuantity;
+	}
+
+	public Appliance getTransactionAppliance() {
+		return transactionAppliance;
+	}
+
+	public void setTransactionAppliance(Appliance transactionAppliance) {
+		this.transactionAppliance = transactionAppliance;
+	}
+
+	public Customer getTransactionCustomer() {
+		return transactionCustomer;
+	}
+
+	public void setTransactionCustomer(Customer transactionCustomer) {
+		this.transactionCustomer = transactionCustomer;
 	}
 
 	public String getBackorderId() {
@@ -155,14 +183,12 @@ public abstract class DataTransfer {
 		backorderId = backorder.getId();
 	};
 
-	/*
-	Not sure about this part.
-	public void setTransacionFields(Transaction transaction) {
-		setTransactionType(transaction.getType());
-		setTransactionDate(transaction.getDate());
-		setBookTitle(transaction.getTitle());
+	
+	public void setTransactionFields(Transaction transaction) {
+		transactionCustomer = transaction.getCustomer();
+		transactionAppliance = transaction.getAppliance();
+		transactionQuantity = transaction.getQuantity();
 	}
-	*/
 
 	public void setApplianceFields(Appliance appliance){
 		//TBD

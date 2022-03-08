@@ -188,29 +188,28 @@ public class UserInterface {
 
 	/**
 	 * Method to be called for adding inventory to a single model. The user inputs the prompted 
-	 * values and uses the appropriate ApplicationStore method for adding the customer.
+	 * values and uses the appropriate ApplicationStore method for adding the model inventory.
 	 */
 	public void addInventory() {
 		Request.instance().setApplianceID(getToken("Enter appliance id"));
 		Result result = applianceStore.searchModel(Request.instance());
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("No appliance with id " + Request.instance().getApplianceID());
-			return;
 		} else {
 			Request.instance().setQuantity(getNumber("Enter quantity to add"));
 			result = applianceStore.addInventory(Request.instance());
-			if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-				System.out.println("Quantity " + Request.instance().getQuantity() + "could not be added");
-			} else {
-				System.out.println("Quantity " + Request.instance().getQuantity() + " added");
-			}
+		}
+		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
+			System.out.println("Quantity " + Request.instance().getQuantity() + "could not be added");
+		} else {
+			System.out.println("Quantity " + Request.instance().getQuantity() + " added");
 		}
 	}
 
 	/**
 	 * Method to be called for purchasing one or more models for a single customer.
 	 * The user inputs the promted values and uses the appropriate ApplicationStore 
-	 * method for adding the customer.
+	 * method purchasing the model.
 	 */
 	public void purchaseModel() {
 		Request.instance().setCustomerId(getToken("Enter customer id"));
@@ -235,19 +234,61 @@ public class UserInterface {
 	/**
 	 * Method to be called for fulfilling the backorders associated with the backorder id.
 	 * The user inputs the backorder id and uses the appropriate ApplicationStore 
-	 * method for adding the customer.
+	 * method for fulfilling the backorder.
 	 */
 	public void fulfillBackorder() {
 		Request.instance().setBackorderId(getToken("Enter backorder id"));
 		Result result = applianceStore.searchBackorder(Request.instance()); 
-		if (result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("No backorder with id " + Request.instance().getBackorderId());
-			return;
+		result = applianceStore.fulfillBackorder(Request.instance());
+		if(result.getResultCode() == Result.NOT_A_VALID_QUANTITY){
+			System.out.println("Backorder could not be fulfilled due to insufficient inventory");
+		} else if(result.getResultCode() == Result.BACK_ORDER_NOT_FOUND) {
+			System.out.println("Backorder could not be found");
 		} else {
-			result = applianceStore.fulfillBackorder(Request.instance());
-			if(result.getResultCode() == Result.OPERATION_FAILED)
+			System.out.println("Backorder fulfilled.");
 		}
 	}
+
+
+	//TODO Might have to redo
+	/**
+	 * Method to be called for enrolling a customer in a repair plan for a single appliance.
+	 * The user inputs the customer id and appliance id and uses the appropriate ApplicationStore
+	 * method for 
+	 */
+	public void enrollRepairPlan() {
+		Request.instance().setCustomerId(getToken("Enter customer id"));
+		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		Result result = applianceStore.enrollRepairPlan(Request.instance());
+		if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+			System.out.println("Could not find customer id");
+		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			System.out.println("Could not find appliance id");
+		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
+			System.out.println("Could not enroll customer in repair plan");
+		} else {
+			System.out.println("Customer " + Request.instance().getCustomerAddress() + " succesfully " + 
+			"enrolled in repair plan for " + Request.instance().getApplianceID());
+		}
+	}
+
+	public void withdrawRepairPlan() {
+		Request.instance().setCustomerId(getToken("Enter customer id"));
+		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		Result result = applianceStore.withdrawRepairPlan(Request.instance());
+		if(result.getResultCode() == Result.NOT_ELIGABLE_FOR_REPAIR_PLAN) {
+			System.out.println("Appliance not eligable for repair plan");
+		} else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+			System.out.println("Could not find customer id");
+		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			System.out.println("Could not find appliance id");
+		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
+			System.out.println("Could not enroll customer in repair plan");
+		} else {
+			System.out.println("Customer " + Request.instance().getCustomerAddress() + " succesfully " + 
+			"enrolled in repair plan for " + Request.instance().getApplianceID());
+			}
+		}
 
 
 
