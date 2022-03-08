@@ -338,8 +338,14 @@ public class UserInterface {
 			System.out.println(customer);
 		}
 	}
-
-
+	/**
+	 * Prints out every customer and their details.
+	 */
+	public void printAllCustomers() {
+		Result result = applianceStore.getAllCustomers();
+		for (Customer customer : result.getCustomers())
+		System.out.println(customer);
+	}
 
 	public static void main(String args[]) {
 		
