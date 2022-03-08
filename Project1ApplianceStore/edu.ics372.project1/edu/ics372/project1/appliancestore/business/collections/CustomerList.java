@@ -51,6 +51,21 @@ public class CustomerList implements Iterable<Customer>, Serializable {
 		return true;
 	}
 
+    /**
+     * Calls the hasRepairPlans method in customer to see if the customer has a repair plan.
+     * if they do, it adds it to the List of customers to be returned.
+     * @return a LinkedList of Customer objects with a repair plan.
+     */
+    public List<Customer> getAllCustomersInRepairPlan() {
+        List<Customer> customersWithRepairPlans = new LinkedList<Customer>();
+        for (Customer customer : customers) {
+            if (customer.hasRepairPlan()) {
+                customersWithRepairPlans.add(customer);
+            }
+        }
+        return customersWithRepairPlans;
+        
+    }
     @Override
     public Iterator<Customer> iterator() {
         return customers.iterator();

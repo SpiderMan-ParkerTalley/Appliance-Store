@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
@@ -295,7 +296,18 @@ public class UserInterface {
 			"enrolled in repair plan for " + Request.instance().getApplianceID());
 			}
 		}
-
+	/**
+	 * Allows the user to charge all active repair plans to the appropriate customers. Updates all customer accounts
+	 * and displays a message when completed.
+	 */
+	public void chargeAllRepairPlans() {
+		applianceStore.chargeRepairPlans();
+		System.out.println("All active repair plans have been charged"); //TODO How do we make sure this is true?
+	}
+	/**
+	 * Lists all appliances or a specific type of appliance. It lists each item with its id, brand name, model name, price,
+	 * and quantity.
+	 */
 	public void listAppliances() {
 		do {
 			System.out.println("1 for washer");
@@ -316,6 +328,15 @@ public class UserInterface {
 				}
 			}
 		} while (yesOrNo("List another type of appliance models?"));
+	}
+	/**
+	 * Finds all customers with repair plans and prints them out.
+	 */
+	public void findAllRepairPlanCustomers() {
+		Result result = applianceStore.getAllRepairPlanCustomers();
+		for (Customer customer : result.getCustomers()) {
+			System.out.println(customer);
+		}
 	}
 
 

@@ -32,7 +32,7 @@ public abstract class DataTransfer {
 	private Customer transactionCustomer;
     private Appliance transactionAppliance;
     private int transactionQuantity;
-	//Safe way to list appliances?
+	//Safe way to list appliances? Maybe put in Result? Does Request have a use for this?
 	private List<Appliance> appliances;
 	
 

@@ -1,6 +1,9 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
+import edu.ics372.project1.appliancestore.business.entities.Customer;
+
+import java.util.List;
 
 /**
  * Ferries the results of operations in the facade to the UI.
@@ -20,6 +23,7 @@ public class Result extends DataTransfer {
 	public static final int REPAIR_PLAN_NOT_FOUND = 8;
 	public static final int NOT_ELIGABLE_FOR_REPAIR_PLAN = 9;
 
+	private List<Customer> customers;
 	private int resultCode;
 
 	public int getResultCode() {
@@ -28,6 +32,14 @@ public class Result extends DataTransfer {
 
 	public void setResultCode(int resultCode) {
 		this.resultCode = resultCode;
+	}
+
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
 	}
 
 

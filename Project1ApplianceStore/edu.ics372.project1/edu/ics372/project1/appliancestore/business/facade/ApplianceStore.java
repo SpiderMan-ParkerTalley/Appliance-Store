@@ -332,9 +332,6 @@ public class ApplianceStore implements Serializable {
 		}
 		return result;
 	}
-
-
-
     /**
      * Charges all repair plans for all customers. The method acquires an iterator
      * from the customerList and then examines each customer. It grabs a repairPlan iterator
@@ -346,6 +343,14 @@ public class ApplianceStore implements Serializable {
             customerIterator.hasNext();) {
                 customerIterator.next().chargeRepairPlans();
         }
+    }
+    /**
+     * Returns a list of all the customers that have repair plans via the Result object.
+     */
+    public Result getAllRepairPlanCustomers() {
+        Result result = new Result();
+        result.setCustomers(customers.getAllCustomersInRepairPlan());
+        return result;
     }
 }
 

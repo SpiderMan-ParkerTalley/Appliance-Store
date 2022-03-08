@@ -156,5 +156,15 @@ public class Customer implements Serializable {
         return transactionTotalCost;
     }
 
+    /**
+     * Boolean check for a repair plan in the Customer object's repairPlans list.
+     * @return
+     */
+    public boolean hasRepairPlan() {
+        if (!this.repairPlans.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
 
 }
