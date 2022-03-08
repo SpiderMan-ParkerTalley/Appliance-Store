@@ -26,6 +26,8 @@ public class Result extends DataTransfer {
 	private List<Customer> customers;
 	private List<BackOrder> backOrders;
 	private int resultCode;
+	private double totalRevenueFromTransactions;
+	private double totalRevenueFromRepairPlans;
 
 	public int getResultCode() {
 		return resultCode;
@@ -49,6 +51,22 @@ public class Result extends DataTransfer {
 
 	public void setBackOrders(List<BackOrder> backOrders) {
 		this.backOrders = backOrders;
+	}
+
+	public double getTotalRevenueFromTransactions() {
+		return totalRevenueFromTransactions;
+	}
+
+	public void setTotalRevenueFromTransactions(double totalRevenueFromTransactions) {
+		this.totalRevenueFromTransactions = totalRevenueFromTransactions;
+	}
+
+	public double getTotalRevenueFromRepairPlans() {
+		return totalRevenueFromRepairPlans;
+	}
+
+	public void setTotalRevenueFromRepairPlans(double totalRevenueFromRepairPlans) {
+		this.totalRevenueFromRepairPlans = totalRevenueFromRepairPlans;
 	}
 
 

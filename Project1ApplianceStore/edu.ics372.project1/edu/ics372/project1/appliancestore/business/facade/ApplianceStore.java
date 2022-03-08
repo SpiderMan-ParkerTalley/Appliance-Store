@@ -372,7 +372,8 @@ public class ApplianceStore implements Serializable {
 				totalRevenueFromRepairPlans =+ customer.getRepairPlansTotalCost();
         }
 		Result result = new Result();
-		//TODO: add totalRevenueFromTransactions and totalRevenueFromRepairPlans to result.
+        result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);
+        result.setTotalRevenueFromRepairPlans(totalRevenueFromRepairPlans);
 		return result;
 	}
 

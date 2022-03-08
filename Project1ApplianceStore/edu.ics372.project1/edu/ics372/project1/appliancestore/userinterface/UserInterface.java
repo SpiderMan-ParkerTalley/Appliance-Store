@@ -419,7 +419,7 @@ public class UserInterface {
 				chargeAllRepairPlans();
 				break;
 			case PRINT_REVENUE:
-				// TODO
+				printRevenue();
 				break;
 			case LIST_APPLIANCES:
 				listAppliances();
@@ -442,6 +442,16 @@ public class UserInterface {
 			}
 		}
 	}
+	/**
+	 * Prints the revenues from sales and repair plan charge in a convenient
+	 * format.
+	 */
+	private void printRevenue() {
+		Result result = applianceStore.getTotalRevenue();
+		System.out.println("Sales Revenue: " + result.getTotalRevenueFromTransactions());
+		System.out.println("Repair Plan Revenue: " + result.getTotalRevenueFromRepairPlans());
+}
+
 	public static void main(String args[]) {
 		UserInterface.instance().process();
 	}
