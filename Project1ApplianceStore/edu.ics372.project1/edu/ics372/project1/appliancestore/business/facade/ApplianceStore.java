@@ -157,6 +157,6 @@ public class ApplianceStore implements Serializable {
 
     public Result addModel(int applianceType, String brandName, String model, double price) {
         return null;
-
+// just a comment
     }
 }
