@@ -1,5 +1,6 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
+import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 
@@ -24,6 +25,7 @@ public class Result extends DataTransfer {
 	public static final int NOT_ELIGABLE_FOR_REPAIR_PLAN = 9;
 
 	private List<Customer> customers;
+	private List<BackOrder> backOrders;
 	private int resultCode;
 
 	public int getResultCode() {
@@ -40,6 +42,14 @@ public class Result extends DataTransfer {
 
 	public void setCustomers(List<Customer> customers) {
 		this.customers = customers;
+	}
+
+	public List<BackOrder> getBackOrders() {
+		return backOrders;
+	}
+
+	public void setBackOrders(List<BackOrder> backOrders) {
+		this.backOrders = backOrders;
 	}
 
 

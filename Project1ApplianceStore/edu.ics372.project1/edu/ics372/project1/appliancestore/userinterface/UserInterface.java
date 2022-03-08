@@ -10,7 +10,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.StringTokenizer;
 
+import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
@@ -345,6 +347,17 @@ public class UserInterface {
 		Result result = applianceStore.getAllCustomers();
 		for (Customer customer : result.getCustomers())
 		System.out.println(customer);
+	}
+	/**
+	 * Prints out all back orders with the appliance brand, model,
+	 * customer name, customer id, and quantity
+	 * 
+	 */
+	public void printAllBackOrders() {
+		Result result = applianceStore.getAllBackOrders();
+		for (BackOrder backOrder : result.getBackOrders())
+		System.out.println(backOrder.getAppliance() + " " +
+		backOrder.getCustomer() + " " + backOrder.getQuantity());
 	}
 
 	public static void main(String args[]) {

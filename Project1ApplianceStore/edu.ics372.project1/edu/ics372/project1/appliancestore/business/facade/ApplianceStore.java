@@ -45,11 +45,12 @@ public class ApplianceStore implements Serializable {
 	 * 
 	 * @return A singleton of type ApplianceStore.
 	 */
-	public ApplianceStore instance() {
+	public static ApplianceStore instance() {
 		if (applianceStore == null) {
-			applianceStore = new ApplianceStore();
-        }  
+			return applianceStore = new ApplianceStore();
+        }  else {
 			return applianceStore;
+        }
 	}
 
 	/**
@@ -362,6 +363,16 @@ public class ApplianceStore implements Serializable {
     public Result getAllCustomers() {
         Result result = new Result();
         result.setCustomers(customers.getCustomers());
+        return result;
+    }
+
+    /**
+     * Queries the backOrdersList and assembles a Result object
+     * with information to be used in the UI for printing back order details. 
+     */
+    public Result getAllBackOrders() {
+        Result result = new Result();
+        result.setBackOrders(backorders.getBackOrderList());
         return result;
     }
 }

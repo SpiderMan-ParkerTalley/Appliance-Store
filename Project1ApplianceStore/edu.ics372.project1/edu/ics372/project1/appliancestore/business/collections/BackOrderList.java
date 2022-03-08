@@ -61,6 +61,14 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
         return false;
     }
 
+    /**
+     * 
+     * @return
+     */
+    public List<BackOrder> getBackOrderList() {
+        return this.backOrders;
+    }
+
     @Override
     public Iterator<BackOrder> iterator() {
         return backOrders.iterator();
