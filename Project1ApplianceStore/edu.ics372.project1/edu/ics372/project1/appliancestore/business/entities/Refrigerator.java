@@ -14,4 +14,12 @@ public class Refrigerator extends Appliance{
 		this.setElilgibleForBackOrder(true);
 	}
 
+	public double getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(double capacity) {
+		this.capacity = capacity;
+	}
+
 }

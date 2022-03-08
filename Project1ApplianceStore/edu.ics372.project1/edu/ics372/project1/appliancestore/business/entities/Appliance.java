@@ -3,6 +3,10 @@ package edu.ics372.project1.appliancestore.business.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+/*
+ * @author Cristian Zendejas
+ * The parent class for all appliances within the store.
+ */
 public class Appliance implements Serializable {
 	private static final String APPLIANCE_STRING = "APP";
 	private String id;
@@ -111,8 +115,4 @@ public class Appliance implements Serializable {
 		System.out.println("the purchase function runs!");
 		return 0;
 	}
-
-	
-
-
 } 

@@ -14,4 +14,14 @@ public class Washer extends Appliance {
 		this.setElilgibleForRepairPlan(true);
 		this.setElilgibleForBackOrder(true);
 	}
+
+	public double getRepairPlanAmount() {
+		return repairPlanAmount;
+	}
+
+	public void setRepairPlanAmount(double repairPlanAmount) {
+		this.repairPlanAmount = repairPlanAmount;
+	}
+	
+	
 }
