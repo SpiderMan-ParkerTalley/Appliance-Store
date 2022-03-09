@@ -28,6 +28,7 @@ public class Result extends DataTransfer {
 	private int resultCode;
 	private double totalRevenueFromTransactions;
 	private double totalRevenueFromRepairPlans;
+	
 
 	public int getResultCode() {
 		return resultCode;

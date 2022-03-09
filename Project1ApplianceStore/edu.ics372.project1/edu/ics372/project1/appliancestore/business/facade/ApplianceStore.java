@@ -249,10 +249,13 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Searches for a given appliance model
+	 * Searches for a given appliance model and returns the result.
+     * Returns the appliance id, brand name, model name, price, and
+     * quantity in a Result object.
+     * If the appliance is not found, returns an error code.
 	 * 
 	 * @param applianceId of the appliance
-	 * @return true iff the appliance is in the model list collection
+	 * @return A Result object with the required information
 	 */
 	public Result searchModel(Request request) {
 		Result result = new Result();
