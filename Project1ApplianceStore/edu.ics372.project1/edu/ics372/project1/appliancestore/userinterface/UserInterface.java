@@ -102,11 +102,6 @@ public class UserInterface {
 		} while (true);
 	}
 
-	public String getTimeStamp() {
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-		Calendar cal = Calendar.getInstance();
-		return dateFormat.format(cal.getTime());
-	}
 
 	public int getCommand() {
 		do {

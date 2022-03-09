@@ -29,8 +29,6 @@ public abstract class DataTransfer {
 	private int applianceType;
 	private boolean hasRepairPlan;
 	private String backorderId;
-	private Customer transactionCustomer;
-    private Appliance transactionAppliance;
     private int transactionQuantity;
 	//Safe way to list appliances? Maybe put in Result? Does Request have a use for this?
 	private List<Appliance> appliances;
@@ -56,21 +54,6 @@ public abstract class DataTransfer {
 		this.transactionQuantity = transactionQuantity;
 	}
 
-	public Appliance getTransactionAppliance() {
-		return transactionAppliance;
-	}
-
-	public void setTransactionAppliance(Appliance transactionAppliance) {
-		this.transactionAppliance = transactionAppliance;
-	}
-
-	public Customer getTransactionCustomer() {
-		return transactionCustomer;
-	}
-
-	public void setTransactionCustomer(Customer transactionCustomer) {
-		this.transactionCustomer = transactionCustomer;
-	}
 
 	public String getBackorderId() {
 		return backorderId;
@@ -197,8 +180,8 @@ public abstract class DataTransfer {
 
 	
 	public void setTransactionFields(Transaction transaction) {
-		transactionCustomer = transaction.getCustomer();
-		transactionAppliance = transaction.getAppliance();
+		customerId = transaction.getCustomer().getId();
+		applianceID = transaction.getAppliance().getId();
 		transactionQuantity = transaction.getQuantity();
 	}
 
