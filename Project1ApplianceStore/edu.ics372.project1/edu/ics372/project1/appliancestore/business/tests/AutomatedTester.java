@@ -37,5 +37,9 @@ public class AutomatedTester {
 			assert result.getPrice() == (prices[count]);
 		}
 	}
+	
+	public void testPurchaseModel() {
+		
+	}
 
 }

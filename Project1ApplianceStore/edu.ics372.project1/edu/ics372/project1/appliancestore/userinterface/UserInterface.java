@@ -146,13 +146,22 @@ public class UserInterface {
 	 * uses the appropriate ApplicationStore method for adding the model.
 	 */
 	public void addModel() {
-		System.out.println("1 for washer");
-		System.out.println("2 for dryer");
-		System.out.println("3 for kitchen range");
-		System.out.println("4 for refrigerator");
-		System.out.println("5 for furnace");
-		System.out.println("6 for dishwasher");
-		Request.instance().setApplianceType(getNumber("Enter appliance type number"));
+		boolean goodInput = false;
+		int input = 0;
+		final int  MINIMUM_MENU_INPUT = 1;
+		final int MAXIMUM_MENU_INPUT = 6;
+		modelSubMenu();
+		while ( !goodInput) {
+			Request.instance().setApplianceType(getNumber("Enter appliance type number"));  // TODO: GUARD AGAINST BAD INPUT
+			if (Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT || Request.instance().getApplianceType() < MINIMUM_MENU_INPUT) {
+				System.out.println("This is not a valid menu selection. Please select from the following options.");
+				modelSubMenu();
+			}
+			else {
+				goodInput = true;
+			}
+		}
+
 		if(Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2){
 			Request.instance().setRepairPlanAmount(getNumber("Enter repair plan price amount"));
 		}else if(Request.instance().getApplianceType() == 4){
@@ -169,6 +178,17 @@ public class UserInterface {
 		} else {
 			System.out.println("Appliance model " + result.getApplianceID() + " has been added");
 		}
+	}
+	/**
+	 * Helper function for addModel.
+	 */
+	private void modelSubMenu() {
+		System.out.println("1 for washer");
+		System.out.println("2 for dryer");
+		System.out.println("3 for kitchen range");
+		System.out.println("4 for refrigerator");
+		System.out.println("5 for furnace");
+		System.out.println("6 for dishwasher");
 	}
 
 	/**
