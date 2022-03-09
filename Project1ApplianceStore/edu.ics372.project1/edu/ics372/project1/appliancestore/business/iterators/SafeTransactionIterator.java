@@ -3,8 +3,6 @@ package edu.ics372.project1.appliancestore.business.iterators;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import javax.swing.plaf.basic.BasicComboBoxUI.ItemHandler;
-
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
 import edu.ics372.project1.appliancestore.business.facade.Result;
 
