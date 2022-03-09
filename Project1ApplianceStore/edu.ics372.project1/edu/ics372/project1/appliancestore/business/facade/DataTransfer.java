@@ -186,7 +186,11 @@ public abstract class DataTransfer {
 	}
 
 	public void setApplianceFields(Appliance appliance){
-		//TBD
+		applianceID = appliance.getId();
+		brandName = appliance.getBrandName();
+		modelName = appliance.getModel();
+		price = appliance.getPrice();
+		quantity = appliance.getQuantity();
 	}
 
 	public void reset() {

@@ -59,7 +59,7 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
     }
 
     /**
-     * Removes a backorder from a collection.
+     * Removes a backorder from a collection.  
      * @param backOrder BackOrder the back order to be removed.
      * @return returns true if the back order was found and removed, false if not.
      */

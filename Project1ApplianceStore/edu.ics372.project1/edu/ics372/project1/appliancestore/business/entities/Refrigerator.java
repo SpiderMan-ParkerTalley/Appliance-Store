@@ -21,5 +21,11 @@ public class Refrigerator extends Appliance{
 	public void setCapacity(double capacity) {
 		this.capacity = capacity;
 	}
+	
+	@Override
+	public String toString() {
+		String output = super.toString() + " Capacity: " + capacity;
+		return output;
+	}
 
 }

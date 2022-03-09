@@ -12,5 +12,10 @@ public class KitchenRange extends Appliance {
 		this.setEligibleForBackOrder(true);
 	}
 
+	@Override
+	public String toString() {
+		String output = super.toString();
+		return output;
+	}
 	
 }
