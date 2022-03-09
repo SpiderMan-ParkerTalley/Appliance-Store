@@ -158,4 +158,9 @@ public class Appliance implements Serializable {
 		System.out.println("the purchase function runs!");
 		return 0;
 	}
+	
+	public String toString() {
+		String output = "Appliance Id: " + id + " Brand: " + brandName + " Model: " + "Price: " + price + " Quantity: " + quantity;
+		return output;
+	}
 } 

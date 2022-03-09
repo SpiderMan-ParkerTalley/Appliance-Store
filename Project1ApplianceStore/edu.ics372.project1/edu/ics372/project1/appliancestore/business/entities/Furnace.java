@@ -21,4 +21,9 @@ public class Furnace extends Appliance {
 		this.maxHeatingOuput = maxHeatingOuput;
 	}
 
+	@Override
+	public String toString() {
+		String output = super.toString() + " Max Heating Output: " + maxHeatingOuput;
+		return output;
+	}
 }

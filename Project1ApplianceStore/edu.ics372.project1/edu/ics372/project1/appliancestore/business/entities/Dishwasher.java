@@ -11,5 +11,11 @@ public class Dishwasher extends Appliance {
 		this.itemsOnStock = new ArrayList<Dishwasher>();
 		this.setEligibleForBackOrder(true);
 	}
+	
+	@Override
+	public String toString() {
+		String output = super.toString();
+		return output;
+	}
 
 }
