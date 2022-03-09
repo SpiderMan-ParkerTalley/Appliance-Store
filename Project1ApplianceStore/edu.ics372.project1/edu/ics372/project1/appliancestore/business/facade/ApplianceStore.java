@@ -309,28 +309,28 @@ public class ApplianceStore implements Serializable {
 	 * @param quantity    - the amount of appliances being purchased.
 	 * @return A Result object with the appropriate information.
 	 */
-	public Result purchaseModel(Request request) {
+	public Result purchaseModel(Request request) { //TODO CLEAN UP REDUNDENT SEARCH
 		Result result = new Result();
         Customer customer = customers.search(request.getCustomerId());
         Appliance appliance = models.search(request.getApplianceID());
         
         if(appliance.getQuantity() >= request.getQuantity()) {
 			customer.addTransaction(new Transaction (customer, appliance, request.getQuantity()));
-			models.search(request.getApplianceID()).setQuantity(appliance.getQuantity() - request.getQuantity());
+			models.search(request.getApplianceID()).setQuantity(appliance.getQuantity() - request.getQuantity()); 
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		} else {
 			if (appliance.eligibleForBackOrder()) {
 				int backOrdersNeeded = request.getQuantity() - appliance.getQuantity();
 				if(backOrdersNeeded != request.getQuantity()) {
 					customer.addTransaction(new Transaction( customer, appliance, appliance.getQuantity()));
-					models.search(request.getApplianceID()).setQuantity(0);
+					models.search(request.getApplianceID()).setQuantity(0); 
 				} else {
 					BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
 					backorders.insertBackOrder(backOrder);
 					result.setResultCode(Result.BACKORDER_CREATED);
 				}
 			} else {
-				customer.addTransaction(new Transaction (customer, appliance, appliance.getQuantity()));
+				customer.addTransaction(new Transaction (customer, appliance, appliance.getQuantity())); 
 				models.search(request.getApplianceID()).setQuantity(0);
 				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			}
