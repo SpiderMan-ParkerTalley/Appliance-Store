@@ -172,4 +172,12 @@ public class Appliance implements Serializable {
 		String output = "Appliance Id: " + id + " Brand: " + brandName + " Model: " + "Price: " + price + " Quantity: " + quantity;
 		return output;
 	}
+
+	//TODO remove after testing
+	/**
+	 * sets the applianceID
+	 */
+	public void setApplianceId(String ApplianceId) {
+		this.id = ApplianceId;
+	}
 } 

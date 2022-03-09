@@ -147,7 +147,6 @@ public class UserInterface {
 	 */
 	public void addModel() {
 		boolean goodInput = false;
-		int input = 0;
 		final int  MINIMUM_MENU_INPUT = 1;
 		final int MAXIMUM_MENU_INPUT = 6;
 		modelSubMenu();
@@ -249,7 +248,7 @@ public class UserInterface {
 			} else {
 				System.out.println("Model could not be purchased");
 			}
-		} while (yesOrNo("Purchase more models?"));
+		} while (yesOrNo("Purchase more models?")); //Does the use case specifically ask for this?
 	}
 
 	/**

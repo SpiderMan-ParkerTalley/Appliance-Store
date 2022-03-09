@@ -199,4 +199,12 @@ public class Customer implements Serializable {
                             ClassNotFoundException {
     idCounter = (int) input.readObject();
     }
+
+    //TODO Remove after testing
+    /**
+     * Sets customerId - FOR TESTING ONLY
+     */
+    public void setCustomerId(String custID) {
+        this.id = custID;
+    }
 }

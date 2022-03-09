@@ -12,6 +12,7 @@ public class AutomatedTester {
 	private int[] appliances = { 1, 2, 3, 4, 5, 6 };
 	private String[] brandNames = { "washer", "dryer", "kitchen range", "refrigerator", "furnace", "dishwasher" };
 	private String[] modelNames = { "Kitchenaid", "LG", "GE", "Samsung", "Sony", "Zephyr" };
+
 	private double[] prices = { 50.00, 60.00, 100.00, 150.00, 175.00, 200.00 };
 	private double repairPlanAmount = 20.50;
 	private double capacity = 100.00;
@@ -38,8 +39,8 @@ public class AutomatedTester {
 		}
 	}
 	
-	public void testPurchaseModel() {
-		
+	public void testPurchaseModel() { // needs to have a working  and addCustomer to function
+
 	}
 
 }
