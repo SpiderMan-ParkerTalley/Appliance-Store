@@ -49,11 +49,12 @@ public class ApplianceStore implements Serializable {
 	 * 
 	 * @return A singleton of type ApplianceStore.
 	 */
-	public ApplianceStore instance() {
+	public static ApplianceStore instance() {
 		if (applianceStore == null) {
-			applianceStore = new ApplianceStore();
-        }  
+			return applianceStore = new ApplianceStore();
+        }  else {
 			return applianceStore;
+        }
 	}
 
 	/**
@@ -336,9 +337,6 @@ public class ApplianceStore implements Serializable {
 		}
 		return result;
 	}
-
-
-
     /**
      * Charges all repair plans for all customers. The method acquires an iterator
      * from the customerList and then examines each customer. It grabs a repairPlan iterator
@@ -350,8 +348,95 @@ public class ApplianceStore implements Serializable {
             customerIterator.hasNext();) {
                 customerIterator.next().chargeRepairPlans();
         }
-
     }
+    /**
+     * Returns a list of all the customers that have repair plans via the Result object.
+     */
+    public Result getAllRepairPlanCustomers() {
+        Result result = new Result();
+        result.setCustomers(customers.getAllCustomersInRepairPlan());
+        return result;
+    }
+
+	/**
+	 * Computes the total revenue from trascations and repair plans.
+	 * @return Result result containing total revenue.
+	 */
+	public Result getTotalRevenue() {
+		double totalRevenueFromTransactions = 0;
+		double totalRevenueFromRepairPlans = 0;
+		for (Iterator<Customer> customerIterator = customers.iterator(); 
+            customerIterator.hasNext();) {
+				Customer customer = customerIterator.next();
+                totalRevenueFromTransactions =+ customer.getTransactionTotalCost();
+				totalRevenueFromRepairPlans =+ customer.getRepairPlansTotalCost();
+        }
+		Result result = new Result();
+        result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);
+        result.setTotalRevenueFromRepairPlans(totalRevenueFromRepairPlans);
+		return result;
+	}
+
+    /**
+     * Gets a List<Customer> object of all the customers from the customers List
+     * and returns it in the Result singleton.
+     * Used to print all customers to the UI.
+     * @return
+     */
+    public Result getAllCustomers() {
+        Result result = new Result();
+        result.setCustomers(customers.getCustomerList());
+        return result;
+    }
+
+    /**
+     * Queries the backOrdersList and assembles a Result object
+     * with information to be used in the UI for printing back order details. 
+     */
+    public Result getAllBackOrders() {
+        Result result = new Result();
+        result.setBackOrders(backorders.getBackOrderList());
+        return result;
+    }
+
+    /**
+     * Saves the data to file ApplianceStoreData,
+     * @return true if successful, false if not.
+     */
+    public static boolean save() {
+        try {
+            FileOutputStream file = new FileOutputStream("ApplianceStoreData");
+            ObjectOutputStream output = new ObjectOutputStream(file);
+            output.writeObject(applianceStore);
+            //TODO: Any static field needs to get saved
+            Customer.save(output);
+            file.close();
+            return true;
+        } catch (Exception ioexception) {
+            ioexception.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Retrieves the data from the file ApplianceStoreData
+     * @return The ApplianceStore object if successful, otherwise null.
+     */
+    public static ApplianceStore retrieve() {
+		try {
+			FileInputStream file = new FileInputStream("ApplianceStoreData");
+			ObjectInputStream input = new ObjectInputStream(file);
+			applianceStore = (ApplianceStore) input.readObject();
+			Customer.retrieve(input); // TODO RETRIEVE ALL STORED STATIC VARS
+			return applianceStore;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return null;
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+			return null;
+		}
+	}
 }
 
    /**
