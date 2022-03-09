@@ -1,4 +1,4 @@
-package edu.ics372.project1.appliancestore.iterators;
+package edu.ics372.project1.appliancestore.business.iterators;
 
 import edu.ics372.project1.appliancestore.business.facade.Result;
 
