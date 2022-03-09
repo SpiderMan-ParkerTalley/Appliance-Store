@@ -23,5 +23,11 @@ public class Washer extends Appliance {
 		this.repairPlanAmount = repairPlanAmount;
 	}
 	
+	@Override
+	public String toString() {
+		String output = super.toString() + " Repair Plan Amount: " + repairPlanAmount;
+		return output;
+	}
+	
 	
 }

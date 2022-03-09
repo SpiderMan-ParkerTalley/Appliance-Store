@@ -149,7 +149,7 @@ public class UserInterface {
 		System.out.println("1 for washer");
 		System.out.println("2 for dryer");
 		System.out.println("3 for kitchen range");
-		System.out.println("4 for refridgerator");
+		System.out.println("4 for refrigerator");
 		System.out.println("5 for furnace");
 		System.out.println("6 for dishwasher");
 		Request.instance().setApplianceType(getNumber("Enter appliance type number"));

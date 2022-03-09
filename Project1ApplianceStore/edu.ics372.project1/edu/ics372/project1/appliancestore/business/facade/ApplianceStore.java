@@ -19,8 +19,6 @@ import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.collections.ModelList;
 
-
-
 /**
  * This is the facade class. It handles all requests from users.
  * 
@@ -34,7 +32,7 @@ public class ApplianceStore implements Serializable {
 
 	private CustomerList customers = CustomerList.getInstance();
 	private ModelList models = ModelList.getInstance();
-    private BackOrderList backorders = BackOrderList.getInstance();
+	private BackOrderList backorders = BackOrderList.getInstance();
 
 	/**
 	 * The constructor is private in order to implement the singleton design
@@ -52,9 +50,9 @@ public class ApplianceStore implements Serializable {
 	public static ApplianceStore instance() {
 		if (applianceStore == null) {
 			return applianceStore = new ApplianceStore();
-        }  else {
+		} else {
 			return applianceStore;
-        }
+		}
 	}
 
 	/**
@@ -77,6 +75,7 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Organizes the operations for adding a member.
+	 * 
 	 * @param customer name
 	 * @param customer address
 	 * @param customer phone number
@@ -84,7 +83,8 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result addCustomer(Request request) {
 		Result result = new Result();
-		Customer customer = new Customer(request.getCustomerName(), request.getCustomerAddress(), request.getCustomerPhoneNumber());
+		Customer customer = new Customer(request.getCustomerName(), request.getCustomerAddress(),
+				request.getCustomerPhoneNumber());
 		if (customers.insertCustomer(customer)) {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			result.setCustomerFields(customer);
@@ -96,6 +96,7 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Adds inventory for a single model
+	 * 
 	 * @param request
 	 * @return result object
 	 */
@@ -109,27 +110,30 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Fulfills backorders, given the inventory has enough to do so. If not, it will return a
-	 * result code stating that is not able to do so.
+	 * Fulfills backorders, given the inventory has enough to do so. If not, it will
+	 * return a result code stating that is not able to do so.
+	 * 
 	 * @param request
 	 * @return
 	 */
 	public Result fulfillBackorder(Request request) {
 		Result result = new Result();
 		BackOrder backorder = backorders.search(request.getBackorderId());
-		if(backorder == null) {
+		if (backorder == null) {
 			result.setResultCode(Result.BACK_ORDER_NOT_FOUND);
 		} else {
-			if(backorder.getQuantity() > models.search(backorder.getAppliance().getId()).getQuantity()) {
+			if (backorder.getQuantity() > models.search(backorder.getAppliance().getId()).getQuantity()) {
 				result.setResultCode(Result.NOT_A_VALID_QUANTITY);
 			} else {
-				Transaction transaction = new Transaction(backorder.getCustomer(), backorder.getAppliance(), backorder.getQuantity());
-				if(backorder.getCustomer().addTransaction(transaction)) {
+				Transaction transaction = new Transaction(backorder.getCustomer(), backorder.getAppliance(),
+						backorder.getQuantity());
+				if (backorder.getCustomer().addTransaction(transaction)) {
 					result.setBackOrderFields(backorder);
 					result.setCustomerFields(backorder.getCustomer());
 					backorders.removeBackOrder(backorder);
 					result.setTransactionFields(transaction);
-					int newQuantity = models.search(backorder.getAppliance().getId()).getQuantity() - backorder.getQuantity();
+					int newQuantity = models.search(backorder.getAppliance().getId()).getQuantity()
+							- backorder.getQuantity();
 					models.search(backorder.getAppliance().getId()).setQuantity(newQuantity);
 					Appliance appliance = models.search(backorder.getAppliance().getId());
 					result.setApplianceFields(appliance);
@@ -141,15 +145,17 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Enrolls a customer into a repair plan. If the customer sucessfully enrolls, it returns a 
-	 * success operation code, and if not, it returns a failed operation code. 
+	 * Enrolls a customer into a repair plan. If the customer sucessfully enrolls,
+	 * it returns a success operation code, and if not, it returns a failed
+	 * operation code.
+	 * 
 	 * @param request
 	 * @return
 	 */
 	public Result enrollRepairPlan(Request request) {
 		Result result = new Result();
 		Appliance appliance = models.search(request.getApplianceID());
-		if(appliance == null) {
+		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 			return result;
 		} else if (appliance.eligibleForRepairPlan() == false) {
@@ -158,13 +164,13 @@ public class ApplianceStore implements Serializable {
 		}
 		result.setApplianceFields(appliance);
 		Customer customer = customers.search(request.getCustomerId());
-		if(customer == null) {
+		if (customer == null) {
 			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
 			return result;
 		}
 		result.setCustomerFields(customer);
-		if(models.search(request.getApplianceID()).eligibleForRepairPlan()) {
-			if(customers.search(request.getCustomerId()).addRepairPlan(models.search(request.getApplianceID()))) {
+		if (models.search(request.getApplianceID()).eligibleForRepairPlan()) {
+			if (customers.search(request.getCustomerId()).addRepairPlan(models.search(request.getApplianceID()))) {
 				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 				return result;
 			}
@@ -174,81 +180,84 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Withdraws a customer from a repair plan for a single model. If the customer withdraws,
-	 * it returns a success operation code, if something goes wrong, it returns the associated
-	 * error code.
+	 * Withdraws a customer from a repair plan for a single model. If the customer
+	 * withdraws, it returns a success operation code, if something goes wrong, it
+	 * returns the associated error code.
+	 * 
 	 * @param request
 	 * @return
 	 */
-	public Result withdrawRepairPlan(Request request) { 
+	public Result withdrawRepairPlan(Request request) {
 		Result result = new Result();
 		Customer customer = customers.search(request.getCustomerId());
-		if(customer == null) {
+		if (customer == null) {
 			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
 			return result;
 		}
 		result.setCustomerFields(customer);
 		Appliance appliance = models.search(result.getApplianceID());
-		if(appliance == null) {
+		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 			return result;
 		}
 		result.setApplianceFields(appliance);
-		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceID()); 
-		if(repairPlan == null) {
+		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceID());
+		if (repairPlan == null) {
 			result.setResultCode(Result.REPAIR_PLAN_NOT_FOUND);
 			return result;
 		}
-		//Do we want to add repairPlan info and Backorder info to result that we return?
-		if(customer.removeRepairPlan(repairPlan)) {
+		// Do we want to add repairPlan info and Backorder info to result that we
+		// return?
+		if (customer.removeRepairPlan(repairPlan)) {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			return result;
 		}
 		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
-	
+
 	/**
-	 * Lists all models of a single appliance or all appliances based on user input. 
-	 * If there are no such models, it returns an error code, but if there are models,
-	 * it returns the list of models.
+	 * Lists all models of a single appliance or all appliances based on user input.
+	 * If there are no such models, it returns an error code, but if there are
+	 * models, it returns the list of models.
+	 * 
 	 * @param request
 	 * @return
 	 */
 	public Result listAppliances(Request request) {
 		Result result = new Result();
 		List<Appliance> appliances = new LinkedList<Appliance>();
-		if(request.getApplianceType() == 7) {
-			for(Appliance model : models) {
+		if (request.getApplianceType() == 7) {
+			for (Appliance model : models) {
 				appliances.add(model);
 			}
 		} else {
 			Appliance appliance = ApplianceFactory.findApplianceType(request.getApplianceType());
-			for(Appliance model : models) {
-				if(model.getClass().equals(appliance.getClass())) {
+			for (Appliance model : models) {
+				if (model.getClass().equals(appliance.getClass())) {
 					appliances.add(model);
 				}
 			}
 		}
-		if(appliances.isEmpty()) {
+		if (appliances.isEmpty()) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 			return result;
-			}
+		}
 		result.setAppliances(appliances);
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		return result;
 	}
 
-
 	/**
 	 * Searches for a given appliance model
+	 * 
 	 * @param applianceId of the appliance
 	 * @return true iff the appliance is in the model list collection
 	 */
 	public Result searchModel(Request request) {
 		Result result = new Result();
 		Appliance appliance = models.search(request.getApplianceID());
-		if(appliance == null) {
+		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 		} else {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
@@ -259,13 +268,14 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Searches for a given customer
+	 * 
 	 * @param customerId of the customer
 	 * @return true iff the customer is in the customer list collection
 	 */
-	public Result searchCustomer(Request request){
+	public Result searchCustomer(Request request) {
 		Result result = new Result();
 		Customer customer = customers.search(request.getCustomerId());
-		if(customer == null) {
+		if (customer == null) {
 			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
 		} else {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
@@ -276,13 +286,14 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Searches for a given backorder
+	 * 
 	 * @param backorderId of the backorder
 	 * @return true iff the backorder is in the backorder list collection
 	 */
 	public Result searchBackorder(Request request) {
 		Result result = new Result();
 		BackOrder backorder = backorders.search(request.getBackorderId());
-		if(backorder == null) {
+		if (backorder == null) {
 			result.setResultCode(Result.BACK_ORDER_NOT_FOUND);
 		} else {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
@@ -290,8 +301,6 @@ public class ApplianceStore implements Serializable {
 		}
 		return result;
 	}
-
-
 
 	/**
 	 * This method allows for the purchase for a single appliance type for a single
@@ -311,118 +320,123 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result purchaseModel(Request request) { //TODO CLEAN UP REDUNDENT SEARCH
 		Result result = new Result();
-        Customer customer = customers.search(request.getCustomerId());
-        Appliance appliance = models.search(request.getApplianceID());
-        
-        if(appliance.getQuantity() >= request.getQuantity()) {
-			customer.addTransaction(new Transaction (customer, appliance, request.getQuantity()));
-			models.search(request.getApplianceID()).setQuantity(appliance.getQuantity() - request.getQuantity()); 
+		Customer customer = customers.search(request.getCustomerId());
+		Appliance appliance = models.search(request.getApplianceID());
+
+		if (appliance.getQuantity() >= request.getQuantity()) {
+			customer.addTransaction(new Transaction(customer, appliance, request.getQuantity()));
+			models.search(request.getApplianceID()).setQuantity(appliance.getQuantity() - request.getQuantity());
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		} else {
 			if (appliance.eligibleForBackOrder()) {
 				int backOrdersNeeded = request.getQuantity() - appliance.getQuantity();
-				if(backOrdersNeeded != request.getQuantity()) {
-					customer.addTransaction(new Transaction( customer, appliance, appliance.getQuantity()));
-					models.search(request.getApplianceID()).setQuantity(0); 
+				if (backOrdersNeeded != request.getQuantity()) {
+					customer.addTransaction(new Transaction(customer, appliance, appliance.getQuantity()));
+					models.search(request.getApplianceID()).setQuantity(0);
 				} else {
 					BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
 					backorders.insertBackOrder(backOrder);
 					result.setResultCode(Result.BACKORDER_CREATED);
 				}
 			} else {
-				customer.addTransaction(new Transaction (customer, appliance, appliance.getQuantity())); 
+				customer.addTransaction(new Transaction(customer, appliance, appliance.getQuantity()));
 				models.search(request.getApplianceID()).setQuantity(0);
 				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			}
 		}
 		return result;
 	}
-    /**
-     * Charges all repair plans for all customers. The method acquires an iterator
-     * from the customerList and then examines each customer. It grabs a repairPlan iterator
-     * from each customer and charges each repair plan it finds. With each repair plan charge,
-     * it generates a transaction object and stores it in the customer's transactionList.
-     */
-    public void chargeRepairPlans() {
-        for (Iterator<Customer> customerIterator = customers.iterator(); 
-            customerIterator.hasNext();) {
-                customerIterator.next().chargeRepairPlans();
-        }
-    }
-    /**
-     * Returns a list of all the customers that have repair plans via the Result object.
-     */
-    public Result getAllRepairPlanCustomers() {
-        Result result = new Result();
-        result.setCustomers(customers.getAllCustomersInRepairPlan());
-        return result;
-    }
+
+	/**
+	 * Charges all repair plans for all customers. The method acquires an iterator
+	 * from the customerList and then examines each customer. It grabs a repairPlan
+	 * iterator from each customer and charges each repair plan it finds. With each
+	 * repair plan charge, it generates a transaction object and stores it in the
+	 * customer's transactionList.
+	 */
+	public void chargeRepairPlans() {
+		for (Iterator<Customer> customerIterator = customers.iterator(); customerIterator.hasNext();) {
+			customerIterator.next().chargeRepairPlans();
+		}
+	}
+
+	/**
+	 * Returns a list of all the customers that have repair plans via the Result
+	 * object.
+	 */
+	public Result getAllRepairPlanCustomers() {
+		Result result = new Result();
+		result.setCustomers(customers.getAllCustomersInRepairPlan());
+		return result;
+	}
 
 	/**
 	 * Computes the total revenue from trascations and repair plans.
+	 * 
 	 * @return Result result containing total revenue.
 	 */
 	public Result getTotalRevenue() {
 		double totalRevenueFromTransactions = 0;
 		double totalRevenueFromRepairPlans = 0;
-		for (Iterator<Customer> customerIterator = customers.iterator(); 
-            customerIterator.hasNext();) {
-				Customer customer = customerIterator.next();
-                totalRevenueFromTransactions =+ customer.getTransactionTotalCost();
-				totalRevenueFromRepairPlans =+ customer.getRepairPlansTotalCost();
-        }
+		for (Iterator<Customer> customerIterator = customers.iterator(); customerIterator.hasNext();) {
+			Customer customer = customerIterator.next();
+			totalRevenueFromTransactions = +customer.getTransactionTotalCost();
+			totalRevenueFromRepairPlans = +customer.getRepairPlansTotalCost();
+		}
 		Result result = new Result();
-        result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);
-        result.setTotalRevenueFromRepairPlans(totalRevenueFromRepairPlans);
+		result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);
+		result.setTotalRevenueFromRepairPlans(totalRevenueFromRepairPlans);
 		return result;
 	}
 
-    /**
-     * Gets a List<Customer> object of all the customers from the customers List
-     * and returns it in the Result singleton.
-     * Used to print all customers to the UI.
-     * @return
-     */
-    public Result getAllCustomers() {
-        Result result = new Result();
-        result.setCustomers(customers.getCustomerList());
-        return result;
-    }
+	/**
+	 * Gets a List<Customer> object of all the customers from the customers List and
+	 * returns it in the Result singleton. Used to print all customers to the UI.
+	 * 
+	 * @return
+	 */
+	public Result getAllCustomers() {
+		Result result = new Result();
+		result.setCustomers(customers.getCustomerList());
+		return result;
+	}
 
-    /**
-     * Queries the backOrdersList and assembles a Result object
-     * with information to be used in the UI for printing back order details. 
-     */
-    public Result getAllBackOrders() {
-        Result result = new Result();
-        result.setBackOrders(backorders.getBackOrderList());
-        return result;
-    }
+	/**
+	 * Queries the backOrdersList and assembles a Result object with information to
+	 * be used in the UI for printing back order details.
+	 */
+	public Result getAllBackOrders() {
+		Result result = new Result();
+		result.setBackOrders(backorders.getBackOrderList());
+		return result;
+	}
 
-    /**
-     * Saves the data to file ApplianceStoreData,
-     * @return true if successful, false if not.
-     */
-    public static boolean save() {
-        try {
-            FileOutputStream file = new FileOutputStream("ApplianceStoreData");
-            ObjectOutputStream output = new ObjectOutputStream(file);
-            output.writeObject(applianceStore);
-            //TODO: Any static field needs to get saved
-            Customer.save(output);
-            file.close();
-            return true;
-        } catch (Exception ioexception) {
-            ioexception.printStackTrace();
-            return false;
-        }
-    }
+	/**
+	 * Saves the data to file ApplianceStoreData,
+	 * 
+	 * @return true if successful, false if not.
+	 */
+	public static boolean save() {
+		try {
+			FileOutputStream file = new FileOutputStream("ApplianceStoreData");
+			ObjectOutputStream output = new ObjectOutputStream(file);
+			output.writeObject(applianceStore);
+			// TODO: Any static field needs to get saved
+			Customer.save(output);
+			file.close();
+			return true;
+		} catch (Exception ioexception) {
+			ioexception.printStackTrace();
+			return false;
+		}
+	}
 
-    /**
-     * Retrieves the data from the file ApplianceStoreData
-     * @return The ApplianceStore object if successful, otherwise null.
-     */
-    public static ApplianceStore retrieve() {
+	/**
+	 * Retrieves the data from the file ApplianceStoreData
+	 * 
+	 * @return The ApplianceStore object if successful, otherwise null.
+	 */
+	public static ApplianceStore retrieve() {
 		try {
 			FileInputStream file = new FileInputStream("ApplianceStoreData");
 			ObjectInputStream input = new ObjectInputStream(file);
@@ -438,4 +452,3 @@ public class ApplianceStore implements Serializable {
 		}
 	}
 }
-
