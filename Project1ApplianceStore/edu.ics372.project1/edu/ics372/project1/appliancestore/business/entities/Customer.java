@@ -43,7 +43,7 @@ public class Customer implements Serializable {
     private double repairPlansTotalCost;
 
     /**
-     * 
+     * Stores the total amount the customer has paid for appliances.
      */
     private double transactionTotalCost;
 
@@ -210,13 +210,5 @@ public class Customer implements Serializable {
     public static void retrieve(ObjectInputStream input) throws IOException, 
                             ClassNotFoundException {
         idCounter = (int) input.readObject();
-    }
-
-    //TODO Remove after testing
-    /**
-     * Sets customerId - FOR TESTING ONLY
-     */
-    public void setCustomerId(String custID) {
-        this.id = custID;
     }
 }

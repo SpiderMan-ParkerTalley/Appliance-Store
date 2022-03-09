@@ -39,8 +39,19 @@ public class AutomatedTester {
 		}
 	}
 	
-	public void testPurchaseModel() { // needs to have a working  and addCustomer to function
+	public void testPurchaseModel() { // needs to have a working addModel and addCustomer to function
 
 	}
 
+
+	/**
+	 * All tests to run here.
+	 */
+	public void testAll() {
+		System.out.println("Testing");
+	}
+
+	public static void main(String[] args) {
+		new AutomatedTester().testAll();
+	}
 }

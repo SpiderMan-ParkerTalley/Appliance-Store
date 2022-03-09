@@ -173,11 +173,4 @@ public class Appliance implements Serializable {
 		return output;
 	}
 
-	//TODO remove after testing
-	/**
-	 * sets the applianceID
-	 */
-	public void setApplianceId(String ApplianceId) {
-		this.id = ApplianceId;
-	}
 } 

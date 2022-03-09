@@ -354,10 +354,10 @@ public class UserInterface {
 	/**
 	 * Prints out every customer and their details.
 	 */
-	public void printAllCustomers() {
+	public void listCustomers() {
 		Result result = applianceStore.getAllCustomers();
 		for (Customer customer : result.getCustomers())
-		System.out.println(customer);
+		System.out.println(customer + " Has Repair Plan: " + customer.hasRepairPlan());
 	}
 	/**
 	 * Prints out all back orders with the appliance brand, model,
@@ -442,7 +442,7 @@ public class UserInterface {
 				ListAllRepairPlanCustomers();
 				break;
 			case LIST_CUSTOMERS:
-				printAllCustomers();
+				listCustomers();
 				break;
 			case LIST_BACKORDERS:
 				printAllBackOrders();
