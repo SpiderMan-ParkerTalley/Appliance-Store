@@ -81,11 +81,18 @@ public class Customer implements Serializable {
     /**
      * Creates and adds a repair plan to customer.
      * @param appliance Appliance appliance to be assoicated with repair plan.
-     * @return boolean true if repair plan was sucessfully added.
+     * @return boolean true if repair plan was sucessfully added. False if no 
+     * transaction contains the appliance was found.
      */
     public boolean addRepairPlan(Appliance appliance) {
-        repairPlans.add(new RepairPlan(this, appliance));
-        return true;
+        for (Transaction transaction : transactions) {
+            if(transaction.getAppliance() == appliance) {
+                repairPlans.add(new RepairPlan(this, appliance));
+                return true;
+            }
+        }
+        
+        return false;
     }
 
     /**

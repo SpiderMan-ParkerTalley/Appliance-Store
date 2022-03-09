@@ -1,5 +1,6 @@
 package edu.ics372.project1.appliancestore.business.tests;
 
+import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
@@ -38,8 +39,89 @@ public class AutomatedTester {
 			assert result.getPrice() == (prices[count]);
 		}
 	}
+
+	// Use-case 2 - Add a single customer.
+	public static void testAddSingleCustomer() {
+		final ApplianceStore applianceStore = ApplianceStore.instance();
+		final String name = "Ryan";
+		final String address = "75 Rockcrest Street Wellington, FL 33414";
+		final String phoneNumber = "310-788-4084";
+
+		Request.instance().setCustomerName(name);
+		Request.instance().setCustomerAddress(address);
+		Request.instance().setCustomerPhoneNumber(phoneNumber);;
+
+		Result result = applianceStore.addCustomer(Request.instance());
+		assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+		assert result.getCustomerName().equals(name);
+		assert result.getCustomerAddress().equals(address);
+		assert result.getCustomerPhoneNumber().equals(phoneNumber);
+	}
 	
 	public void testPurchaseModel() { // needs to have a working addModel and addCustomer to function
+
+	}
+
+	// Use-case 6 - Enroll a cuostmer in a repair plan for a single appliance.
+	public void testEnrollCustomerInRepairPlan() {
+		// Creating and adding custome.
+		final ApplianceStore applianceStore = ApplianceStore.instance();
+		final String name = "Ryan";
+		final String address = "75 Rockcrest Street Wellington, FL 33414";
+		final String phoneNumber = "310-788-4084";
+
+		Request.instance().setCustomerName(name);
+		Request.instance().setCustomerAddress(address);
+		Request.instance().setCustomerPhoneNumber(phoneNumber);;
+
+		Result customerResult = applianceStore.addCustomer(Request.instance());
+		final String customerId = customerResult.getCustomerId();
+
+		// Adding appliances.
+		final String applianceModel = "ApplianceModel";
+		final String brandName = "Kitchenaid";
+		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
+
+		final double price = 5.00;
+		final double repairPlanAmount = 10.0;
+		final double capacity = 15.0;
+		final double maxHeatingOutput = 20.0;
+
+		String[] applianceIDs = new String[6];
+
+		for (int count = 0; count < applianceTypes.length; count++) {
+			Request.instance().setApplianceType(applianceTypes[count]);
+			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
+				Request.instance().setRepairPlanAmount(repairPlanAmount);
+			} else if (Request.instance().getApplianceType() == 4) {
+				Request.instance().setCapacity(capacity);
+			} else if (Request.instance().getApplianceType() == 5) {
+				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+			}
+			Request.instance().setModelName(applianceModel);
+			Request.instance().setBrandName(brandName);
+			Request.instance().setPrice(price);
+			Result applianceResult = applianceStore.addModel(Request.instance());
+			applianceIDs[count] = applianceResult.getApplianceID();
+		}
+
+		// TODO: add purchasing of appliance.
+
+		// Enrolling customer in repair plan.
+		for(int index = 0; index < applianceIDs.length; index++) {
+			Request.instance().setApplianceID(applianceIDs[index]);
+			Request.instance().setCustomerId(customerId);
+			Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
+			if (index == 0) {
+				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;
+			}
+			else if (index == 1) {
+				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;
+			}
+			else if (index >= 2) {
+				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGABLE_FOR_REPAIR_PLAN;
+			}
+		}
 
 	}
 
@@ -48,7 +130,9 @@ public class AutomatedTester {
 	 * All tests to run here.
 	 */
 	public void testAll() {
-		System.out.println("Testing");
+		System.out.println("Testing...");
+		testAddSingleCustomer(); 
+		testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
 	}
 
 	public static void main(String[] args) {
