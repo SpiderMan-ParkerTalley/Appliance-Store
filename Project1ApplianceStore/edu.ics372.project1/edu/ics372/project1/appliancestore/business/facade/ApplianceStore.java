@@ -1,5 +1,10 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,7 +15,6 @@ import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
-import edu.ics372.project1.appliancestore.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.collections.ModelList;
@@ -189,7 +193,7 @@ public class ApplianceStore implements Serializable {
 			return result;
 		}
 		result.setApplianceFields(appliance);
-		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getCustomerId(), request.getApplianceID()); 
+		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceID()); 
 		if(repairPlan == null) {
 			result.setResultCode(Result.REPAIR_PLAN_NOT_FOUND);
 			return result;
@@ -304,23 +308,20 @@ public class ApplianceStore implements Serializable {
 	 * @param quantity    - the amount of appliances being purchased.
 	 * @return A Result object with the appropriate information.
 	 */
-
-	 //TODO change for addTransactions
 	public Result purchaseModel(Request request) {
 		Result result = new Result();
         Customer customer = customers.search(request.getCustomerId());
         Appliance appliance = models.search(request.getApplianceID());
         
         if(appliance.getQuantity() >= request.getQuantity()) {
-
-			customer.addTransaction(appliance, request.getQuantity());
+			customer.addTransaction(new Transaction (customer, appliance, request.getQuantity()));
 			models.search(request.getApplianceID()).setQuantity(appliance.getQuantity() - request.getQuantity());
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		} else {
 			if (appliance.eligibleForBackOrder()) {
 				int backOrdersNeeded = request.getQuantity() - appliance.getQuantity();
 				if(backOrdersNeeded != request.getQuantity()) {
-					customer.addTransaction(appliance, appliance.getQuantity());
+					customer.addTransaction(new Transaction( customer, appliance, appliance.getQuantity()));
 					models.search(request.getApplianceID()).setQuantity(0);
 				} else {
 					BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
@@ -328,7 +329,7 @@ public class ApplianceStore implements Serializable {
 					result.setResultCode(Result.BACKORDER_CREATED);
 				}
 			} else {
-				customer.addTransaction(appliance, appliance.getQuantity());
+				customer.addTransaction(new Transaction (customer, appliance, appliance.getQuantity()));
 				models.search(request.getApplianceID()).setQuantity(0);
 				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			}
@@ -351,5 +352,95 @@ public class ApplianceStore implements Serializable {
         }
 
     }
+}
+
+   /**
+     * Returns a list of all the customers that have repair plans via the Result object.
+     */
+    public Result getAllRepairPlanCustomers() {
+        Result result = new Result();
+        result.setCustomers(customers.getAllCustomersInRepairPlan());
+        return result;
+    }
+
+	/**
+	 * Computes the total revenue from trascations and repair plans.
+	 * @return Result result containing total revenue.
+	 */
+	public Result getTotalRevenue() {
+		double totalRevenueFromTransactions = 0;
+		double totalRevenueFromRepairPlans = 0;
+		for (Iterator<Customer> customerIterator = customers.iterator(); 
+            customerIterator.hasNext();) {
+				Customer customer = customerIterator.next();
+                totalRevenueFromTransactions =+ customer.getTransactionTotalCost();
+				totalRevenueFromRepairPlans =+ customer.getRepairPlansTotalCost();
+        }
+		Result result = new Result();
+        result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);
+        result.setTotalRevenueFromRepairPlans(totalRevenueFromRepairPlans);
+		return result;
+	}
+
+    /**
+     * Gets a List<Customer> object of all the customers from the customers List
+     * and returns it in the Result singleton.
+     * Used to print all customers to the UI.
+     * @return
+     */
+    public Result getAllCustomers() {
+        Result result = new Result();
+        result.setCustomers(customers.getCustomerList());
+        return result;
+    }
+
+    /**
+     * Queries the backOrdersList and assembles a Result object
+     * with information to be used in the UI for printing back order details. 
+     */
+    public Result getAllBackOrders() {
+        Result result = new Result();
+        result.setBackOrders(backorders.getBackOrderList());
+        return result;
+    }
+
+    /**
+     * Saves the data to file ApplianceStoreData,
+     * @return true if successful, false if not.
+     */
+    public static boolean save() {
+        try {
+            FileOutputStream file = new FileOutputStream("ApplianceStoreData");
+            ObjectOutputStream output = new ObjectOutputStream(file);
+            output.writeObject(applianceStore);
+            //TODO: Any static field needs to get saved
+            Customer.save(output);
+            file.close();
+            return true;
+        } catch (Exception ioexception) {
+            ioexception.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Retrieves the data from the file ApplianceStoreData
+     * @return The ApplianceStore object if successful, otherwise null.
+     */
+    public static ApplianceStore retrieve() {
+		try {
+			FileInputStream file = new FileInputStream("ApplianceStoreData");
+			ObjectInputStream input = new ObjectInputStream(file);
+			applianceStore = (ApplianceStore) input.readObject();
+			Customer.retrieve(input); // TODO RETRIEVE ALL STORED STATIC VARS
+			return applianceStore;
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return null;
+		} catch (ClassNotFoundException cnfe) {
+			cnfe.printStackTrace();
+			return null;
+		}
+	}
 }
 
