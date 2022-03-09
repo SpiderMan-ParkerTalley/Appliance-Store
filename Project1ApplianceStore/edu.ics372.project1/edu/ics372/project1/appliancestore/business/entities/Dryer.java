@@ -22,5 +22,11 @@ public class Dryer extends Appliance {
 	public void setRepairPlanAmount(double repairPlanAmount) {
 		this.repairPlanAmount = repairPlanAmount;
 	}
+	
+	@Override
+	public String toString() {
+		String output = super.toString() + " Repair Plan Amount: " + repairPlanAmount;
+		return output;
+	}
 
 }
