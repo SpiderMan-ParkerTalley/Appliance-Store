@@ -185,6 +185,18 @@ public class Customer implements Serializable {
         return false;
     }
 
+    public String getInformation() {
+        String customerInfo = "Member name " + name + " address " + address + 
+            " id " + id + " phone number " + phoneNumber + " acount balance " + 
+            accountBalance + " has repair plan: ";
+        if(this.hasRepairPlan()) {
+            customerInfo.concat("true");
+        } else {
+            customerInfo.concat("false");
+        }
+        return customerInfo;
+    }
+
     /**
      * Saves the static idCounter.
      * @param output
@@ -197,7 +209,7 @@ public class Customer implements Serializable {
     */
     public static void retrieve(ObjectInputStream input) throws IOException, 
                             ClassNotFoundException {
-    idCounter = (int) input.readObject();
+        idCounter = (int) input.readObject();
     }
 
     //TODO Remove after testing
