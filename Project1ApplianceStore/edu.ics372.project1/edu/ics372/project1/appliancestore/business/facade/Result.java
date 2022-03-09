@@ -2,6 +2,7 @@ package edu.ics372.project1.appliancestore.business.facade;
 
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
+import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 
 import java.util.List;
 
@@ -28,7 +29,6 @@ public class Result extends DataTransfer {
 	private int resultCode;
 	private double totalRevenueFromTransactions;
 	private double totalRevenueFromRepairPlans;
-	
 
 	public int getResultCode() {
 		return resultCode;
@@ -70,6 +70,15 @@ public class Result extends DataTransfer {
 		this.totalRevenueFromRepairPlans = totalRevenueFromRepairPlans;
 	}
 
+	/**
+	 * Sets the fields neccesary for the implementation of use case 11.
+	 * @param next The repairPlan in question
+	 */
+	public void setRepairPlanFields(RepairPlan next) {
+		setCustomerFields(next.getCustomer());
+		setApplianceFields(next.getAppliance());
+		setHasRepairPlan(next.getCustomer().hasRepairPlan());
+	}
 
 }
 

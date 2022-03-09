@@ -27,7 +27,7 @@ public abstract class DataTransfer {
 	private String timeStamp;
 	private int transactionType;
 	private int applianceType;
-	private boolean hasRepairPlan;
+	private boolean customerHasRepairPlan;
 	private String backorderId;
     private int transactionQuantity;
 	//Safe way to list appliances? Maybe put in Result? Does Request have a use for this?
@@ -72,11 +72,11 @@ public abstract class DataTransfer {
 	}
 
 	public boolean isHasRepairPlan() {
-		return hasRepairPlan;
+		return customerHasRepairPlan;
 	}
 
 	public void setHasRepairPlan(boolean hasRepairPlan) {
-		this.hasRepairPlan = hasRepairPlan;
+		this.customerHasRepairPlan = hasRepairPlan;
 	}
 
 	public String getApplianceID() {
@@ -172,6 +172,7 @@ public abstract class DataTransfer {
 		customerName = customer.getName();
 		customerPhoneNumber = customer.getPhoneNumber();
 		customerAddress = customer.getAddress();
+		customerHasRepairPlan = customer.hasRepairPlan();
 	}
 
 	public void setBackOrderFields(BackOrder backorder) {
@@ -191,6 +192,14 @@ public abstract class DataTransfer {
 		modelName = appliance.getModel();
 		price = appliance.getPrice();
 		quantity = appliance.getQuantity();
+	}
+
+	public boolean getCustomerHasRepairPlan() {
+		return customerHasRepairPlan;
+	}
+
+	public void setCustomerHasRepairPlan(boolean customerHasRepairPlan) {
+		this.customerHasRepairPlan = customerHasRepairPlan;
 	}
 
 	public void reset() {

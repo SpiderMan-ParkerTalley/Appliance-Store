@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.StringTokenizer;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
@@ -355,10 +356,15 @@ public class UserInterface {
 	 * Prints out every customer and their details.
 	 */
 	public void listCustomers() {
-		Result result = applianceStore.getAllCustomers();
-		for (Customer customer : result.getCustomers())
-		System.out.println(customer + " Has Repair Plan: " + customer.hasRepairPlan());
+		Iterator<Result> resultIterator = applianceStore.getAllCustomers();
+		while (resultIterator.hasNext()){
+		Result result = resultIterator.next();
+		System.out.println(result.getCustomerName() + ", "
+						 + result.getCustomerAddress() + ", "
+						 + result.getCustomerPhoneNumber() + ", Has Repair Plan: "
+						 + result.getCustomerHasRepairPlan());
 	}
+}
 	/**
 	 * Prints out all back orders with the appliance brand, model,
 	 * customer name, customer id, and quantity

@@ -15,6 +15,7 @@ import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
+import edu.ics372.project1.appliancestore.business.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.collections.ModelList;
@@ -398,10 +399,10 @@ public class ApplianceStore implements Serializable {
 	 * 
 	 * @return
 	 */
-	public Result getAllCustomers() {
+	public Iterator<Result> getAllCustomers() {
 		Result result = new Result();
 		result.setCustomers(customers.getCustomerList());
-		return result;
+		return new SafeCustomerIterator(customers.iterator());
 	}
 
 	/**
