@@ -3,6 +3,8 @@ package edu.ics372.project1.appliancestore.business.entities;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import edu.ics372.project1.appliancestore.business.collections.ModelList;
+
 /*
  * @author Cristian Zendejas
  * The parent class for all appliances within the store.
@@ -150,12 +152,19 @@ public class Appliance implements Serializable {
 	}
 
 	/*
-	 * Returns the amount of appliances purchased and which ones were backorders?
+	 * Returns the quantity of appliances that need to be backordered.
 	 * @params quantity of desired appliances
 	 * @returns integer 
 	 */
 	public int purchase(int quantity) {
-		System.out.println("the purchase function runs!");
-		return 0;
+		Appliance purchasedAppliance = ModelList.getInstance().search(this.id);
+		int needToBackOrder = 0;
+		
+		if(purchasedAppliance.getQuantity() < quantity) {
+			needToBackOrder = quantity - purchasedAppliance.getQuantity(); 
+			return needToBackOrder;
+		}
+		
+		return needToBackOrder;
 	}
 } 
