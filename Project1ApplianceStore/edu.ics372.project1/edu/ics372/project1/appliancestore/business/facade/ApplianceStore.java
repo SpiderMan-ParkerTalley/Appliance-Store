@@ -361,7 +361,7 @@ public class ApplianceStore implements Serializable {
 		}
 		return result;
 	}
-
+    
 	/**
 	 * Charges all repair plans for all customers. The method acquires an iterator
 	 * from the customerList and then examines each customer. It grabs a repairPlan
