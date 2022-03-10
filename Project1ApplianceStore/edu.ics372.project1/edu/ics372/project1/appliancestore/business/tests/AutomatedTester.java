@@ -62,9 +62,9 @@ public class AutomatedTester {
 
 	}
 
-	// Use-case 6 - Enroll a cuostmer in a repair plan for a single appliance.
+	// Use-case 6 - Enroll a custmer in a repair plan for a single appliance.
 	public void testEnrollCustomerInRepairPlan() {
-		// Creating and adding custome.
+		// Creating and adding customer.
 		final ApplianceStore applianceStore = ApplianceStore.instance();
 		final String name = "Ryan";
 		final String address = "75 Rockcrest Street Wellington, FL 33414";
@@ -112,10 +112,8 @@ public class AutomatedTester {
 			Request.instance().setApplianceID(applianceIDs[index]);
 			Request.instance().setCustomerId(customerId);
 			Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
-			if (index == 0) {
-				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;
-			}
-			else if (index == 1) {
+			if (index <= 1) {
+				System.out.println(enrollRepairPlanResult.getResultCode());
 				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			}
 			else if (index >= 2) {
@@ -133,6 +131,7 @@ public class AutomatedTester {
 		System.out.println("Testing...");
 		testAddSingleCustomer(); 
 		testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
+		System.out.println("Done testing.");
 	}
 
 	public static void main(String[] args) {

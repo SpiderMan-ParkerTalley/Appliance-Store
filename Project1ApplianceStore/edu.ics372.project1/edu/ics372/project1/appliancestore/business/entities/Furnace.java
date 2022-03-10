@@ -4,26 +4,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Furnace extends Appliance {
-	private double maxHeatingOuput;
+	private double maxHeatingOutput;
 	private List<Furnace> itemsOnStock;
 	
-	public Furnace(String brandName, String model, double price, int quantity, double maxHeatingOuput) {
+	public Furnace(String brandName, String model, double price, int quantity, double maxHeatingOutput) {
 		super(brandName, model, price, quantity);
-		this.maxHeatingOuput = maxHeatingOuput;
+		this.maxHeatingOutput = maxHeatingOutput;
 		this.itemsOnStock = new ArrayList<Furnace>();
 	}
 
-	public double getMaxHeatingOuput() {
-		return maxHeatingOuput;
+	public double getMaxHeatingOutput() {
+		return maxHeatingOutput;
 	}
 
-	public void setMaxHeatingOuput(double maxHeatingOuput) {
-		this.maxHeatingOuput = maxHeatingOuput;
+	public void setMaxHeatingOutput(double maxHeatingOutput) {
+		this.maxHeatingOutput = maxHeatingOutput;
 	}
 
-	@Override
-	public String toString() {
-		String output = super.toString() + " Max Heating Output: " + maxHeatingOuput;
-		return output;
-	}
 }
