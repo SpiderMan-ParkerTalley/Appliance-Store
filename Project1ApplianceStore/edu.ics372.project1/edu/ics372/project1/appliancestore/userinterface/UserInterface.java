@@ -257,13 +257,18 @@ public class UserInterface {
 		}
 			Request.instance().setQuantity(getNumber("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
-			if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
+			switch(result.getResultCode()) {
+			case Result.OPERATION_SUCCESSFUL:
 				System.out.println("Model " + result.getModelName() + " bought by " + result.getCustomerName()
 				+ " on " + result.getTimeStamp());
-			} else {
-				System.out.println("Model could not be purchased");
+				break;
+			case Result.BACKORDER_CREATED:
+				System.out.printf("Could not fulfill entire order. Back Order created with Back Order ID %s", result.getBackorderId());
+				break;
+			default:
+				System.out.println("Could not process order.");
 			}
-		} while (yesOrNo("Purchase more models?")); //Does the use case specifically ask for this?
+		} while (yesOrNo("Purchase more models?")); //TODO Does the use case specifically ask for this?
 	}
 
 	/**
