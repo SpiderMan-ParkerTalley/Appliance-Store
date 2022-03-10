@@ -122,6 +122,14 @@ public class AutomatedTester {
 		}
 
 	}
+	// Use Case 9 Print total Revenue
+	public void testPrintRevenue(){
+		Result result = new Result();
+		result = ApplianceStore.instance().getTotalRevenue();
+		double totalSale = result.getTotalRevenueFromTransactions();
+		double totalRepairPlan = result.getTotalRevenueFromRepairPlans();
+		System.out.println("The total sale is: " + totalSale + "The total repair plan revenue is: " + totalRepairPlan);
+	}
 
 
 	/**
@@ -131,6 +139,9 @@ public class AutomatedTester {
 		System.out.println("Testing...");
 		testAddSingleCustomer(); 
 		testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
+		testFulfillBackOrder();
+		testWithDrawCustomer();
+		testPrintRevenue();
 		System.out.println("Done testing.");
 	}
 
@@ -138,3 +149,4 @@ public class AutomatedTester {
 		new AutomatedTester().testAll();
 	}
 }
+// nhj
