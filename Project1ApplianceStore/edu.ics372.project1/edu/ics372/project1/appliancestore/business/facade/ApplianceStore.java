@@ -322,10 +322,11 @@ public class ApplianceStore implements Serializable {
 	 * @param quantity    - the amount of appliances being purchased.
 	 * @return A Result object with the appropriate information.
 	 */
-	public Result purchaseModel(Request request) { //TODO CLEAN UP REDUNDENT SEARCH
+	public Result purchaseModel(Request request) { 
 		Result result = new Result();
+        int backOrdersNeeded = 0;
         /* This block searches for the customer and appliance. It returns error codes
-        if either are not found.
+        if either are not found. TODO is it redundant?
         */
 		Customer customer = customers.search(request.getCustomerId());
         if(customer == null) {
@@ -337,31 +338,25 @@ public class ApplianceStore implements Serializable {
             result.setResultCode(Result.APPLIANCE_NOT_FOUND);
             return result;
         }
-            //TODO fix the backorder flow here - Jim
-		if (appliance.getQuantity() >= request.getQuantity()) {
-			customer.addTransaction(new Transaction(customer, appliance, request.getQuantity()));
-			appliance.purchase(request.getQuantity());
-			result.setResultCode(Result.OPERATION_SUCCESSFUL);
-		} else {
-			if (appliance.eligibleForBackOrder()) {
-				int backOrdersNeeded = request.getQuantity() - appliance.getQuantity();
-				if (backOrdersNeeded != request.getQuantity()) {
-					customer.addTransaction(new Transaction(customer, appliance, appliance.getQuantity()));
-					models.search(request.getApplianceId()).setQuantity(0);
-				} else {
-					BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
-					backorders.insertBackOrder(backOrder);
-					result.setResultCode(Result.BACKORDER_CREATED);
-				}
-			} else {
-				customer.addTransaction(new Transaction(customer, appliance, appliance.getQuantity()));
-				models.search(request.getApplianceId()).setQuantity(0);
-				result.setResultCode(Result.OPERATION_SUCCESSFUL);
-			}
-		}
+        /*
+        Here, the purchase method in the Appliance class deducts the quantity in the request
+        to purchase from the actual number availble. If the requested purchase amount exceeds
+        the number available, it returns an integer value of the requested amount that could
+        not be fulfilled. This amount is used to create the backOrder.
+        */
+        backOrdersNeeded = appliance.purchase(request.getQuantity());
+        if (backOrdersNeeded == 0) {
+        customer.addTransaction(new Transaction(customer, appliance, appliance.getQuantity()));
+        result.setResultCode(Result.OPERATION_SUCCESSFUL);
+        }
+        else if (backOrdersNeeded > 0) {
+            BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
+            backorders.insertBackOrder(backOrder);
+            result.setResultCode(Result.BACKORDER_CREATED);
+        }
 		return result;
 	}
-    
+
 	/**
 	 * Charges all repair plans for all customers. The method acquires an iterator
 	 * from the customerList and then examines each customer. It grabs a repairPlan
@@ -437,7 +432,9 @@ public class ApplianceStore implements Serializable {
 			ObjectOutputStream output = new ObjectOutputStream(file);
 			output.writeObject(applianceStore);
 			// TODO: Any static field needs to get saved
+            // TODO: Not saving over a file that is already created.
 			Customer.save(output);
+            output.close();
 			file.close();
 			return true;
 		} catch (Exception ioexception) {
@@ -457,6 +454,8 @@ public class ApplianceStore implements Serializable {
 			ObjectInputStream input = new ObjectInputStream(file);
 			applianceStore = (ApplianceStore) input.readObject();
 			Customer.retrieve(input); // TODO RETRIEVE ALL STORED STATIC VARS
+            input.close(); // TODO check if neccesary
+            file.close(); // TODO check if neccesary
 			return applianceStore;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();

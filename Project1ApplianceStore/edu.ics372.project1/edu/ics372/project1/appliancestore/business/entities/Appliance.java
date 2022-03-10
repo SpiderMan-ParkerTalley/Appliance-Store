@@ -153,19 +153,22 @@ public class Appliance implements Serializable {
 
 	/*
 	 * Returns the quantity of appliances that need to be backordered.
-	 * @params quantity of desired appliances
-	 * @returns integer 
+	 * If the quantity of appliances in stock is greater than the quantity
+	 * being purchased, needToBackOrder returns 0.
+	 * If there is not enough inventory on hand to fulfill the purchase,
+	 * needToBackOrder returns the amount needed to back order.
+	 * @param int - the quantity being purchased
+	 * @return int - The amount of appliances to put on back order. 
 	 */
 	public int purchase(int quantity) {
-		Appliance purchasedAppliance = ModelList.getInstance().search(this.id);
 		int needToBackOrder = 0;
-		
-		if(purchasedAppliance.getQuantity() < quantity) {
-			needToBackOrder = quantity - purchasedAppliance.getQuantity(); 
+		if(this.getQuantity() < quantity) {
+			this.setQuantity(this.getQuantity() - quantity); 
+			return needToBackOrder;
+		} else {
+			needToBackOrder = quantity - this.getQuantity();
 			return needToBackOrder;
 		}
-		
-		return needToBackOrder;
 	}
 	
 	public String toString() {

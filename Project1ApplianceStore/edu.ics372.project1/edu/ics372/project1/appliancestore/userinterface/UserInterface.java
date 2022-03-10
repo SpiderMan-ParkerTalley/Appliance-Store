@@ -246,7 +246,7 @@ public class UserInterface {
 		boolean applianceInputGood = false;
 		while(!applianceInputGood) {
 			Request.instance().setApplianceID(getToken("Enter appliance id"));
-			result = applianceStore.searchCustomer(Request.instance());
+			result = applianceStore.searchModel(Request.instance());
 			if(result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
 					System.out.println("Error: Appliance with id " + Request.instance().getApplianceId() +
 					" not found.");
