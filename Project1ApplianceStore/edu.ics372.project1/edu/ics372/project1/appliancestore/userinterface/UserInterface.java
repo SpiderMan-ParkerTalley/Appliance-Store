@@ -171,7 +171,7 @@ public class UserInterface {
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("Could not add appliance model");
 		} else {
-			System.out.println("Appliance model " + result.getApplianceID() + " has been added");
+			System.out.println("Appliance model " + result.getApplianceId() + " has been added");
 		}
 	}
 	/**
@@ -210,7 +210,7 @@ public class UserInterface {
 		Request.instance().setApplianceID(getToken("Enter appliance id"));
 		Result result = applianceStore.searchModel(Request.instance());
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("No appliance with id " + Request.instance().getApplianceID());
+			System.out.println("No appliance with id " + Request.instance().getApplianceId());
 		} else {
 			Request.instance().setQuantity(getNumber("Enter quantity to add"));
 			result = applianceStore.addInventory(Request.instance());
@@ -228,14 +228,33 @@ public class UserInterface {
 	 * method purchasing the model.
 	 */
 	public void purchaseModel() {
-		Request.instance().setCustomerId(getToken("Enter customer id"));
-		Result result = applianceStore.searchCustomer(Request.instance());
-		if (result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("No customer with id " + Request.instance().getCustomerId());
-			return;
-		}
+		Result result;
 		do {
+		// customer and appliance search guards
+		boolean customerInputGood = false;
+		while(!customerInputGood) {
+			Request.instance().setCustomerId(getToken("Enter customer id"));
+			result = applianceStore.searchCustomer(Request.instance());
+			if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+				System.out.println("Error: Customer with id " + Request.instance().getCustomerId() +
+				" not found.");
+			}
+			else if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
+				customerInputGood = true;
+			}
+		}
+		boolean applianceInputGood = false;
+		while(!applianceInputGood) {
 			Request.instance().setApplianceID(getToken("Enter appliance id"));
+			result = applianceStore.searchCustomer(Request.instance());
+			if(result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+					System.out.println("Error: Appliance with id " + Request.instance().getApplianceId() +
+					" not found.");
+				}
+			else if (result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
+				applianceInputGood = true;
+			}
+		}
 			Request.instance().setQuantity(getNumber("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
 			if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
@@ -284,7 +303,7 @@ public class UserInterface {
 			System.out.println("Could not enroll customer in repair plan");
 		} else {
 			System.out.println("Customer " + Request.instance().getCustomerAddress() + " succesfully " + 
-			"enrolled in repair plan for " + Request.instance().getApplianceID());
+			"enrolled in repair plan for " + Request.instance().getApplianceId());
 		}
 	}
 
@@ -307,7 +326,7 @@ public class UserInterface {
 			System.out.println("Could not enroll customer in repair plan");
 		} else {
 			System.out.println("Customer " + Request.instance().getCustomerAddress() + " successfully " + 
-			"enrolled in repair plan for " + Request.instance().getApplianceID());
+			"enrolled in repair plan for " + Request.instance().getApplianceId());
 			}
 		}
 	/**
@@ -357,11 +376,14 @@ public class UserInterface {
 	 */
 	public void listCustomers() {
 		Iterator<Result> resultIterator = applianceStore.getAllCustomers();
+		System.out.println("Name | Address | Phone| Repair Plan Status");
+		System.out.println("----------------------------------------------------" +
+							"------------------------------------");
 		while (resultIterator.hasNext()){
 		Result result = resultIterator.next();
-		System.out.println(result.getCustomerName() + ", "
-						 + result.getCustomerAddress() + ", "
-						 + result.getCustomerPhoneNumber() + ", Has Repair Plan: "
+		System.out.println(result.getCustomerName() + " | "
+						 + result.getCustomerAddress() + " | "
+						 + result.getCustomerPhoneNumber() + " | "
 						 + result.getCustomerHasRepairPlan());
 	}
 }

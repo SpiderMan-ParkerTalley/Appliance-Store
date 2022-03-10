@@ -79,7 +79,7 @@ public abstract class DataTransfer {
 		this.customerHasRepairPlan = hasRepairPlan;
 	}
 
-	public String getApplianceID() {
+	public String getApplianceId() {
 		return applianceID;
 	}
 

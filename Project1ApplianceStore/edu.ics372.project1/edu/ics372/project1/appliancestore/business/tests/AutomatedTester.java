@@ -102,7 +102,7 @@ public class AutomatedTester {
 			Request.instance().setBrandName(brandName);
 			Request.instance().setPrice(price);
 			Result applianceResult = applianceStore.addModel(Request.instance());
-			applianceIDs[count] = applianceResult.getApplianceID();
+			applianceIDs[count] = applianceResult.getApplianceId();
 		}
 
 		// TODO: add purchasing of appliance.

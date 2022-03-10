@@ -103,8 +103,8 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result addInventory(Request request) {
 		Result result = new Result();
-		models.search(request.getApplianceID()).setQuantity(request.getQuantity());
-		Appliance appliance = models.search(request.getApplianceID());
+		models.search(request.getApplianceId()).setQuantity(request.getQuantity());
+		Appliance appliance = models.search(request.getApplianceId());
 		result.setApplianceFields(appliance);
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		return result;
@@ -155,7 +155,7 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result enrollRepairPlan(Request request) {
 		Result result = new Result();
-		Appliance appliance = models.search(request.getApplianceID());
+		Appliance appliance = models.search(request.getApplianceId());
 		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 			return result;
@@ -170,8 +170,8 @@ public class ApplianceStore implements Serializable {
 			return result;
 		}
 		result.setCustomerFields(customer);
-		if (models.search(request.getApplianceID()).eligibleForRepairPlan()) {
-			if (customers.search(request.getCustomerId()).addRepairPlan(models.search(request.getApplianceID()))) {
+		if (models.search(request.getApplianceId()).eligibleForRepairPlan()) {
+			if (customers.search(request.getCustomerId()).addRepairPlan(models.search(request.getApplianceId()))) {
 				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 				return result;
 			}
@@ -196,13 +196,13 @@ public class ApplianceStore implements Serializable {
 			return result;
 		}
 		result.setCustomerFields(customer);
-		Appliance appliance = models.search(result.getApplianceID());
+		Appliance appliance = models.search(result.getApplianceId());
 		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 			return result;
 		}
 		result.setApplianceFields(appliance);
-		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceID());
+		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceId());
 		if (repairPlan == null) {
 			result.setResultCode(Result.REPAIR_PLAN_NOT_FOUND);
 			return result;
@@ -260,7 +260,7 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result searchModel(Request request) {
 		Result result = new Result();
-		Appliance appliance = models.search(request.getApplianceID());
+		Appliance appliance = models.search(request.getApplianceId());
 		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 		} else {
@@ -324,19 +324,30 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result purchaseModel(Request request) { //TODO CLEAN UP REDUNDENT SEARCH
 		Result result = new Result();
+        /* This block searches for the customer and appliance. It returns error codes
+        if either are not found.
+        */
 		Customer customer = customers.search(request.getCustomerId());
-		Appliance appliance = models.search(request.getApplianceID());
-
+        if(customer == null) {
+            result.setResultCode(Result.CUSTOMER_NOT_FOUND);
+            return result;
+        }
+		Appliance appliance = models.search(request.getApplianceId());
+        if(appliance == null) {
+            result.setResultCode(Result.APPLIANCE_NOT_FOUND);
+            return result;
+        }
+            //TODO fix the backorder flow here - Jim
 		if (appliance.getQuantity() >= request.getQuantity()) {
 			customer.addTransaction(new Transaction(customer, appliance, request.getQuantity()));
-			models.search(request.getApplianceID()).setQuantity(appliance.getQuantity() - request.getQuantity());
+			appliance.purchase(request.getQuantity());
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		} else {
 			if (appliance.eligibleForBackOrder()) {
 				int backOrdersNeeded = request.getQuantity() - appliance.getQuantity();
 				if (backOrdersNeeded != request.getQuantity()) {
 					customer.addTransaction(new Transaction(customer, appliance, appliance.getQuantity()));
-					models.search(request.getApplianceID()).setQuantity(0);
+					models.search(request.getApplianceId()).setQuantity(0);
 				} else {
 					BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
 					backorders.insertBackOrder(backOrder);
@@ -344,7 +355,7 @@ public class ApplianceStore implements Serializable {
 				}
 			} else {
 				customer.addTransaction(new Transaction(customer, appliance, appliance.getQuantity()));
-				models.search(request.getApplianceID()).setQuantity(0);
+				models.search(request.getApplianceId()).setQuantity(0);
 				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			}
 		}
