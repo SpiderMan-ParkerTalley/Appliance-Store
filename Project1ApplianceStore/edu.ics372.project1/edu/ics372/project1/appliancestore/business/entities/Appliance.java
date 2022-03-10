@@ -163,10 +163,11 @@ public class Appliance implements Serializable {
 	public int purchase(int quantity) {
 		int needToBackOrder = 0;
 		if(this.getQuantity() < quantity) {
-			this.setQuantity(this.getQuantity() - quantity); 
+			needToBackOrder = quantity - this.getQuantity();
+			this.setQuantity(0); 
 			return needToBackOrder;
 		} else {
-			needToBackOrder = quantity - this.getQuantity();
+			this.setQuantity(this.getQuantity()-quantity);
 			return needToBackOrder;
 		}
 	}
