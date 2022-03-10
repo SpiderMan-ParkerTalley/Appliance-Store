@@ -316,7 +316,7 @@ public class UserInterface {
 		Request.instance().setCustomerId(getToken("Enter customer id"));
 		Request.instance().setApplianceID(getToken("Enter appliance id"));
 		Result result = applianceStore.withdrawRepairPlan(Request.instance());
-		if(result.getResultCode() == Result.NOT_ELIGABLE_FOR_REPAIR_PLAN) {
+		if(result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
 			System.out.println("Appliance not eligable for repair plan");
 		} else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
 			System.out.println("Could not find customer id");
