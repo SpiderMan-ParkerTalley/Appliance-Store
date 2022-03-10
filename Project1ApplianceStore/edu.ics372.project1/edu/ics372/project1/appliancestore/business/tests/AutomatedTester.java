@@ -61,6 +61,59 @@ public class AutomatedTester {
 	public void testPurchaseModel() { // needs to have a working addModel and addCustomer to function
 
 	}
+	// Use Case 5 Fulfill a single backOrder
+	public void fulfillBackorder(){
+		// The customer is created and added to the store
+		final String name = "Nuel";
+		final String address = "007 Krypton Blvd, Asgard, WA 00701";
+		final String phoneNumber = "(001)112-2223";
+
+		Request.instance().setCustomerName(name);
+		Request.instance().setCustomerAddress(address);
+		Request.instance().setCustomerPhoneNumber(phoneNumber);;
+
+		Result resultCustomer = ApplianceStore.instance().addCustomer(Request.instance());
+
+		// The appliance is created and added to the store
+		final String brandName = "GE";
+		final String model = "009";
+		final double price = 100.00;
+		final int quantity = 1;
+		final double repairPlanAmount = 200.00;
+    	final double capacity = 60.00;
+		final int amount = 2;
+		final int number = 3;
+
+		
+		if(number == 0 || number == 1){
+			Request.instance().setRepairPlanAmount(repairPlanAmount);
+			Request.instance().setBrandName(brandName);
+			Request.instance().setModelName(model);
+			Request.instance().setPrice(price);
+			Request.instance().setQuantity(quantity);
+		}
+		else if(number == 3){
+			Request.instance().setCapacity(capacity);
+			Request.instance().setBrandName(brandName);
+			Request.instance().setModelName(model);
+			Request.instance().setPrice(price);
+			Request.instance().setQuantity(quantity);
+		}
+		else if(number == 2 || number == 5){
+			Request.instance().setBrandName(brandName);
+			Request.instance().setModelName(model);
+			Request.instance().setPrice(price);
+			Request.instance().setQuantity(quantity);
+		}
+		Result resultAppliance = ApplianceStore.instance().addModel(Request.instance());
+		Request.instance().setCustomerId(resultCustomer.getCustomerId());
+		Request.instance().setApplianceID(resultAppliance.getApplianceId());
+		Request.instance().setQuantity(amount);
+		Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackorder(Request.instance());
+		System.out.println(resultFulfillBackOrder.getResultCode());
+		assert resultFulfillBackOrder.getResultCode() == Result.OPERATION_SUCCESSFUL;
+		
+	}
 
 	// Use-case 6 - Enroll a custmer in a repair plan for a single appliance.
 	public void testEnrollCustomerInRepairPlan() {
@@ -135,9 +188,10 @@ public class AutomatedTester {
 
 		Result resultCustomer = ApplianceStore.instance().addCustomer(Request.instance());
 
-		final String brandName = "ApplianceModel";
-		final String model = "Kitchenaid";
-		final double price = 5.00;
+		// The appliance is created and added to the store
+		final String brandName = "GE";
+		final String model = "009";
+		final double price = 100.00;
 		final int quantity = 1;
 		Request.instance().setBrandName(brandName);
 		Request.instance().setModelName(model);
@@ -151,8 +205,6 @@ public class AutomatedTester {
 		// The customer is removed from the repair plan;
 		Result resultWithDrawRepairPlan = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
 		assert resultWithDrawRepairPlan.getResultCode() == Result.OPERATION_SUCCESSFUL;
-
-
 	}
 	// Use Case 9 Print total Revenue
 	public void testPrintRevenue(){
