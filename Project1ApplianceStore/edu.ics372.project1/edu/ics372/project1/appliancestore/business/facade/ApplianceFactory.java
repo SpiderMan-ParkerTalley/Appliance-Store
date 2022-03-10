@@ -42,15 +42,15 @@ public class ApplianceFactory {
         Appliance appliance = null;
         switch(type) {
             case WASHER:  appliance = new Washer("", "", 0, 0, 0);
-            
+            break;
             case DRYER: appliance =  new Dryer("", "", 0, 0, 0);
-
+            break;
             case KITCHENRANGE: appliance =  new KitchenRange("", "", 0, 0);
-
+            break;
             case REFRIGERATOR: appliance =  new Refrigerator("", "", 0, 0, 0);
-
+            break;
             case FURNACE: appliance =  new Furnace("", "", 0, 0, 0);
-
+            break;
             case DISHWASHER: appliance =  new Dishwasher("", "", 0, 0); 
         }
         return appliance;

@@ -39,7 +39,7 @@ public class UserInterface {
 	private static final int HELP = 15;
 
 	private UserInterface() {
-		if (yesOrNo("Look for saved data and  use it?")) {
+		if (yesOrNo("Look for saved data and load it if found?")) {
 			retrieve();
 		} else {
 			applianceStore = ApplianceStore.instance();
@@ -109,6 +109,11 @@ public class UserInterface {
 			try {
 				int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
 				if (value >= EXIT && value <= HELP) {
+					if (value == EXIT) {
+						if (yesOrNo("Would you like to save before exiting? ")) {
+							save();
+						}
+					}
 					return value;
 				}
 			} catch (NumberFormatException nfe) {
