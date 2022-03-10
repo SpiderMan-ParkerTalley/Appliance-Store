@@ -21,18 +21,18 @@ public class ApplianceFactory {
         switch(type) {
             case WASHER:  appliance = new Washer(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
             request.getRepairPlanAmount());
-            
+            break;
             case DRYER: appliance =  new Dryer(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
             request.getRepairPlanAmount());
-
+            break;
             case KITCHENRANGE: appliance =  new KitchenRange(request.getBrandName(), request.getModelName(), request.getPrice(), 0);
-
+            break;
             case REFRIGERATOR: appliance =  new Refrigerator(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
             request.getCapacity());
-
+            break;
             case FURNACE: appliance =  new Furnace(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
             request.getMaxheatingOutput());
-
+            break;
             case DISHWASHER: appliance =  new Dishwasher(request.getBrandName(), request.getModelName(), request.getPrice(), 0); 
         }
         return appliance;
