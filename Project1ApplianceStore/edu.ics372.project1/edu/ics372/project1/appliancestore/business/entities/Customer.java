@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Customer implements Serializable {
+    private static final long serialVersionUID = 1L;
     // Fields
     private static int idCounter;
     private static final String CUSTOMER_STRING = "C";

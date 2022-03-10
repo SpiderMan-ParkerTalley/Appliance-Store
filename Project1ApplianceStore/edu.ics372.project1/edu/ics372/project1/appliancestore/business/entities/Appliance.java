@@ -6,8 +6,6 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-import edu.ics372.project1.appliancestore.business.collections.ModelList;
-
 /*
  * @author Cristian Zendejas
  * The parent class for all appliances within the store.

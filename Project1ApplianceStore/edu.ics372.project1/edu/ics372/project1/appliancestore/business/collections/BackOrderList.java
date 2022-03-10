@@ -8,6 +8,8 @@ import java.util.List;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 
 public class BackOrderList implements Iterable<BackOrder>, Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
      * A list got storing BackOrder(s).
      */

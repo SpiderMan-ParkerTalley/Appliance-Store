@@ -3,8 +3,10 @@ package edu.ics372.project1.appliancestore.business.entities;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
-public class BackOrder {
+public class BackOrder implements Serializable {
+    private static final long serialVersionUID = 1L;
     private static final String BACKORDER_STRING = "BCKORD";
     private static int idCounter = 0;
 

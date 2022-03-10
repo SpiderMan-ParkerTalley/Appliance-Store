@@ -1,6 +1,9 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
-public class RepairPlan {
+import java.io.Serializable;
+
+public class RepairPlan implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * Stores reference to customer associated with repair plan.
      */
