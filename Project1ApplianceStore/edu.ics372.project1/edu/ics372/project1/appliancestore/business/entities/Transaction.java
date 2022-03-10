@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String TRANSACTION_STRING = "TRANS";
     private static int idCounter = 1;
+    private Calendar timeStamp;
 
     /**
      * Stores reference to customer.
@@ -40,6 +44,7 @@ public class Transaction implements Serializable {
         this.setCustomer(customer);
         this.setAppliance(appliance);
         this.setQuantity(quantity);
+        this.timeStamp = new GregorianCalendar();
         setCode(TRANSACTION_STRING + idCounter++);
     }
 
@@ -75,6 +80,20 @@ public class Transaction implements Serializable {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public Calendar getTimeStamp() {
+        return this.timeStamp;
+    }
+
+    public String getStringStamp() {
+        SimpleDateFormat formattedDate = new SimpleDateFormat("dd-MMM-yyy");
+        String stringStamp = formattedDate.format(this.timeStamp.getTime());
+        return stringStamp;
+    }
+
+    public void setTimeStamp(Calendar timeStamp) {
+        this.timeStamp = timeStamp;
     }
 
     /**

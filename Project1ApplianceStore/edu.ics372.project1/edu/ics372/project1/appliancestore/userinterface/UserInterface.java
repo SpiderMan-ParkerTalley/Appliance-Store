@@ -236,7 +236,7 @@ public class UserInterface {
 		Result result = new Result();
 		do {
 		// customer and appliance search guards
-		customerCheck(); // TODO do these need to return result?
+		customerCheck(); 
 		applianceCheck();
 			Request.instance().setQuantity(getNumber("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
@@ -260,10 +260,10 @@ public class UserInterface {
 	 * Helper method for the output of PurchaseModel.
 	 */
 	private void purchaseModelSuccessfulOutput(Result result) {
-		System.out.println(result.getQuantity() + " of Appliance Brand " + 
-		result.getBrandName() + ", Model " + result.getModelName() + 
-		" bought by " + result.getCustomerName() + 
-		" on " + result.getTimeStamp());
+		System.out.println((Request.instance().getQuantity() - result.getQuantity()) + 
+					" of Appliance Brand " + result.getBrandName() + ", Model " + 
+					result.getModelName() +	" bought by " + result.getCustomerName() + 
+					" on " + result.getTimeStamp());
 	}
 
 	/**

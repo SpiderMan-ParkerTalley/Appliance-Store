@@ -347,10 +347,10 @@ public class ApplianceStore implements Serializable {
         backOrdersNeeded = appliance.purchase(request.getQuantity());
 		Transaction transaction = new Transaction(customer, appliance, appliance.getQuantity() - backOrdersNeeded);
         customer.addTransaction(transaction); 
-		// TODO add timeStamp to Transactions so Result can bring it back.
 		result.setCustomerFields(customer);
 		result.setApplianceFields(appliance);
-		result.setTimeStamp(null); // TODO replace null
+		result.setQuantity(backOrdersNeeded);  //Note: the quantity being returned is the backorders needed
+		result.setTimeStamp(transaction.getStringStamp());
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 
         if (backOrdersNeeded > 0) {
