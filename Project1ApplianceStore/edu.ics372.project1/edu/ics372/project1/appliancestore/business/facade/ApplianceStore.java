@@ -345,13 +345,18 @@ public class ApplianceStore implements Serializable {
         not be fulfilled. This amount is used to create the backOrder.
         */
         backOrdersNeeded = appliance.purchase(request.getQuantity());
-        if (backOrdersNeeded == 0) {
-        customer.addTransaction(new Transaction(customer, appliance, appliance.getQuantity()));
-        result.setResultCode(Result.OPERATION_SUCCESSFUL);
-        }
-        else if (backOrdersNeeded > 0) {
+		Transaction transaction = new Transaction(customer, appliance, appliance.getQuantity() - backOrdersNeeded);
+        customer.addTransaction(transaction); 
+		// TODO add timeStamp to Transactions so Result can bring it back.
+		result.setCustomerName(customer.getName());
+		result.setApplianceID(appliance.getId());
+		result.setTimeStamp(null); // TODO replace null
+		result.setResultCode(Result.OPERATION_SUCCESSFUL);
+
+        if (backOrdersNeeded > 0) {
             BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
             backorders.insertBackOrder(backOrder);
+			result.setBackorderId(backOrder.getId());
             result.setResultCode(Result.BACKORDER_CREATED);
         }
 		return result;
@@ -434,6 +439,9 @@ public class ApplianceStore implements Serializable {
 			// TODO: Any static field needs to get saved
             // TODO: Not saving over a file that is already created.
 			Customer.save(output);
+			Appliance.save(output);
+			BackOrder.save(output);
+			Transaction.save(output);
             output.close();
 			file.close();
 			return true;
@@ -453,7 +461,10 @@ public class ApplianceStore implements Serializable {
 			FileInputStream file = new FileInputStream("ApplianceStoreData");
 			ObjectInputStream input = new ObjectInputStream(file);
 			applianceStore = (ApplianceStore) input.readObject();
-			Customer.retrieve(input); // TODO RETRIEVE ALL STORED STATIC VARS
+			Customer.retrieve(input);
+			Appliance.retrieve(input);
+			BackOrder.retrieve(input);
+			Transaction.retrieve(input);
             input.close(); // TODO check if neccesary
             file.close(); // TODO check if neccesary
 			return applianceStore;

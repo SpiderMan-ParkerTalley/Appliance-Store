@@ -1,5 +1,8 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
@@ -171,6 +174,21 @@ public class Appliance implements Serializable {
 			return needToBackOrder;
 		}
 	}
+
+	    /**
+     * Saves the static idCounter.
+     * @param output
+     */
+    public static void save(ObjectOutputStream output) throws IOException {
+        output.writeObject(idCounter);
+    }
+    /**
+    * Retrieves the static id counter.
+    */
+    public static void retrieve(ObjectInputStream input) throws IOException, 
+                            ClassNotFoundException {
+        idCounter = (int) input.readObject();
+    }
 	
 	public String toString() {
 		String output = "Appliance Id: " + id + " Brand: " + brandName + " Model: " + "Price: " + price + " Quantity: " + quantity;
