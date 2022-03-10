@@ -117,7 +117,7 @@ public class AutomatedTester {
 				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			}
 			else if (index >= 2) {
-				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGABLE_FOR_REPAIR_PLAN;
+				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
 			}
 		}
 
