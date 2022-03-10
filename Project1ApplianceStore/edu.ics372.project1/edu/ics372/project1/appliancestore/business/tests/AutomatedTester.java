@@ -122,6 +122,38 @@ public class AutomatedTester {
 		}
 
 	}
+	//Use Case 7 Withdraw Customer from a single repair plan
+	// The customer is created and added to the store
+	public void testWithDrawCustomer(){
+		final String name = "Nuel";
+		final String address = "007 Krypton Blvd, Asgard, WA 00701";
+		final String phoneNumber = "(001)112-2223";
+
+		Request.instance().setCustomerName(name);
+		Request.instance().setCustomerAddress(address);
+		Request.instance().setCustomerPhoneNumber(phoneNumber);;
+
+		Result resultCustomer = ApplianceStore.instance().addCustomer(Request.instance());
+
+		final String brandName = "ApplianceModel";
+		final String model = "Kitchenaid";
+		final double price = 5.00;
+		final int quantity = 1;
+		Request.instance().setBrandName(brandName);
+		Request.instance().setModelName(model);
+		Request.instance().setPrice(price);
+		Request.instance().setQuantity(quantity);
+		Result resultAppliance = ApplianceStore.instance().addModel(Request.instance());
+		// The customer is first added to a repair plan
+		Request.instance().setApplianceID(resultAppliance.getApplianceId());
+		Request.instance().setCustomerId(resultCustomer.getCustomerId());
+		Result resultEnrollRepairPlan = ApplianceStore.instance().enrollRepairPlan(Request.instance());
+		// The customer is removed from the repair plan;
+		Result resultWithDrawRepairPlan = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
+		assert resultWithDrawRepairPlan.getResultCode() == Result.OPERATION_SUCCESSFUL;
+
+
+	}
 	// Use Case 9 Print total Revenue
 	public void testPrintRevenue(){
 		Result result = new Result();
