@@ -231,17 +231,19 @@ public class UserInterface {
 		Result result = new Result();
 		do {
 		// customer and appliance search guards
-		result = customerCheck();
-		result = applianceCheck();
+		customerCheck(); // TODO do these need to return result?
+		applianceCheck();
 			Request.instance().setQuantity(getNumber("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
 			switch(result.getResultCode()) {
 			case Result.OPERATION_SUCCESSFUL:
-				System.out.println("Model " + result.getModelName() + " bought by " + result.getCustomerName()
-				+ " on " + result.getTimeStamp());
+				purchaseModelSuccessfulOutput(result);
 				break;
 			case Result.BACKORDER_CREATED:
-				System.out.printf("Could not fulfill entire order. Back Order created with Back Order ID %s", result.getBackorderId());
+				purchaseModelSuccessfulOutput(result);
+				System.out.printf("Could not fulfill entire order." +
+				" Back Order created with Back Order ID %s. Quantity back ordered: %d%n",
+				 result.getBackorderId(), result.getQuantity());
 				break;
 			default:
 				System.out.println("Could not process order.");
@@ -250,10 +252,19 @@ public class UserInterface {
 	}
 
 	/**
-	 * Helper method to check the validity of the applianceId.
-	 * @param result
+	 * Helper method for the output of PurchaseModel.
 	 */
-	private Result applianceCheck() {
+	private void purchaseModelSuccessfulOutput(Result result) {
+		System.out.println(result.getQuantity() + " of Appliance Brand " + 
+		result.getBrandName() + ", Model " + result.getModelName() + 
+		" bought by " + result.getCustomerName() + 
+		" on " + result.getTimeStamp());
+	}
+
+	/**
+	 * Helper method to check the validity of the applianceId.
+	 */
+	private void applianceCheck() {
 		Result result = new Result();
 		boolean applianceInputGood = false;
 		while(!applianceInputGood) {
@@ -267,10 +278,11 @@ public class UserInterface {
 				applianceInputGood = true;
 			}
 		}
-		return result;
 	}
-
-	private Result customerCheck() {
+	/**
+	 * Helper method to check the validity of the applianceId.
+	 */
+	private void customerCheck() {
 		Result result = new Result();
 		boolean customerInputGood = false;
 		while(!customerInputGood) {
@@ -284,7 +296,6 @@ public class UserInterface {
 				customerInputGood = true;
 			}
 		}
-		return result;
 	}
 
 	/**

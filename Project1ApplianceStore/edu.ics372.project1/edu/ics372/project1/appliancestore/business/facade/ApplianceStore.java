@@ -348,8 +348,8 @@ public class ApplianceStore implements Serializable {
 		Transaction transaction = new Transaction(customer, appliance, appliance.getQuantity() - backOrdersNeeded);
         customer.addTransaction(transaction); 
 		// TODO add timeStamp to Transactions so Result can bring it back.
-		result.setCustomerName(customer.getName());
-		result.setApplianceID(appliance.getId());
+		result.setCustomerFields(customer);
+		result.setApplianceFields(appliance);
 		result.setTimeStamp(null); // TODO replace null
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 
@@ -357,6 +357,7 @@ public class ApplianceStore implements Serializable {
             BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
             backorders.insertBackOrder(backOrder);
 			result.setBackorderId(backOrder.getId());
+			result.setQuantity(backOrdersNeeded); //Note: the quantity being returned is the backorders needed
             result.setResultCode(Result.BACKORDER_CREATED);
         }
 		return result;
