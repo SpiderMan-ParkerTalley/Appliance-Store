@@ -1,6 +1,8 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
 public class Washer extends Appliance {
+	private static final String WASHER_STRING = "WASH";
+	
 	private double repairPlanAmount;
 
 	public Washer(String brandName, String model, double price, int quantity, double repairPlanAmount) {
@@ -8,6 +10,11 @@ public class Washer extends Appliance {
 		this.repairPlanAmount = repairPlanAmount;
 		this.setEligibleForRepairPlan(true);
 		this.setEligibleForBackOrder(true);
+	}
+	
+	@Override
+	public String createId() {
+		return WASHER_STRING + super.getNextId();
 	}
 
 	public double getRepairPlanAmount() {
