@@ -38,6 +38,12 @@ public class UserInterface {
 	private static final int SAVE = 14;
 	private static final int HELP = 15;
 
+	/**
+	 * Private constructor to support the singleton pattern.
+	 * Asks if they user would like to attempt to load a saved data
+	 * state, then either retrieves that state or calls the instance()
+	 * method to return an ApplianceStore singleton.
+	 */
 	private UserInterface() {
 		if (yesOrNo("Look for saved data and load it if found?")) {
 			retrieve();
@@ -47,6 +53,13 @@ public class UserInterface {
 
 	}
 
+	/**
+	 * Applies the singleton pattern to UserInteface.
+	 * If an instance of userInterface already exists,
+	 * it returns that instance. Otherwise, it calls the
+	 * constructor and returns a new instance.
+	 * @return A userInterface object
+	 */
 	public static UserInterface instance() {
 		if (userInterface == null) {
 			return userInterface = new UserInterface();
@@ -55,6 +68,11 @@ public class UserInterface {
 		}
 	}
 
+	/**
+	 * String tokenizer to help with user input.
+	 * @param prompt
+	 * @return
+	 */
 	public String getToken(String prompt) {
 		do {
 			try {
@@ -70,6 +88,11 @@ public class UserInterface {
 		} while (true);
 	}
 
+	/**
+	 * Grabs input from the user using a prompt and returns it for the name field.
+	 * @param prompt The text prompt the system will display to the user.
+	 * @return The name
+	 */
 	public String getName(String prompt) {
 		do {
 			try {
@@ -83,6 +106,11 @@ public class UserInterface {
 
 	}
 
+	/**
+	 * Boolean yes/no for continuing or exiting menu loops.
+	 * @param prompt The prompt the user sees.
+	 * @return Boolean true for yes, false for no
+	 */
 	private boolean yesOrNo(String prompt) {
 		String more = getToken(prompt + " (Y|y)[es] or anything else for no");
 		if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
@@ -91,6 +119,12 @@ public class UserInterface {
 		return true;
 	}
 
+	/**
+	 * Prompts for an integer value of a number.
+	 * Takes a string as argument, converters to Integer, then returns as int.
+	 * @param prompt The prompt displayed to the user
+	 * @return The primative int value
+	 */
 	public int getNumber(String prompt) {
 		do {
 			try {
@@ -103,7 +137,11 @@ public class UserInterface {
 		} while (true);
 	}
 
-
+/**
+ * Directs the flow of the system via integer input from the user. 
+ * Offers to save data upon an exit request.
+ * @return an int
+ */
 	public int getCommand() {
 		do {
 			try {
@@ -122,6 +160,9 @@ public class UserInterface {
 		} while (true);
 	}
 
+	/**
+	 * Help menu to remind user of input values.
+	 */
 	public void help() {
 		System.out.println("Enter a number between 0 and 14 as explained below:");
 		System.out.println(EXIT + " to Exit\n");
@@ -143,7 +184,7 @@ public class UserInterface {
 	}
 
 	/**
-	 * Method to be called for adding a model. The user inputs the prompted valued and 
+	 * Method to be called for adding a model. Takes user input and 
 	 * uses the appropriate ApplicationStore method for adding the model.
 	 */
 	public void addModel() {
