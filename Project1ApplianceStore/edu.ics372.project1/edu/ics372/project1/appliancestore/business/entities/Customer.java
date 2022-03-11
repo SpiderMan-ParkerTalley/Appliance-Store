@@ -85,9 +85,9 @@ public class Customer implements Serializable {
      * @return boolean true if repair plan was sucessfully added. False if no 
      * transaction contains the appliance was found.
      */
-    public boolean addRepairPlan(Appliance appliance) {
+    public boolean addRepairPlan(Appliance appliance) { // TODO redundant check code? {
         for (Transaction transaction : transactions) {
-            if(transaction.getAppliance() == appliance) {
+            if(transaction.getAppliance() == appliance) { //TODO right way to eval?
                 repairPlans.add(new RepairPlan(this, appliance));
                 return true;
             }
