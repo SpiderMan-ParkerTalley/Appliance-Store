@@ -378,8 +378,8 @@ public class UserInterface {
 		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
 			System.out.println("Could not enroll customer in repair plan");
 		} else {
-			System.out.println("Customer " + Request.instance().getCustomerAddress() + " succesfully " + 
-			"enrolled in repair plan for " + Request.instance().getApplianceId());
+			System.out.println("Customer " + result.getCustomerId() + " succesfully " + 
+			"enrolled in repair plan for " + result.getApplianceId());
 		}
 	}
 
