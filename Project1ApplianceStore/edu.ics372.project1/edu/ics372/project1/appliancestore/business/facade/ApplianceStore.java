@@ -326,7 +326,7 @@ public class ApplianceStore implements Serializable {
 		Result result = new Result();
         int backOrdersNeeded = 0;
         /* This block searches for the customer and appliance. It returns error codes
-        if either are not found. TODO is it redundant?
+        if either are not found. TODO: This is guarded in the UI. Should never return bad.
         */
 		Customer customer = customers.search(request.getCustomerId());
         if(customer == null) {
@@ -437,8 +437,6 @@ public class ApplianceStore implements Serializable {
 			FileOutputStream file = new FileOutputStream("ApplianceStoreData");
 			ObjectOutputStream output = new ObjectOutputStream(file);
 			output.writeObject(applianceStore);
-			// TODO: Any static field needs to get saved
-            // TODO: Not saving over a file that is already created.
 			Customer.save(output);
 			Appliance.save(output);
 			BackOrder.save(output);

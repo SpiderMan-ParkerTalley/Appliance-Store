@@ -3,9 +3,6 @@ package edu.ics372.project1.appliancestore.userinterface;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
