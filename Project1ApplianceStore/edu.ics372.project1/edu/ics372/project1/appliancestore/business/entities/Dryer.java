@@ -1,6 +1,7 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
 public class Dryer extends Appliance {
+	private static final String DRYER_STRING = "DRY";
 	private double repairPlanAmount;
 
 	public Dryer(String brandName, String model, double price, int quantity, double repairPlanAmount) {
@@ -8,6 +9,11 @@ public class Dryer extends Appliance {
 		this.repairPlanAmount = repairPlanAmount;
 		this.setEligibleForRepairPlan(true);
 		this.setEligibleForBackOrder(true);
+	}
+	
+	@Override
+	public String createId() {
+		return DRYER_STRING + super.getNextId();
 	}
 
 	public double getRepairPlanAmount() {

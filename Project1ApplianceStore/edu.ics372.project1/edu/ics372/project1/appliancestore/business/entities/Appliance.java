@@ -11,9 +11,8 @@ import java.sql.Timestamp;
  * The parent class for all appliances within the store.
  */
 public class Appliance implements Serializable {
-	private static final String APPLIANCE_STRING = "APP";
-	private static int idCounter = 1;
-
+	protected static int nextId = 0;
+	
 	/**
 	 * Stores the appliance identification number.
 	 */
@@ -71,11 +70,12 @@ public class Appliance implements Serializable {
 	}
 
 	/**
-	 * Generates a ID for the appliance.
+	 * Generates a generic string for the appliance.
+	 * Will be overridden in each subclass to keep track of the id.
 	 * @return String a generated ID.
 	 */
-	private String createId() {
-		return APPLIANCE_STRING + idCounter++;
+	public String createId() {
+		return "";
 	}
 
 	// Setters
@@ -114,6 +114,11 @@ public class Appliance implements Serializable {
 	// Getters
 	public String getId() {
 		return id;
+	}
+	
+	public int getNextId() {
+		nextId++;
+		return nextId;
 	}
 
 	public String getBrandName() {
@@ -168,28 +173,28 @@ public class Appliance implements Serializable {
 			this.setQuantity(0); 
 			return needToBackOrder;
 		} else {
-			this.setQuantity(this.getQuantity()-quantity);
+			this.setQuantity(this.getQuantity()- quantity);
 			return needToBackOrder;
 		}
 	}
 
-	    /**
+	 /**
      * Saves the static idCounter.
      * @param output
      */
     public static void save(ObjectOutputStream output) throws IOException {
-        output.writeObject(idCounter);
+        output.writeObject(nextId);
     }
     /**
     * Retrieves the static id counter.
     */
     public static void retrieve(ObjectInputStream input) throws IOException, 
                             ClassNotFoundException {
-        idCounter = (int) input.readObject();
+    	nextId = (int) input.readObject();
     }
 	
 	public String toString() {
-		String output = "Appliance Id: " + id + " Brand: " + brandName + " Model: " + "Price: " + price + " Quantity: " + quantity;
+		String output = this.getClass().getSimpleName() + " id: " + this.getId() + " Brand: " + brandName + " Model: " + "Price: " + price + " Quantity: " + quantity;
 		return output;
 	}
 

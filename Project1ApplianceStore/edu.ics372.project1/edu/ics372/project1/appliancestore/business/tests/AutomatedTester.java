@@ -1,6 +1,11 @@
 package edu.ics372.project1.appliancestore.business.tests;
 
 import edu.ics372.project1.appliancestore.business.entities.Customer;
+import edu.ics372.project1.appliancestore.business.entities.Dryer;
+import edu.ics372.project1.appliancestore.business.entities.Furnace;
+import edu.ics372.project1.appliancestore.business.entities.KitchenRange;
+import edu.ics372.project1.appliancestore.business.entities.Refrigerator;
+import edu.ics372.project1.appliancestore.business.entities.Washer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
@@ -167,7 +172,7 @@ public class AutomatedTester {
 			Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
 			if (index <= 1) {
 				System.out.println(enrollRepairPlanResult.getResultCode());
-				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;
+				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;//getting an assertion error here
 			}
 			else if (index >= 2) {
 				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
@@ -230,6 +235,20 @@ public class AutomatedTester {
 	}
 
 	public static void main(String[] args) {
+		Washer washer = new Washer("washer100", "LG", 150.00, 1, 25.00);
+		System.out.println(washer);
+		
+		Dryer dryer = new Dryer("dryer50", "GE", 124.00, 2, 30.00);
+		System.out.println(dryer);
+		
+		Furnace furnace = new Furnace("furnace1", "LG", 200.00, 1, 30.00);
+		System.out.println(furnace);
+		
+		KitchenRange kit = new KitchenRange("kit1", "GE", 300.00, 2);
+		System.out.println(kit);
+		
+		Refrigerator fridge = new Refrigerator("fridge", "LE", 200.00, 1, 25.25);
+		System.out.println(fridge);
 		new AutomatedTester().testAll();
 	}
 }
