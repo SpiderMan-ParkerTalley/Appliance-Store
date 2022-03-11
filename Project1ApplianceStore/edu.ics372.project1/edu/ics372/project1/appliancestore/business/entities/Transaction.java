@@ -97,6 +97,29 @@ public class Transaction implements Serializable {
     }
 
     /**
+     * Returns the TRANSACTION_STRING field to help with the matches method.
+     * @return TRANSACTION_STRING field as a String
+     */
+    public String getTransactionString() {
+        return TRANSACTION_STRING;
+    }
+    /**
+     * Tests if the classes are the same by testing the static TRANSACTION_STRING
+     * field. If they are the same, returns true. If they are not, returns false.
+     * The assertion we make so that this holds true is that all Transaction type
+     * classes have the same TRANSACTION_STRING field, as it is static.
+     * @param transaction The transaction being compared.
+     * @return true if the TRANSACTION_STRING fields match, else false.
+     */
+    public boolean matches(Transaction transaction) {
+        if(TRANSACTION_STRING.equals(transaction.getTransactionString())) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Saves the static idCounter.
      * @param output
      */

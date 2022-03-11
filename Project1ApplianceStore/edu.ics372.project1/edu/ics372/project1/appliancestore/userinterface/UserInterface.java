@@ -375,12 +375,17 @@ public class UserInterface {
 			System.out.println("Could not find customer id");
 		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
 			System.out.println("Could not find appliance id");
-		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
-			System.out.println("Could not enroll customer in repair plan");
-		} else {
+		} else if (result.getResultCode() == Result.REPAIR_PLAN_ENROLLED) {
 			System.out.println("Customer " + result.getCustomerId() + " succesfully " + 
 			"enrolled in repair plan for " + result.getApplianceId());
-		}
+		} else if (result.getResultCode() == Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE) {
+			System.out.println("Cannot enroll customer in repair plan." + 
+								"This customer has not purchased this appliance.");
+		} else if (result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
+			System.out.println("This appliance is not eligible for a repair plan.");
+		} else {
+			System.out.println("There was an error enrolling the plan.");
+				}
 	}
 
 	/**
