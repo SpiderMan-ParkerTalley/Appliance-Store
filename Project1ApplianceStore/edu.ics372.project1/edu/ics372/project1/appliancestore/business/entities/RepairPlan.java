@@ -27,7 +27,12 @@ public class RepairPlan implements Serializable {
     public RepairPlan(Customer customer, Appliance appliance) {
         this.customer = customer;
         this.appliance = appliance;
-    //    this.cost = appliance.getRepairPlanCost(); TODO: Best way to store cost and guard here?
+        /* TODO Here's the problem with repairCost not coming in. If we want it to be
+        able to call the cost regardless of Aplliance, we need to put repair plan price
+        field in the superclass Appliance. The set/gets could be abstract then and only
+        defined in appliances that need to implement them. Thoughts?
+        */
+     //   this.cost = appliance.getRepairPlanCost();
     }
 
     /**
