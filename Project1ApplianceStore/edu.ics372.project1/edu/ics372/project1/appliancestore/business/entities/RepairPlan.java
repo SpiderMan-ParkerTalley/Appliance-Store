@@ -27,6 +27,7 @@ public class RepairPlan implements Serializable {
     public RepairPlan(Customer customer, Appliance appliance) {
         this.customer = customer;
         this.appliance = appliance;
+    //    this.cost = appliance.getRepairPlanCost(); TODO: Best way to store cost and guard here?
     }
 
     /**

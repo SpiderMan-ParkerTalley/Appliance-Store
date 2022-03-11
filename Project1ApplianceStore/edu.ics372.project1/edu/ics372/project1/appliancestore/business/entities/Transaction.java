@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String TRANSACTION_STRING = "TRANS";
     private static int idCounter = 1;
+    private Calendar timeStamp;
 
     /**
      * Stores reference to customer.
@@ -40,6 +44,7 @@ public class Transaction implements Serializable {
         this.setCustomer(customer);
         this.setAppliance(appliance);
         this.setQuantity(quantity);
+        this.timeStamp = new GregorianCalendar();
         setCode(TRANSACTION_STRING + idCounter++);
     }
 
@@ -75,6 +80,43 @@ public class Transaction implements Serializable {
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public Calendar getTimeStamp() {
+        return this.timeStamp;
+    }
+
+    public String getStringStamp() {
+        SimpleDateFormat formattedDate = new SimpleDateFormat("dd-MMM-yyy");
+        String stringStamp = formattedDate.format(this.timeStamp.getTime());
+        return stringStamp;
+    }
+
+    public void setTimeStamp(Calendar timeStamp) {
+        this.timeStamp = timeStamp;
+    }
+
+    /**
+     * Returns the TRANSACTION_STRING field to help with the matches method.
+     * @return TRANSACTION_STRING field as a String
+     */
+    public String getTransactionString() {
+        return TRANSACTION_STRING;
+    }
+    /**
+     * Tests if the classes are the same by testing the static TRANSACTION_STRING
+     * field. If they are the same, returns true. If they are not, returns false.
+     * The assertion we make so that this holds true is that all Transaction type
+     * classes have the same TRANSACTION_STRING field, as it is static.
+     * @param transaction The transaction being compared.
+     * @return true if the TRANSACTION_STRING fields match, else false.
+     */
+    public boolean matches(Transaction transaction) {
+        if(TRANSACTION_STRING.equals(transaction.getTransactionString())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

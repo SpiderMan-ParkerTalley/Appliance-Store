@@ -155,6 +155,12 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result enrollRepairPlan(Request request) {
 		Result result = new Result();
+		// Validating Customer and Appliance for repair plan
+		Customer customer = customers.search(request.getCustomerId());
+		if (customer == null) {
+			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
+			return result;
+		}
 		Appliance appliance = models.search(request.getApplianceId());
 		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
@@ -163,20 +169,19 @@ public class ApplianceStore implements Serializable {
 			result.setResultCode(Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN);
 			return result;
 		}
-		result.setApplianceFields(appliance);
-		Customer customer = customers.search(request.getCustomerId());
-		if (customer == null) {
-			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
-			return result;
-		}
 		result.setCustomerFields(customer);
-		if (models.search(request.getApplianceId()).eligibleForRepairPlan()) {
-			if (customers.search(request.getCustomerId()).addRepairPlan(models.search(request.getApplianceId()))) {
-				result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		result.setApplianceFields(appliance);
+		result.setResultCode(Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE); // default if appliance not found in transactions
+		// Validating that customer has purchased this appliance. If true, enroll
+		Iterator<Transaction> transactionIterator = customer.getTransactionIterator();
+		while(transactionIterator.hasNext()) {
+			Transaction transaction = transactionIterator.next();
+			if (transaction.getAppliance().getId().equals(appliance.getId())) {
+				customer.addRepairPlan(appliance);
+				result.setResultCode(Result.REPAIR_PLAN_ENROLLED);
 				return result;
 			}
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
 
@@ -326,7 +331,7 @@ public class ApplianceStore implements Serializable {
 		Result result = new Result();
         int backOrdersNeeded = 0;
         /* This block searches for the customer and appliance. It returns error codes
-        if either are not found. TODO is it redundant?
+        if either are not found. TODO: This is guarded in the UI. Should never return bad.
         */
 		Customer customer = customers.search(request.getCustomerId());
         if(customer == null) {
@@ -347,10 +352,10 @@ public class ApplianceStore implements Serializable {
         backOrdersNeeded = appliance.purchase(request.getQuantity());
 		Transaction transaction = new Transaction(customer, appliance, appliance.getQuantity() - backOrdersNeeded);
         customer.addTransaction(transaction); 
-		// TODO add timeStamp to Transactions so Result can bring it back.
 		result.setCustomerFields(customer);
 		result.setApplianceFields(appliance);
-		result.setTimeStamp(null); // TODO replace null
+		result.setQuantity(backOrdersNeeded);  //Note: the quantity being returned is the backorders needed
+		result.setTimeStamp(transaction.getStringStamp());
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 
         if (backOrdersNeeded > 0) {
@@ -437,8 +442,6 @@ public class ApplianceStore implements Serializable {
 			FileOutputStream file = new FileOutputStream("ApplianceStoreData");
 			ObjectOutputStream output = new ObjectOutputStream(file);
 			output.writeObject(applianceStore);
-			// TODO: Any static field needs to get saved
-            // TODO: Not saving over a file that is already created.
 			Customer.save(output);
 			Appliance.save(output);
 			BackOrder.save(output);
