@@ -350,7 +350,7 @@ public class ApplianceStore implements Serializable {
         not be fulfilled. This amount is used to create the backOrder.
         */
         backOrdersNeeded = appliance.purchase(request.getQuantity());
-		Transaction transaction = new Transaction(customer, appliance, appliance.getQuantity() - backOrdersNeeded);
+		Transaction transaction = new Transaction(customer, appliance, Request.instance().getQuantity() - backOrdersNeeded);
         customer.addTransaction(transaction); 
 		result.setCustomerFields(customer);
 		result.setApplianceFields(appliance);
@@ -401,8 +401,8 @@ public class ApplianceStore implements Serializable {
 		double totalRevenueFromRepairPlans = 0;
 		for (Iterator<Customer> customerIterator = customers.iterator(); customerIterator.hasNext();) {
 			Customer customer = customerIterator.next();
-			totalRevenueFromTransactions = +customer.getTransactionTotalCost();
-			totalRevenueFromRepairPlans = +customer.getRepairPlansTotalCost();
+			totalRevenueFromTransactions += customer.getTransactionTotalCost();
+			totalRevenueFromRepairPlans += customer.getRepairPlansTotalCost();
 		}
 		Result result = new Result();
 		result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);

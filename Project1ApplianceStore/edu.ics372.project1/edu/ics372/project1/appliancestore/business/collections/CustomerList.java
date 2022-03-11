@@ -17,6 +17,7 @@ public class CustomerList implements Iterable<Customer>, Serializable {
 	private List<Customer> customers = new LinkedList<Customer>();
 
     /**
+     *
      * Stores the singleton of CustomerList.
      */
 	private static CustomerList customerList;
