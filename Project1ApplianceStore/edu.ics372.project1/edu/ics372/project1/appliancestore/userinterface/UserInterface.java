@@ -271,6 +271,7 @@ public class UserInterface {
 	 * method purchasing the model.
 	 */
 	public void purchaseModel() {
+		Request.instance().reset(); // TODO Watch this, I think it's a good idea to reset in the UI with each new request. Thoughts?
 		Result result = new Result();
 		do {
 		// customer and appliance search guards

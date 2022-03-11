@@ -219,4 +219,12 @@ public class Customer implements Serializable {
                             ClassNotFoundException {
         idCounter = (int) input.readObject();
     }
+
+	public Iterator<RepairPlan> getRepairPlanIterator() {
+		return repairPlans.iterator();
+	}
+
+	public Iterator<Transaction> getTransactionIterator() {
+		return transactions.iterator();
+	}
 }

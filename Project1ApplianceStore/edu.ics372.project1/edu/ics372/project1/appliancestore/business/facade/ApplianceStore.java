@@ -155,6 +155,12 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result enrollRepairPlan(Request request) {
 		Result result = new Result();
+		// Validating Customer and Appliance for repair plan
+		Customer customer = customers.search(request.getCustomerId());
+		if (customer == null) {
+			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
+			return result;
+		}
 		Appliance appliance = models.search(request.getApplianceId());
 		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
@@ -163,20 +169,19 @@ public class ApplianceStore implements Serializable {
 			result.setResultCode(Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN);
 			return result;
 		}
-		result.setApplianceFields(appliance);
-		Customer customer = customers.search(request.getCustomerId());
-		if (customer == null) {
-			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
-			return result;
-		}
 		result.setCustomerFields(customer);
-		if (models.search(request.getApplianceId()).eligibleForRepairPlan()) {
-			if (customers.search(request.getCustomerId()).addRepairPlan(models.search(request.getApplianceId()))) {
-				result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		result.setApplianceFields(appliance);
+		result.setResultCode(Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE); // default if appliance not found in transactions
+		// Validating that customer has purchased this appliance. If true, enroll
+		Iterator<Transaction> transactionIterator = customer.getTransactionIterator();
+		while(transactionIterator.hasNext()) {
+			Transaction transaction = transactionIterator.next();
+			if (transaction.getAppliance().getId().equals(appliance.getId())) {
+				customer.addRepairPlan(appliance);
+				result.setResultCode(Result.REPAIR_PLAN_ENROLLED);
 				return result;
 			}
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
 		return result;
 	}
 

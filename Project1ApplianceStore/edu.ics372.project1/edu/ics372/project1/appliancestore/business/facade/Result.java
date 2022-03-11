@@ -23,6 +23,8 @@ public class Result extends DataTransfer {
     public static final int NOT_A_VALID_QUANTITY = 7;
 	public static final int REPAIR_PLAN_NOT_FOUND = 8;
 	public static final int NOT_ELIGIBLE_FOR_REPAIR_PLAN = 9;
+	public static final int REPAIR_PLAN_ENROLLED = 10;
+	public static final int CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE = 11;
 
 	private List<Customer> customers;
 	private List<BackOrder> backOrders;
