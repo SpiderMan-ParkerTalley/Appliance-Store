@@ -15,6 +15,7 @@ import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
+import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 import edu.ics372.project1.appliancestore.business.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
@@ -238,11 +239,11 @@ public class ApplianceStore implements Serializable {
 				appliances.add(model);
 			}
 		} else {
-			Appliance appliance = ApplianceFactory.findApplianceType(request.getApplianceType());
-			for (Appliance model : models) {
-				if (model.getClass().equals(appliance.getClass())) {
-					appliances.add(model);
-				}
+			String applianceCode = ApplianceFactory.findApplianceType(request.getApplianceType());
+			for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), applianceCode); 
+			applianceFilteredIterator.hasNext();) {
+				Appliance appliance = applianceFilteredIterator.next();
+				appliances.add(appliance);
 			}
 		}
 		if (appliances.isEmpty()) {

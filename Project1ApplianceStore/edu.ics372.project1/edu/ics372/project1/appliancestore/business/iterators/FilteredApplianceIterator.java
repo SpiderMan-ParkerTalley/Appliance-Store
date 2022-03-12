@@ -19,8 +19,8 @@ public class FilteredApplianceIterator implements Iterator<Appliance> {
      * @param predicate specifies the test.
      */
     public FilteredApplianceIterator(Iterator<Appliance> iterator, String predicate) {
-        this.predicate = predicate;
-        this.iterator = iterator;
+        this.predicate = predicate; // sub string
+        this.iterator = iterator; // iterator
         getNextItem();
     }
 
