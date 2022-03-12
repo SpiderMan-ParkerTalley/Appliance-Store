@@ -179,7 +179,7 @@ public class ApplianceStore implements Serializable {
 			Transaction transaction = transactionIterator.next();
 			if (transaction.getAppliance().getId().equals(appliance.getId())) {
 				customer.addRepairPlan(appliance);
-				result.setResultCode(Result.REPAIR_PLAN_ENROLLED);
+				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 				return result;
 			}
 		}
