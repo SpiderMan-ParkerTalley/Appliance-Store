@@ -1,12 +1,18 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
 public class Refrigerator extends Appliance{
+	private static final String REFRIGERATOR_STRING = "REFR";
 	private double capacity;
 	
 	public Refrigerator(String brandName, String model, double price, int quantity, double capacity) {
 		super(brandName, model, price, quantity);
 		this.capacity = capacity;
 		this.setEligibleForBackOrder(true);
+	}
+	
+	@Override
+	public String createId() {
+		return REFRIGERATOR_STRING + super.getNextId();
 	}
 	
 	public double getCapacity() {

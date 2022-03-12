@@ -38,22 +38,22 @@ public class ApplianceFactory {
         return appliance;
     }
 
-    public static Appliance findApplianceType(int type) {
-        Appliance appliance = null;
+    public static String findApplianceType(int type) {
+        String applianceString = null;
         switch(type) {
-            case WASHER:  appliance = new Washer("", "", 0, 0, 0);
+            case WASHER:  applianceString = "WASH";
             break;
-            case DRYER: appliance =  new Dryer("", "", 0, 0, 0);
+            case DRYER: applianceString =  "DRY";
             break;
-            case KITCHENRANGE: appliance =  new KitchenRange("", "", 0, 0);
+            case KITCHENRANGE: applianceString =  "KIT";
             break;
-            case REFRIGERATOR: appliance =  new Refrigerator("", "", 0, 0, 0);
+            case REFRIGERATOR: applianceString =  "REFR";
             break;
-            case FURNACE: appliance =  new Furnace("", "", 0, 0, 0);
+            case FURNACE: applianceString =  "FURN";
             break;
-            case DISHWASHER: appliance =  new Dishwasher("", "", 0, 0); 
+            case DISHWASHER: applianceString =  "DSHW"; 
         }
-        return appliance;
+        return applianceString;
     
     }
 }
