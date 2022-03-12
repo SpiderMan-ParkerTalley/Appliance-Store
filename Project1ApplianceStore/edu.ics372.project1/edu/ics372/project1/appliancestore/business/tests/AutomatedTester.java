@@ -20,6 +20,7 @@ public class AutomatedTester {
 	private double maxHeatingOutput = 225.00;
 
 	public void testAddAppliance() {
+		final ApplianceStore store = ApplianceStore.instance();
 		for (int count = 0; count < appliances.length; count++) {
 			Request.instance().setApplianceType(appliances[count]);
 			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
@@ -216,16 +217,31 @@ public class AutomatedTester {
 	}
 
 
+	//Use Case 10 List all or some types of appliance
+	public void testListAppliances() {
+		final String[] choices = {"washer", "dryer", "kitchen range", "refridgerator", "furnace", "dishwasher", "all"};
+		Result result = new Result();
+		for(int i=1; i<8; i++){
+			System.out.println(choices[i-1] + ":");
+			Request.instance().setApplianceType(i);
+			result = ApplianceStore.instance().listAppliances(Request.instance());
+			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+		}
+	}
+
+
 	/**
 	 * All tests to run here.
 	 */
 	public void testAll() {
 		System.out.println("Testing...");
+		testAddAppliance();
 		testAddSingleCustomer(); 
-		testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
+		//testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
 //		testFulfillBackOrder(); TODO: broken
-		testWithDrawCustomer();
+		//testWithDrawCustomer();
 		testPrintRevenue();
+		testListAppliances();
 		System.out.println("Done testing.");
 	}
 

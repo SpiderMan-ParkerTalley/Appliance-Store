@@ -6,6 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.facade.Result;
+import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
+import edu.ics372.project1.appliancestore.business.iterators.SafeApplianceIterator;
 
 
 public class ModelList implements Iterable<Appliance>, Serializable {
@@ -35,6 +38,14 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 		return modelList;
 	}
 
+
+    //TODO figure this shit out lol
+    public Iterator<Result> getTypedAppliance(Appliance appliance) {
+        return new SafeApplianceIterator(
+            new FilteredApplianceIterator(models.iterator(), Predicate<appliance>));
+        
+    }
+
     /**
      * Check whether an appliance with a given appliance id exists.
      * 
@@ -61,6 +72,14 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 		models.add(appliance);
 		return true;
 	}
+
+    public Iterator<Appliance> getModels() {
+        return models.iterator();
+    }
+
+    public List<Appliance> getModelList() {
+        return models;
+    }
 
     @Override
     public Iterator<Appliance> iterator() {

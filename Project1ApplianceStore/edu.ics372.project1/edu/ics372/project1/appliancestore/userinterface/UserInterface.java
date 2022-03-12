@@ -474,11 +474,16 @@ public class UserInterface {
 	 * 
 	 */
 	public void printAllBackOrders() {
-		Result result = applianceStore.getAllBackOrders();
-		for (BackOrder backOrder : result.getBackOrders())
-		System.out.println(backOrder.getAppliance() + " " +
-		backOrder.getCustomer() + " " + backOrder.getQuantity());
-	}
+		Iterator<Result> iterator = applianceStore.getAllBackOrders();
+		System.out.println("Backorder ID | Appliance ID | Customer ID| Quantity");
+		System.out.println("----------------------------------------------------" +
+							"------------------------------------");
+		while(iterator.hasNext()){
+			Result result = iterator.next();
+			System.out.println(result.getBackorderId() + " | " + result.getApplianceId() + " | " + result.getCustomerId()
+			+ " | " + result.getQuantity());
+		}
+	}	
 	/**
 	 * Saves the data to a file.
 	 */
@@ -577,5 +582,7 @@ public class UserInterface {
 
 	public static void main(String args[]) {
 		UserInterface.instance().process();
+
+
 	}
 }

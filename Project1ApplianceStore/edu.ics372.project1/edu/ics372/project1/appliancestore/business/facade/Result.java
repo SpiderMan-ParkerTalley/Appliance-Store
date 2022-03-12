@@ -1,5 +1,6 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
+import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
@@ -31,6 +32,15 @@ public class Result extends DataTransfer {
 	private int resultCode;
 	private double totalRevenueFromTransactions;
 	private double totalRevenueFromRepairPlans;
+	private List<Appliance> appliances;
+
+	public List<Appliance> getAppliances() {
+		return appliances;
+	}
+
+	public void setAppliances(List<Appliance> appliances) {
+		this.appliances = appliances;
+	}
 
 	public int getResultCode() {
 		return resultCode;

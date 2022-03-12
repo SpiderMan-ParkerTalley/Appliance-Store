@@ -15,6 +15,8 @@ import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
+import edu.ics372.project1.appliancestore.business.iterators.SafeApplianceIterator;
+import edu.ics372.project1.appliancestore.business.iterators.SafeBackOrderIterator;
 import edu.ics372.project1.appliancestore.business.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
@@ -385,6 +387,7 @@ public class ApplianceStore implements Serializable {
 	 * Returns a list of all the customers that have repair plans via the Result
 	 * object.
 	 */
+	//TODO use safe iterators
 	public Result getAllRepairPlanCustomers() {
 		Result result = new Result();
 		result.setCustomers(customers.getAllCustomersInRepairPlan());
@@ -426,10 +429,10 @@ public class ApplianceStore implements Serializable {
 	 * Queries the backOrdersList and assembles a Result object with information to
 	 * be used in the UI for printing back order details.
 	 */
-	public Result getAllBackOrders() {
+	public Iterator<Result> getAllBackOrders() {
 		Result result = new Result();
 		result.setBackOrders(backorders.getBackOrderList());
-		return result;
+		return new SafeBackOrderIterator(backorders.iterator());
 	}
 
 	/**

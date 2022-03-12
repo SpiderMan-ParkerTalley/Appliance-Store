@@ -31,20 +31,12 @@ public abstract class DataTransfer {
 	private String backorderId;
     private int transactionQuantity;
 	//Safe way to list appliances? Maybe put in Result? Does Request have a use for this?
-	private List<Appliance> appliances;
 	
 
 	public DataTransfer(){
 		reset();
 	}
 
-	public List<Appliance> getAppliances() {
-		return appliances;
-	}
-
-	public void setAppliances(List<Appliance> appliances) {
-		this.appliances = appliances;
-	}
 
 	public int getTransactionQuantity() {
 		return transactionQuantity;
@@ -177,6 +169,9 @@ public abstract class DataTransfer {
 
 	public void setBackOrderFields(BackOrder backorder) {
 		backorderId = backorder.getId();
+		customerId = backorder.getCustomer().getId();
+		applianceID = backorder.getAppliance().getId();
+		quantity = backorder.getQuantity();
 	};
 
 	

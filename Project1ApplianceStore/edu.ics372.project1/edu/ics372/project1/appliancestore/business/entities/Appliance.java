@@ -193,4 +193,9 @@ public class Appliance implements Serializable {
 		return output;
 	}
 
+	public static void main(String[] args) {
+		Appliance appliance = new Appliance("a", "b", 0, 0);
+		System.out.println(appliance);
+	}
+
 } 
