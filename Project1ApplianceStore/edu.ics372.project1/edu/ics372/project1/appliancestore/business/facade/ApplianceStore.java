@@ -15,8 +15,7 @@ import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
-import edu.ics372.project1.appliancestore.business.iterators.SafeApplianceIterator;
-import edu.ics372.project1.appliancestore.business.iterators.SafeBackOrderIterator;
+import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 import edu.ics372.project1.appliancestore.business.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
 import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
@@ -180,7 +179,7 @@ public class ApplianceStore implements Serializable {
 			Transaction transaction = transactionIterator.next();
 			if (transaction.getAppliance().getId().equals(appliance.getId())) {
 				customer.addRepairPlan(appliance);
-				result.setResultCode(Result.REPAIR_PLAN_ENROLLED);
+				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 				return result;
 			}
 		}
@@ -240,11 +239,11 @@ public class ApplianceStore implements Serializable {
 				appliances.add(model);
 			}
 		} else {
-			Appliance appliance = ApplianceFactory.findApplianceType(request.getApplianceType());
-			for (Appliance model : models) {
-				if (model.getClass().equals(appliance.getClass())) {
-					appliances.add(model);
-				}
+			String applianceCode = ApplianceFactory.findApplianceType(request.getApplianceType());
+			for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), applianceCode); 
+			applianceFilteredIterator.hasNext();) {
+				Appliance appliance = applianceFilteredIterator.next();
+				appliances.add(appliance);
 			}
 		}
 		if (appliances.isEmpty()) {
@@ -352,7 +351,7 @@ public class ApplianceStore implements Serializable {
         not be fulfilled. This amount is used to create the backOrder.
         */
         backOrdersNeeded = appliance.purchase(request.getQuantity());
-		Transaction transaction = new Transaction(customer, appliance, appliance.getQuantity() - backOrdersNeeded);
+		Transaction transaction = new Transaction(customer, appliance, Request.instance().getQuantity() - backOrdersNeeded);
         customer.addTransaction(transaction); 
 		result.setCustomerFields(customer);
 		result.setApplianceFields(appliance);
@@ -387,7 +386,6 @@ public class ApplianceStore implements Serializable {
 	 * Returns a list of all the customers that have repair plans via the Result
 	 * object.
 	 */
-	//TODO use safe iterators
 	public Result getAllRepairPlanCustomers() {
 		Result result = new Result();
 		result.setCustomers(customers.getAllCustomersInRepairPlan());
@@ -404,8 +402,8 @@ public class ApplianceStore implements Serializable {
 		double totalRevenueFromRepairPlans = 0;
 		for (Iterator<Customer> customerIterator = customers.iterator(); customerIterator.hasNext();) {
 			Customer customer = customerIterator.next();
-			totalRevenueFromTransactions = +customer.getTransactionTotalCost();
-			totalRevenueFromRepairPlans = +customer.getRepairPlansTotalCost();
+			totalRevenueFromTransactions += customer.getTransactionTotalCost();
+			totalRevenueFromRepairPlans += customer.getRepairPlansTotalCost();
 		}
 		Result result = new Result();
 		result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);
@@ -429,10 +427,10 @@ public class ApplianceStore implements Serializable {
 	 * Queries the backOrdersList and assembles a Result object with information to
 	 * be used in the UI for printing back order details.
 	 */
-	public Iterator<Result> getAllBackOrders() {
+	public Result getAllBackOrders() {
 		Result result = new Result();
 		result.setBackOrders(backorders.getBackOrderList());
-		return new SafeBackOrderIterator(backorders.iterator());
+		return result;
 	}
 
 	/**

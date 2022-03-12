@@ -360,8 +360,6 @@ public class UserInterface {
 		}
 	}
 
-
-	//TODO Might have to redo
 	/**
 	 * Method to be called for enrolling a customer in a repair plan for a single appliance.
 	 * The user inputs the customer id and appliance id and uses the appropriate ApplicationStore

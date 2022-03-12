@@ -15,7 +15,7 @@ public class ModelList implements Iterable<Appliance>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     *  A list for storing Appliance(s).
+     *  A list for storing Appliance(s). 
      */
 	private List<Appliance> models = new LinkedList<Appliance>();
 
