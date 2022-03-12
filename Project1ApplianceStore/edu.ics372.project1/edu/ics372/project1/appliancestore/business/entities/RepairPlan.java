@@ -27,12 +27,22 @@ public class RepairPlan implements Serializable {
     public RepairPlan(Customer customer, Appliance appliance) {
         this.customer = customer;
         this.appliance = appliance;
-        /* TODO Here's the problem with repairCost not coming in. If we want it to be
-        able to call the cost regardless of Aplliance, we need to put repair plan price
-        field in the superclass Appliance. The set/gets could be abstract then and only
-        defined in appliances that need to implement them. Thoughts?
+        //   this.cost = appliance.getRepairPlanCost(); TODO: NOT IMPLEMENTED
+        /* Here's the problem with repairCost not coming in. If we want it to be
+        able to call the cost regardless of Appliance i.e washer or dryer, we need to 
+        put repair plan price field in the superclass Appliance. 
+        The set/gets could be abstract then and only defined in appliances that need
+         to implement them. That would mean that Appliance would need to be Abstract too.
+         From the oracle docs page:
+         Consider using abstract classes if any of these statements apply to your situation:
+         You want to share code among several closely related classes.
+         You expect that classes that extend your abstract class have many common methods or fields, 
+         or require access modifiers other than public (such as protected and private).
+         You want to declare non-static or non-final fields. This enables you to define methods that 
+         can access and modify the state of the object to which they belong
+         Thoughts?
         */
-     //   this.cost = appliance.getRepairPlanCost();
+
     }
 
     /**
