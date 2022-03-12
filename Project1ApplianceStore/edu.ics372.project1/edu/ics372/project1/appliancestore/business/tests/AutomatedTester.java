@@ -1,8 +1,14 @@
 package edu.ics372.project1.appliancestore.business.tests;
 
+import java.util.Iterator;
+
+import edu.ics372.project1.appliancestore.business.collections.ModelList;
+import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
+import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 
 public class AutomatedTester {
 	/*
@@ -212,6 +218,16 @@ public class AutomatedTester {
 		double totalSale = result.getTotalRevenueFromTransactions();
 		double totalRepairPlan = result.getTotalRevenueFromRepairPlans();
 		System.out.println("The total sale is: " + totalSale + "The total repair plan revenue is: " + totalRepairPlan);
+	}
+
+	public void testFilterApplianceIterator() {
+		// TODO: a way for the user to input the type they want.
+		String userInput = "DRY";
+		for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), userInput); 
+			applianceFilteredIterator.hasNext();) {
+				Appliance appliance = applianceFilteredIterator.next();
+				
+			}
 	}
 
 
