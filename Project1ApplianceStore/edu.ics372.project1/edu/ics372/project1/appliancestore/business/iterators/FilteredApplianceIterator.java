@@ -47,7 +47,7 @@ public class FilteredApplianceIterator implements Iterator<Appliance> {
     private void getNextItem() {
         while (iterator.hasNext()) {
             item = iterator.next();
-            if (predicate.contains(item.getId())) {
+            if (item.getId().contains(predicate)) {
                 return;
             }
         }
