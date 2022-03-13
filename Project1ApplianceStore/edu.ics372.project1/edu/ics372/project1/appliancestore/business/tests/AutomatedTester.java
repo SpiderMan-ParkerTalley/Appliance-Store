@@ -562,7 +562,7 @@ TODO: Add '// Working' after you have tested your method and it meets all the re
 	// TODO: order test cases in a way that test dependences first. Example: testAddSingleCustomer(); come before testEnrollCustomerInRepairPlan();
 	public void testAll() {
 		System.out.println("Testing...");
-		testAddSingleCustomer(); 
+		testAddSingleCustomer(); // Working
 		testAddAppliance(); // Working
 		testEnrollCustomerInRepairPlan(); // Working
 		//fulfillBackorder(); //TODO: broken
