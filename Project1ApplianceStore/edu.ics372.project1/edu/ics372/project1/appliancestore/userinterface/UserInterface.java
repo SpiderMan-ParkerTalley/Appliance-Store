@@ -51,7 +51,7 @@ public class UserInterface {
 	}
 
 	/**
-	 * Applies the singleton pattern to UserInteface.
+	 * Applies the singleton pattern to UserInterface.
 	 * If an instance of userInterface already exists,
 	 * it returns that instance. Otherwise, it calls the
 	 * constructor and returns a new instance.
@@ -120,7 +120,7 @@ public class UserInterface {
 	 * Prompts for an integer value of a number.
 	 * Takes a string as argument, converters to Integer, then returns as int.
 	 * @param prompt The prompt displayed to the user
-	 * @return The primative int value
+	 * @return The primitive int value
 	 */
 	public int getNumber(String prompt) {
 		do {
@@ -167,7 +167,7 @@ public class UserInterface {
 		System.out.println(ADD_CUSTOMER + " to add a single customer");
 		System.out.println(ADD_INVENTORY + " to add inventory for a single model");
 		System.out.println(PURCHASE_MODEL + " to purchase one or more models for a customer");
-		System.out.println(FULFILL_BACKORDER + " to fulfill a single backorder");
+		System.out.println(FULFILL_BACKORDER + " to fulfill a single back order");
 		System.out.println(ENROLL_REPAIR_PLAN + " to enroll customer in a repair plan for a single appliance");
 		System.out.println(WITHDRAW_REPAIR_PLAN + " to withdraw a customer from a repair plan for a single appliance");
 		System.out.println(CHARGE_REPAIR_PLANS + " to charge all repair plans");
@@ -175,7 +175,7 @@ public class UserInterface {
 		System.out.println(LIST_APPLIANCES + " to list all or some types of appliances");
 		System.out.println(LIST_REPAIR_PLAN_USERS + " to list all users in repair plans");
 		System.out.println(LIST_CUSTOMERS + " to list all customers");
-		System.out.println(LIST_BACKORDERS + " to list all backorders");
+		System.out.println(LIST_BACKORDERS + " to list all back orders");
 		System.out.println(SAVE + " to save data to disk");
 		System.out.println(HELP + " for help");
 	}
@@ -267,7 +267,7 @@ public class UserInterface {
 
 	/**
 	 * Method to be called for purchasing one or more models for a single customer.
-	 * The user inputs the promted values and uses the appropriate ApplicationStore 
+	 * The user inputs the promoted values and uses the appropriate ApplicationStore 
 	 * method purchasing the model.
 	 */
 	public void purchaseModel() {
@@ -348,15 +348,15 @@ public class UserInterface {
 	 * method for fulfilling the backorder.
 	 */
 	public void fullFillBackorder() {
-		Request.instance().setBackorderId(getToken("Enter backorder id"));
+		Request.instance().setBackorderId(getToken("Enter back order id"));
 		Result result = applianceStore.searchBackorder(Request.instance()); 
 		result = applianceStore.fulfillBackorder(Request.instance());
 		if(result.getResultCode() == Result.NOT_A_VALID_QUANTITY){
-			System.out.println("Backorder could not be fulfilled due to insufficient inventory");
+			System.out.println("Back order could not be fulfilled due to insufficient inventory");
 		} else if(result.getResultCode() == Result.BACK_ORDER_NOT_FOUND) {
-			System.out.println("Backorder could not be found");
+			System.out.println("Back order could not be found");
 		} else {
-			System.out.println("Backorder fulfilled.");
+			System.out.println("Back order fulfilled.");
 		}
 	}
 
@@ -374,7 +374,7 @@ public class UserInterface {
 		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
 			System.out.println("Could not find appliance id");
 		} else if (result.getResultCode() == Result.REPAIR_PLAN_ENROLLED) {
-			System.out.println("Customer " + result.getCustomerId() + " succesfully " + 
+			System.out.println("Customer " + result.getCustomerId() + " successfully " + 
 			"enrolled in repair plan for " + result.getApplianceId());
 		} else if (result.getResultCode() == Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE) {
 			System.out.println("Cannot enroll customer in repair plan." + 
@@ -425,7 +425,7 @@ public class UserInterface {
 			System.out.println("1 for washer");
 			System.out.println("2 for dryer");
 			System.out.println("3 for kitchen range");
-			System.out.println("4 for refridgerator");
+			System.out.println("4 for refrigerator");
 			System.out.println("5 for furnace");
 			System.out.println("6 for dishwasher");
 			System.out.println("7 for all");
@@ -502,7 +502,7 @@ public class UserInterface {
 				if (applianceStore != null) {
 					System.out.println(" The applianceStore has been successfully retrieved from the file LibraryData \n");
 				} else {
-					System.out.println("File doesnt exist; creating new applianceStore");
+					System.out.println("File doesn't exist; creating new applianceStore");
 					applianceStore = ApplianceStore.instance();
 				}
 			}
