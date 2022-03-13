@@ -61,6 +61,8 @@ public class AutomatedTester {
 		assert result.getCustomerName().equals(name);
 		assert result.getCustomerAddress().equals(address);
 		assert result.getCustomerPhoneNumber().equals(phoneNumber);
+
+		ApplianceStore.clear();
 	}
 	
 	public void testPurchaseModel() { // needs to have a working addModel and addCustomer to function
@@ -300,8 +302,7 @@ public class AutomatedTester {
 			}
 	}
 
-	//Use Case 10 List Appliances
-
+	// Use-case 10 - List all or some types of appliances. Sharon
 	public void testListAppliances() {
 		final ApplianceStore applianceStore = ApplianceStore.instance();
 
@@ -359,6 +360,8 @@ public class AutomatedTester {
 			count++;
 		}
 		// End of checking appliance.
+
+		ApplianceStore.clear();
 	}
 
 	//Use Case 13 Get All Backorders
@@ -396,13 +399,13 @@ public class AutomatedTester {
 	public void testAll() {
 		System.out.println("Testing...");
 		//testAddSingleCustomer(); 
-		// testAddAppliance(); // Working
-		// testEnrollCustomerInRepairPlan(); // Working.
+		testAddAppliance(); // Working
+		testEnrollCustomerInRepairPlan(); // Working
 		//fulfillBackorder(); //TODO: broken
 		//testWithDrawCustomer();
 		//testPrintRevenue();
 		//testListAppliances();
-		testListAppliances();
+		testListAppliances(); // Working
 		System.out.println("Done testing.");
 	}
 

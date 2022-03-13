@@ -34,6 +34,10 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
         return backOrderList;
     }
 
+    public void clear() {
+        backOrders.clear();
+    }
+
     /**
      * Check whether a back order with a given back order id exists.
      * @param backOrderId String the id of the back order.

@@ -62,7 +62,9 @@ public class ApplianceStore implements Serializable {
 	 * Removes all data from appliance store.
 	 */
 	public static void clear() {
-		applianceStore = new ApplianceStore();
+		ApplianceStore.instance().customers.clear();
+		ApplianceStore.instance().models.clear();
+		ApplianceStore.instance().backOrders.clear();
 	}
 
 	/**

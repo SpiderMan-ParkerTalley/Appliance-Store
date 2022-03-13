@@ -36,6 +36,10 @@ public class CustomerList implements Iterable<Customer>, Serializable {
         return customerList;
     }
 
+    public void clear() {
+        customers.clear();
+    }
+
     /**
      * Checks whether a customer with a given customer id exists.
      * 

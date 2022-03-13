@@ -34,6 +34,10 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 		return modelList;
 	}
 
+    public void clear() {
+        models.clear();
+    }
+
     /**
      * Check whether an appliance with a given appliance id exists.
      * @param applianceId String the id of the appliance
