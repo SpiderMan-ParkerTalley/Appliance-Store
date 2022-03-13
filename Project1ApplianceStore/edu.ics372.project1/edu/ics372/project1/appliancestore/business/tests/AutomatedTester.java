@@ -24,6 +24,8 @@ public class AutomatedTester {
 	private double capacity = 100.00;
 	private double maxHeatingOutput = 225.00;
 
+	// Use-case 1 - Add a single model. Christian
+	// TODO: make idependent and add clear() after testing is complete.
 	public void testAddAppliance() {
 		for (int count = 0; count < appliances.length; count++) {
 			Request.instance().setApplianceType(appliances[count]);
@@ -45,7 +47,8 @@ public class AutomatedTester {
 		}
 	}
 
-	// Use-case 2 - Add a single customer.
+
+	// Use-case 2 - Add a single customer. Christian
 	public static void testAddSingleCustomer() {
 		final ApplianceStore applianceStore = ApplianceStore.instance();
 		final String name = "Ryan";
@@ -65,10 +68,22 @@ public class AutomatedTester {
 		ApplianceStore.clear();
 	}
 	
-	public void testPurchaseModel() { // needs to have a working addModel and addCustomer to function
+
+	// Use-case 3 - Add to inventory for a single model. Christian
+	// TODO: Implement testAddToInventoryForModel() Christian
+	public void testAddToInventoryForModel() { 
 
 	}
-	// Use Case 5 Fulfill a single backOrder
+
+
+	// Use-case 4 - Purchase one or more models. James
+	// TODO: Implement testPurchaseOneOrMoreModels() James
+	public void testPurchaseOneOrMoreModels() {
+
+	}
+
+	// Use-case 5 - Fulfill a single back order. Emmanuel
+	// TODO: remove extra stuff. Emmanuel 
 	public void fulfillBackOrder(){
 		// The customer is created and added to the store
 		final String name = "Nuel";
@@ -140,6 +155,7 @@ public class AutomatedTester {
 		}
 	}
 
+
 	// Use-case 6 - Enroll a customer in a repair plan for a single appliance. Parker Talley
 	public void testEnrollCustomerInRepairPlan() {
 		// Creating and adding customer.
@@ -206,11 +222,14 @@ public class AutomatedTester {
 				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
 			}
 		}
+		
+		// Clearing appliance store data.
 		ApplianceStore.clear();
 	}
 
-	//Use Case 7 Withdraw Customer from a single repair plan
-	// The customer is created and added to the store
+	
+	// Use-case 7 - Withdraw customer from a single repair plan. Emmanuel
+	// TODO: change to assert, remove extra stuff. Emmanuel
 	public void testWithDrawCustomer(){
 		final String name = "Nuel";
 		final String address = "007 Krypton Blvd, Asgard, WA 00701";
@@ -281,7 +300,17 @@ public class AutomatedTester {
 		}
 		
 	}
-	// Use Case 9 Print total Revenue
+
+
+	// Use-case 8 - Charge all repair plans. James
+	// TODO: implement testChargeAllRepairPlans. James
+	public void testChargeAllRepairPlans() {
+
+	}
+
+
+	// Use-case 9 - Print total revenue from all sales and repair plans. Emmanuel
+	// TODO: change to assert. Emmanuel
 	public void testPrintRevenue(){
 		Result result = new Result();
 		result = ApplianceStore.instance().getTotalRevenue();
@@ -364,7 +393,23 @@ public class AutomatedTester {
 		ApplianceStore.clear();
 	}
 
-	//Use Case 13 Get All Backorders
+
+	// Use-case 11 - List all users in repair plans. Parker
+	// TODO: implement testListAllUsersInRepairPlans. Parker
+	public void testListAllUsersInRepairPlans() {
+
+	}
+
+
+	// Use-case 12 - List customers. Parker
+	// TODO: implement testListCustomers. Parker
+	public void testListCustomers() {
+		
+	}
+
+
+	// Use-case 13 - List all back orders. Sharon
+	// TODO: Change to assert, remove extra unused stuff.
 	public void testGetAllBackorders() {
 		final String name = "Nuel";
 		final String address = "007 Krypton Blvd, Asgard, WA 00701";
@@ -390,15 +435,25 @@ public class AutomatedTester {
 		}
 	}
 
+	// Use-case 14 - Save data to disk. Sharon
+	// TODO: Save data to disk test.
+	public void testSaveDataToDisk() {
 
+	}
+
+/*
+TODO: All test method should use ApplianceStore.clear() once they are done testing.
+TODO: All test methods should be as indepent as possible (varibles created inside of the method AND clear once done testing). Ask Parker for a reason as to why for explination.
+*/
 
 
 	/**
 	 * All tests to run here.
 	 */
+	// TODO: order test cases in a way that test dependences first. Example: testAddSingleCustomer(); come before testEnrollCustomerInRepairPlan();
 	public void testAll() {
 		System.out.println("Testing...");
-		//testAddSingleCustomer(); 
+		testAddSingleCustomer(); 
 		testAddAppliance(); // Working
 		testEnrollCustomerInRepairPlan(); // Working
 		//fulfillBackorder(); //TODO: broken
