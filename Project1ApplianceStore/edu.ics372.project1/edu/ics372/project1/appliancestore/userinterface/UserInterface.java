@@ -282,9 +282,9 @@ public class UserInterface {
 		Request.instance().reset(); // TODO Watch this, I think it's a good idea to reset in the UI with each new request. Thoughts?
 		Result result = new Result();
 		do {
-		// customer and appliance search guards
-		customerCheck(); 
-		applianceCheck();
+			// Customer and appliance guards.
+			customerCheck(); 
+			applianceCheck();
 			Request.instance().setQuantity(getNumber("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
 			switch(result.getResultCode()) {
@@ -338,11 +338,11 @@ public class UserInterface {
 		Result result = new Result();
 		boolean customerInputGood = false;
 		while(!customerInputGood) {
-			Request.instance().setCustomerId(getToken("Enter customer id"));
+			Request.instance().setCustomerId(getToken("Enter customer's ID: "));
 			result = applianceStore.searchCustomer(Request.instance());
 			if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-				System.out.println("Error: Customer with id " + Request.instance().getCustomerId() +
-				" not found.");
+				System.out.println("Error: Customer with id " + 
+					Request.instance().getCustomerId() + " not found.");
 			}
 			else if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
 				customerInputGood = true;

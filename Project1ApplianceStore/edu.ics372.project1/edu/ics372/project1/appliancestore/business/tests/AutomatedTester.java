@@ -11,207 +11,295 @@ import edu.ics372.project1.appliancestore.business.facade.Result;
 import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 
 public class AutomatedTester {
-	/*
-	 * Test case for adding a single model.
-	 */
-	private ApplianceStore store = ApplianceStore.instance();
-	private final int TEST_SIZE = 6;
-	// Appliances
-	private int[] appliances = { 1, 2, 3, 4, 5, 6 };
-	private String[] brandNames = { "washer", "dryer", "kitchen range", "refrigerator", "furnace", "dishwasher" };
-	private String[] modelNames = { "Kitchenaid", "LG", "GE", "Samsung", "Sony", "Zephyr" };
-	private double[] prices = { 50.00, 60.00, 100.00, 150.00, 175.00, 200.00 };
-	private double repairPlanAmount = 20.50;
-	private double capacity = 100.00;
-	private double maxHeatingOutput = 225.00;
-	// Customers for global use
-	private String[] customerNames = {"n1", "n2", "n3", "n4", "n5", "n6"};
-	private String[] customerIds = {"c1", "c2", "c3", "c4", "c5", "c6"};
-	private String[] customerAddresses = {"a1", "a2", "a3", "a4", "a5", "a6"};
-	private String[] customerPhone = {"p1", "p2", "p3", "p4", "p5", "p6"};
-	private Customer[] customerObjects = new Customer[TEST_SIZE]; 
+	// Storing ApplianceStore entity locally.
+	private static ApplianceStore applianceStore = ApplianceStore.instance();
+	
+	// Appliances Information - 20 appliances/models total.
+	private static final int APPLIANCE_TEST_SIZE = 20;
 
-	// Use-case 1 - Add a single model. Christian
-	// TODO: make idependent and add clear() after testing is complete.
-	public void testAddAppliance() {
-		for (int count = 0; count < appliances.length; count++) {
-			Request.instance().setApplianceType(appliances[count]);
+	private static String[] applianceIds = new String[APPLIANCE_TEST_SIZE];
+
+	private static final int[] applianceTypes = { 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4, 4, 4, 
+		5, 5, 5, 6, 6, 6 };
+	
+	private static final String[] brandNames = { "Amana", "Bosch", "Comfort Zone", 
+		"GE Appliances", "KitchenAid", "LG", "Moen", "Maytag", "Franke", 
+		"Frigidaire", "Sharp", "Insinkerator", "Samsung", "Whirlpool", "Haier", 
+		"Sub-Zero", "Viking", "Best Buy Brand", "Bertazzoni", "Thor Kitchen"};
+	
+	private static final String[] modelNames = { "MD4LJD026G", "WFSZSI842W", "G7C6FFZZF7", 
+		"3K4JER8CNS", "VTWTVFV3QZ", "Y2GHK9LWNY", "1Z5KJ64Q0H", "SNXBI25BXQ",
+		"B7PBOLRES5", "L1CZEGMFE9", "MYJDIM68SF", "D2O6GNBQ59", "28ADTP0K7Z",
+		"BBEP5Q8Y2P", "LDLYCE3LKX", "FPZYVC4Y4I", "PH28IUF2ET", "WTLERQKBU3",
+		"L9Y5QJSC6J", "EX8HYM1QL8" };
+	
+	private static final double[] prices = { 10.00, 20.00, 30.00, 40.00, 50.00, 60.00, 70.00, 
+		80.00, 90.00, 100.00, 110.00, 120.00, 130.00, 140.00, 150.00, 160.00, 
+		170.00, 180.00, 190.00, 200.00 };
+	
+	private static final double repairPlanAmount = 23.50;
+	
+	private static final double capacity = 100.00;
+	
+	private static final double maxHeatingOutput = 100_000;
+
+	private static final int quantity = 2;
+	// End of appliances information.
+	
+
+	// Customer(s) Information - 5 customers total.
+	private static final int CUSTOMER_TEST_SIZE = 5;
+	// Added when the customers is created.
+	private static String[] customerIds = new String[CUSTOMER_TEST_SIZE]; 
+
+	private static final String[] customerNames = { "Christian Zendejas" , 
+		" Emmanuel Ojogwu", "James Sawicki", "Sharon Shin", "Parker Talley" };
+
+	private static final String[] customerAddresses = {
+		"8946 South Fieldstone Ave. Ambler, PA 19002", 
+		"839 Tailwater Dr. Ronkonkoma, NY 11779", 
+		"8977 NE. Thompson Court East Lansing, MI 48823", 
+		"740 Gainsway Ave. Valley Stream, NY 11580", 
+		"48 River Ave.Westport, CT 06880" };
+	
+	private static final String[] customerPhoneNumbers = { "910-554-5621", "631-275-6029", 
+		"252-389-8790", "843-889-6979", "843-308-6768" };
+	// End of customers information.
+
+	// Purchase Models and Back Orders Information.
+	/**
+	 * The appliances will be in stock. No back order needed.
+	 */
+	private static final int inStockQuantity = 2;
+
+	/**
+	 * The appliances will be partially in stock. A back order will be needed.
+	 */
+	private static final int backOrderQuantity = 5;
+	
+	/**
+	 * Quantity needed to be back ordered.
+	 */
+	private static final int neededBackOrderQuantity = 3;
+
+	/**
+	 * Stores the back order IDs.
+	 */
+	private static String[] backOrderIds = new String[5];
+	
+	/**
+	 * Quantity for adding inventory after creation of back orders.
+	 */
+	private static final int restockInventory = 5;
+	// End of purchase models and back orders information.
+
+
+	// Use-case 1 - Add a single model.
+	public static void addAppliances() {
+		for (int index = 0; index < APPLIANCE_TEST_SIZE; index++) {
+			// Set the appliance type.
+			Request.instance().setApplianceType(applianceTypes[index]);
+
+			// If the appliance is washer or dryer...
 			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
+				// Set the repair plan amount.
 				Request.instance().setRepairPlanAmount(repairPlanAmount);
-			} else if (Request.instance().getApplianceType() == 4) {
+			} 
+			// If the appliance is a refrigerator...
+			else if (Request.instance().getApplianceType() == 4) {
+				// Set the capacity.
 				Request.instance().setCapacity(capacity);
-			} else if (Request.instance().getApplianceType() == 5) {
+			} 
+			// If the appliance is a furnace...
+			else if (Request.instance().getApplianceType() == 5) {
+				// Set the heating output.
 				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 			}
-			Request.instance().setModelName(modelNames[count]);
-			Request.instance().setBrandName(brandNames[count]);
-			Request.instance().setPrice(prices[count]);
+			
+			// Set remanding information.
+			Request.instance().setModelName(modelNames[index]);
+			Request.instance().setBrandName(brandNames[index]);
+			Request.instance().setPrice(prices[index]);
+			
+			// Add appliance to the store.
 			Result result = ApplianceStore.instance().addModel(Request.instance());
+
+			// Store appliance IDs.
+			applianceIds[index] = result.getApplianceId();
+			
+			// Validate results.
 			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
-			assert result.getBrandName().equals(brandNames[count]);
-			assert result.getModelName().equals(modelNames[count]);
-			assert result.getPrice() == (prices[count]);
+			assert result.getBrandName().compareTo(brandNames[index]) == 0;
+			assert result.getModelName().compareTo(modelNames[index]) == 0;
+			assert result.getPrice() == (prices[index]);
 		}
 	}
 
 
-	// Use-case 2 - Add a single customer. Christian
-	public static void testAddSingleCustomer() {
-		final ApplianceStore applianceStore = ApplianceStore.instance();
-		final String name = "Ryan";
-		final String address = "75 Rockcrest Street Wellington, FL 33414";
-		final String phoneNumber = "310-788-4084";
+	// Use-case 2 - Add a single customer. 
+	public static void addCustomers() {
+		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
 
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);
+			// Set customer information.
+			Request.instance().setCustomerName(customerNames[index]);
+			Request.instance().setCustomerAddress(customerAddresses[index]);
+			Request.instance().setCustomerPhoneNumber(customerPhoneNumbers[index]);
 
-		Result result = applianceStore.addCustomer(Request.instance());
-		assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
-		assert result.getCustomerName().equals(name);
-		assert result.getCustomerAddress().equals(address);
-		assert result.getCustomerPhoneNumber().equals(phoneNumber);
+			// Add customer to appliance store.
+			Result result = applianceStore.addCustomer(Request.instance());
 
-		ApplianceStore.clear();
+			// Store customer IDs.
+			customerIds[index] = result.getCustomerId();
+			
+			// Validate results.
+			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+			assert 0 == result.getCustomerName().compareTo(customerNames[index]);
+			assert 0 == result.getCustomerAddress().compareTo(customerAddresses[index]);
+			assert 0 == result.getCustomerPhoneNumber().compareTo(customerPhoneNumbers[index]);
+		}
 	}
 	
 
-	// Use-case 3 - Add to inventory for a single model. Christian
-	// TODO: Implement testAddToInventoryForModel() Christian
-	public void testAddToInventoryForModel() { 
+	// Use-case 3 - Add to inventory for a single model. 
+	public void testAddToInventoryForModels() { 
+		for (int index = 0; index < APPLIANCE_TEST_SIZE; index++) {
+			// Set appliance id and quantity.
+			Request.instance().setApplianceID(applianceIds[index]);
+			Request.instance().setQuantity(quantity);
+			
+			// Add inventory to appliance store.
+			Result result = ApplianceStore.instance().addInventory(Request.instance());
 
+			// Validate results.
+			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+			assert result.getQuantity() == quantity;
+			assert result.getBrandName().compareTo(brandNames[index]) == 0;
+			assert result.getModelName().compareTo(modelNames[index]) == 0;
+			assert result.getPrice() == (prices[index]);
+		}
 	}
 
 
-	// Use-case 4 - Purchase one or more models. James
-	public void testPurchaseOneOrMoreModels() {
-		ApplianceStore.clear();
-		for (int index = 0; index < TEST_SIZE; index++) {
-			/*
-			Adding customers to store. ASSERTION: applianceStore.addCustomers()
-			(use case 1) is correct.
-			*/
-			Request.instance().setCustomerName(customerNames[index]);
+	// Use-case 4 - Purchase one or more models. 
+	public static void testPurchaseModels() {
+		// Stores the current test index for appliance information.
+		int applianceIndex = 0;
+		
+		// Test with appliance in-stock. Back orders NOT NEEDED.
+		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
+			// Set purchase information.
+			Request.instance().setQuantity(inStockQuantity);
 			Request.instance().setCustomerId(customerIds[index]);
-			Request.instance().setCustomerAddress(customerAddresses[index]);
-			Request.instance().setCustomerPhoneNumber(customerPhone[index]);
-			Result result = ApplianceStore.instance().addCustomer(Request.instance());
-			Request.instance().setCustomerId(result.getCustomerId());
-			/*
-			Adding appliances to the store. ASSERTION: applianceStore.addAppliances()
-			(use case 2) and applianceStore.addInventory() (use case 3) 
-			are correct. Adds 2 units to inventory.
-			*/
-			Request.instance().setApplianceType(appliances[index]);
-			Request.instance().setBrandName(brandNames[index]);
-			Request.instance().setModelName(modelNames[index]);
-			Request.instance().setPrice(prices[index]);
-			if (appliances[index] == 1 || appliances[index] == 2) {
-				Request.instance().setRepairPlanAmount(repairPlanAmount);
-			} else if (appliances[index] == 4) {
-				Request.instance().setCapacity(capacity);
-			} else if (appliances[index] == 5) {
-				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
-			}
-			result = ApplianceStore.instance().addModel(Request.instance());
-			Request.instance().setApplianceID(result.getApplianceId());
-			Request.instance().setQuantity(2);
-			ApplianceStore.instance().addInventory(Request.instance());
-			/*
-			This tests a purchase with no back order created.
-			Quantity purchased (1) <= inventory (2). 0 back orders, so quantity
-			returned is 0.
-			*/
-			Request.instance().setQuantity(1);
-			result = ApplianceStore.instance().purchaseModel(Request.instance());
+			Request.instance().setApplianceID(applianceIds[applianceIndex]);
+
+			// Purchase appliances.
+			Result result = ApplianceStore.instance().purchaseModel(Request.instance());
+			
+			// Validate results.
+			// Customer asserts.
 			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			assert result.getCustomerName().equals(customerNames[index]);
 			assert result.getCustomerAddress().equals(customerAddresses[index]);
-			assert result.getCustomerPhoneNumber().equals(customerPhone[index]);
-			assert result.getApplianceId().equals(Request.instance().getApplianceId());
-			assert result.getBrandName().equals(brandNames[index]);
-			assert result.getModelName().equals(modelNames[index]);
-			assert result.getPrice() == prices[index];
-			assert result.getQuantity() == 0; // 0 backorders
-			
-			/*
-			This tests the case where a backOrder is created.
-			Quantity purchased (2) >= inventory (1). 1 back order, so quantity
-			returned is 1.
-			*/
-			Request.instance().setQuantity(2);
-			Result result2 = ApplianceStore.instance().purchaseModel(Request.instance());
-			assert result2.getResultCode() == Result.BACK_ORDER_CREATED;
-			assert result2.getCustomerName().equals(customerNames[index]);
-			assert result2.getCustomerAddress().equals(customerAddresses[index]);
-			assert result2.getCustomerPhoneNumber().equals(customerPhone[index]);
-			assert result2.getApplianceId().equals(Request.instance().getApplianceId());
-			assert result2.getBrandName().equals(brandNames[index]);
-			assert result2.getModelName().equals(modelNames[index]);
-			assert result2.getPrice() == prices[index];
-			assert result2.getQuantity() == 1; // 1 backorders
+			assert result.getCustomerPhoneNumber().equals(customerPhoneNumbers[index]);
+			// Appliance asserts.
+			assert result.getApplianceId().equals(applianceIds[applianceIndex]);
+			assert result.getBrandName().equals(brandNames[applianceIndex]);
+			assert result.getModelName().equals(modelNames[applianceIndex]);
+			assert result.getPrice() == prices[applianceIndex];
+			assert result.getQuantity() == 0;
 
-			Request.instance().reset();
-			ApplianceStore.clear();
+			// Iterator appliance index.
+			applianceIndex++;
+		}
+
+		// Test with appliance partially in-stock. Back order NEEDED.
+		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
+			// Set purchase information.
+			Request.instance().setQuantity(backOrderQuantity);
+			Request.instance().setCustomerId(customerIds[index]);
+			Request.instance().setApplianceID(applianceIds[applianceIndex]);
+
+			// Purchase appliances.
+			Result result = ApplianceStore.instance().purchaseModel(Request.instance());
+
+			// Store back order ID.
+			backOrderIds[index] = result.getBackOrderId();
+			
+			// Validate results.
+			// Customer asserts.
+			assert result.getResultCode() == Result.BACK_ORDER_CREATED;
+			assert result.getCustomerName().equals(customerNames[index]);
+			assert result.getCustomerAddress().equals(customerAddresses[index]);
+			assert result.getCustomerPhoneNumber().equals(customerPhoneNumbers[index]);
+			// Appliance asserts.
+			assert result.getApplianceId().equals(applianceIds[applianceIndex]);
+			assert result.getBrandName().equals(brandNames[applianceIndex]);
+			assert result.getModelName().equals(modelNames[applianceIndex]);
+			assert result.getPrice() == prices[applianceIndex];
+			assert result.getQuantity() == neededBackOrderQuantity;
+
+			// Iterator appliance index.
+			applianceIndex++;
 		}
 	}
 
-	// Use-case 5 - Fulfill a single back order. Emmanuel 
-	public void fulfillBackOrder(){
-		// The customer is created and added to the store
-		Request.instance().setCustomerName(customerNames[0]);
-		Request.instance().setCustomerAddress(customerAddresses[0]);
-		Request.instance().setCustomerPhoneNumber(customerPhone[0]);;
-
-		Result resultCustomer = ApplianceStore.instance().addCustomer(Request.instance());
-
-		// The appliance is created and added to the store
-		
-		final int amount = 2;
-		final Result[] appliance = new Result[6];
-		
-		for (int count = 0; count < appliances.length; count++) {
-			Request.instance().setApplianceType(appliances[count]);
-			if (Request.instance().getApplianceType() == 0 || Request.instance().getApplianceType() == 1) {
-				Request.instance().setRepairPlanAmount(repairPlanAmount);
-				Request.instance().setModelName(modelNames[count]);
-				Request.instance().setBrandName(brandNames[count]);
-				Request.instance().setPrice(prices[count]);
-			} else if (Request.instance().getApplianceType() == 3) {
-				Request.instance().setCapacity(capacity);
-				Request.instance().setModelName(modelNames[count]);
-				Request.instance().setBrandName(brandNames[count]);
-				Request.instance().setPrice(prices[count]);
-			} else if (Request.instance().getApplianceType() == 4) {
-				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
-				Request.instance().setModelName(modelNames[count]);
-				Request.instance().setBrandName(brandNames[count]);
-				Request.instance().setPrice(prices[count]);
-			} else if (Request.instance().getApplianceType() == 2 || Request.instance().getApplianceType() == 5) {
-				Request.instance().setModelName(modelNames[count]);
-				Request.instance().setBrandName(brandNames[count]);
-				Request.instance().setPrice(prices[count]);
-			}
+	public void addInventoryAfterBackOrdersCreation() {
+		// Add inventory for 3 of the back orders.
+		for (int index = 5; index < 8; index++) {
+			// Set appliance id and quantity.
+			Request.instance().setApplianceID(applianceIds[index]);
+			Request.instance().setQuantity(restockInventory);
 			
-			Result applianceResult = ApplianceStore.instance().addModel(Request.instance());
-			appliance[count] = applianceResult;
+			// Add inventory to appliance store.
+			Result result = ApplianceStore.instance().addInventory(Request.instance());
+
+			// Validate results.
+			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+			assert result.getQuantity() == restockInventory;
+			assert result.getBrandName().compareTo(brandNames[index]) == 0;
+			assert result.getModelName().compareTo(modelNames[index]) == 0;
+			assert result.getPrice() == (prices[index]);
 		}
-		for(int count = 0; count < appliances.length; count++){
-			if(count < 4 && count == 5){
-				Request.instance().setCustomerId(resultCustomer.getCustomerId());
-				Request.instance().setApplianceID(appliance[count].getApplianceId());
-				Request.instance().setQuantity(amount);
-				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackOrder(Request.instance());
-				assert resultFulfillBackOrder.getResultCode() == Result.OPERATION_SUCCESSFUL;
-			} else if (count == 4){
-				Request.instance().setCustomerId(resultCustomer.getCustomerId());
-				Request.instance().setApplianceID(appliance[count].getApplianceId());
-				Request.instance().setQuantity(amount);
-				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackOrder(Request.instance());
-				assert resultFulfillBackOrder.getResultCode() == Result.BACK_ORDER_NOT_FOUND;
-			}
+	}
+
+	// Use-case 5 - Fulfill a single back order. 
+	public void testFulfillBackOrders() {
+		// Restock inventory for test.
+		addInventoryAfterBackOrdersCreation();
 		
+		// Test with appliances in-stock. Back orders FULFILLED.
+		for (int index = 0; index < 3; index++) {
+			// Set back order ID.
+			Request.instance().setBackOrderId(backOrderIds[index]);
+
+			// Fulfill back order.
+			Result result = ApplianceStore.instance().fulfillBackOrder(Request.instance());
+
+			// Validate results.
+			assert result.getResultCode() ==  Result.OPERATION_SUCCESSFUL;
 		}
+
+		// Test with appliances NOT in-stock. Back orders NOT FULFILLED.
+		for (int index = 3; index < 5; index++) {
+			// Set back order ID.
+			Request.instance().setBackOrderId(backOrderIds[index]);
+
+			// Attempt to fulfill back order.
+			Result result = ApplianceStore.instance().fulfillBackOrder(Request.instance());
+
+			// Validate results.
+			assert result.getResultCode() ==  Result.NOT_A_VALID_QUANTITY;
+		}
+
+		// Test with invalid back order ID. Back order NOT FOUND.
+		// Set back order ID.
+		Request.instance().setBackOrderId("NOT A BACK ORDER ID");
+
+		// Attempt to fulfill back order.
+		Result result = ApplianceStore.instance().fulfillBackOrder(Request.instance());
+
+		// Validate results.
+		assert result.getResultCode() ==  Result.BACK_ORDER_NOT_FOUND;
 	}
 
 
@@ -608,30 +696,16 @@ public class AutomatedTester {
 
 	}
 
-/*
-TODO: All test method should use 'ApplianceStore.clear()' once they are done testing.
-TODO: All test methods should be as indepent as possible (varibles created inside of the method AND clear once done testing). Ask Parker for a reason as to why for explination.
-TODO: Add '// Working' after you have tested your method and it meets all the requirements.
-*/
-
-
 	/**
 	 * All tests to run here.
 	 */
-	// TODO: order test cases in a way that test dependences first. Example: testAddSingleCustomer(); come before testEnrollCustomerInRepairPlan();
 	public void testAll() {
 		System.out.println("Testing...");
-		testAddSingleCustomer(); // Working
-		testAddAppliance(); // Working
-		testEnrollCustomerInRepairPlan(); // Working
-		testPurchaseOneOrMoreModels(); // Working
-		//fulfillBackorder(); //TODO: broken
-		//testWithDrawCustomer();
-		//testPrintRevenue();
-		//testListAppliances();
-		testListAppliances(); // Working
-		testListAllUsersInRepairPlans(); // Working
-		testListCustomers(); // Working
+		addAppliances();
+		addCustomers();
+		testAddToInventoryForModels();
+		testPurchaseModels();
+		testFulfillBackOrders();
 		System.out.println("Done testing.");
 	}
 
