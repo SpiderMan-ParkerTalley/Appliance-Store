@@ -374,25 +374,39 @@ public class UserInterface {
 	 * method for enrolling the customer in the repair plan.
 	 */
 	public void enrollRepairPlan() {
-		Request.instance().setCustomerId(getToken("Enter customer id"));
-		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		// Gather user information.
+		Request.instance().setCustomerId(getToken("Enter customer ID: "));
+		Request.instance().setApplianceID(getToken("Enter appliance ID: "));
+		// Submit request to appliance store.
 		Result result = applianceStore.enrollRepairPlan(Request.instance());
+		// Customer ID is not in system.
 		if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-			System.out.println("Could not find customer id");
-		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
-			System.out.println("Could not find appliance id");
-		} else if (result.getResultCode() == Result.REPAIR_PLAN_ENROLLED) {
+			System.out.println("Could not find customer associate with customer ID entered.");
+		} 
+		// Appliance ID is not in system.
+		else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			System.out.println("Could not find appliance associate with appliance ID entered.");
+		} 
+		// Successful operation.
+		else if (result.getResultCode() == Result.REPAIR_PLAN_ENROLLED) {
 			System.out.println("Customer " + result.getCustomerId() + " successfully " + 
 			"enrolled in repair plan for " + result.getApplianceId());
-		} else if (result.getResultCode() == Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE) {
+		} 
+		// Customer has not purchased the appliance.
+		else if (result.getResultCode() == Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE) {
 			System.out.println("Cannot enroll customer in repair plan." + 
 								"This customer has not purchased this appliance.");
-		} else if (result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
+		} 
+		// Appliance is not eligible for repair plan.
+		else if (result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
 			System.out.println("This appliance is not eligible for a repair plan.");
-		} else {
+		} 
+		// An unknown error has occurred.
+		else {
 			System.out.println("There was an error enrolling the plan.");
-				}
+		}
 	}
+
 
 	/**
 	 * Method for withdrawing a customer from a repair plan for a single appliance.
@@ -400,22 +414,35 @@ public class UserInterface {
 	 * methods for withdrawing the customer from the repair plan.
 	 */
 	public void withdrawRepairPlan() {
-		Request.instance().setCustomerId(getToken("Enter customer id"));
-		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		// Gather user information.
+		Request.instance().setCustomerId(getToken("Enter customer ID: "));
+		Request.instance().setApplianceID(getToken("Enter appliance ID: "));
+		// Submit request to appliance store.
 		Result result = applianceStore.withdrawRepairPlan(Request.instance());
+		// Appliance is not eligible for repair plan.
 		if(result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
-			System.out.println("Appliance not eligible for repair plan");
-		} else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-			System.out.println("Could not find customer id");
-		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
-			System.out.println("Could not find appliance id");
-		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
-			System.out.println("Could not enroll customer in repair plan");
-		} else {
+			System.out.println("Appliance not eligible for repair plan.");
+		} 
+		// Customer ID is not in system.
+		else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+			System.out.println("Could not find customer associate with customer ID entered.");
+		} 
+		// Appliance ID is not in system.
+		else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			System.out.println("Could not find appliance associate with appliance ID entered.");
+		} 
+		// Customer has not been enrolled in repair plan with appliance.
+		else if (result.getResultCode() == Result.OPERATION_FAILED) {
+			System.out.println("Customer has not been enrolled in repair plan with appliance.");
+		} 
+		// Successful operation.
+		else {
 			System.out.println("Customer " + Request.instance().getCustomerAddress() + " successfully " + 
 			"enrolled in repair plan for " + Request.instance().getApplianceId());
-			}
 		}
+	}
+
+
 	/**
 	 * Allows the user to charge all active repair plans to the appropriate customers. Updates all customer accounts
 	 * and displays a message when completed.

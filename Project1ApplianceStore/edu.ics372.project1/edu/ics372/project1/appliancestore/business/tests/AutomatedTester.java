@@ -243,6 +243,9 @@ public class AutomatedTester {
 		}
 	}
 
+	/**
+	 * Helper method for adding inventory after back orders have been created.
+	 */
 	public void addInventoryAfterBackOrdersCreation() {
 		// Add inventory for 3 of the back orders.
 		for (int index = 5; index < 8; index++) {
@@ -261,6 +264,7 @@ public class AutomatedTester {
 			assert result.getPrice() == (prices[index]);
 		}
 	}
+
 
 	// Use-case 5 - Fulfill a single back order. 
 	public void testFulfillBackOrders() {
@@ -303,147 +307,128 @@ public class AutomatedTester {
 	}
 
 
-	// Use-case 6 - Enroll a customer in a repair plan for a single appliance. Parker Talley
+	// Use-case 6 - Enroll a customer in a repair plan for a single appliance.
 	public void testEnrollCustomerInRepairPlan() {
-		// Creating and adding customer.
-		final ApplianceStore applianceStore = ApplianceStore.instance();
-		final String name = "Ryan";
-		final String address = "75 Rockcrest Street Wellington, FL 33414";
-		final String phoneNumber = "310-788-4084";
+		/* Test with incorrect appliance ID. Customer NOT found.
+		Settings appliance ID and customer ID. */
+		Request.instance().setApplianceID("NOT AN APPLIANCE ID");
+		Request.instance().setCustomerId(customerIds[0]);
 
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);;
+		// Enrolling customer in repair plan.
+		Result resultApplianceID = applianceStore.enrollRepairPlan(Request.instance());
 
-		Result customerResult = applianceStore.addCustomer(Request.instance());
-		final String customerId = customerResult.getCustomerId();
+		// Validate results.
+		assert resultApplianceID.getResultCode() == Result.APPLIANCE_NOT_FOUND;
+		
 
-		// Adding appliances.
-		final String applianceModel = "ApplianceModel";
-		final String brandName = "KitchenAid";
-		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
+		/* Test with incorrect customer ID. Appliance NOT found.
+		Setting appliance ID and customer ID. */
+		Request.instance().setApplianceID(applianceIds[0]);
+		Request.instance().setCustomerId("NOT A CUSTOMER ID");
 
-		final double price = 5.00;
-		final double repairPlanAmount = 10.0;
-		final double capacity = 15.0;
-		final double maxHeatingOutput = 20.0;
+		// Enrolling customer in repair plan.
+		Result resultCustomerID = applianceStore.enrollRepairPlan(Request.instance());
 
-		final Result[] appliances = new Result[6];
+		// Validate results.
+		assert resultCustomerID.getResultCode() == Result.CUSTOMER_NOT_FOUND;
 
-		for (int count = 0; count < applianceTypes.length; count++) {
-			Request.instance().setApplianceType(applianceTypes[count]);
-			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
-				Request.instance().setRepairPlanAmount(repairPlanAmount);
-			} else if (Request.instance().getApplianceType() == 4) {
-				Request.instance().setCapacity(capacity);
-			} else if (Request.instance().getApplianceType() == 5) {
-				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
-			}
-			Request.instance().setModelName(applianceModel);
-			Request.instance().setBrandName(brandName);
-			Request.instance().setPrice(price);
-			Result applianceResult = applianceStore.addModel(Request.instance());
-			appliances[count] = applianceResult;
+
+		// Test with proper/correct appliance IDs and customer IDs. Repair plan ENROLLED.
+		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
+			// Settings appliance ID and customer ID.
+			Request.instance().setApplianceID(applianceIds[index]);
+			Request.instance().setCustomerId(customerIds[index]);
+
+			// Enrolling customer in repair plan.
+			Result result = applianceStore.enrollRepairPlan(Request.instance());
+
+			// Validate results.
+			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 		}
 
-		// Purchasing and enrolling customer in repair plan.
-		for(int index = 0; index < applianceTypes.length; index++) {
 
-			// Purchasing of repair plan.
-			Request.instance().setApplianceID(appliances[index].getApplianceId());
-			Request.instance().setCustomerId(customerId);
-			applianceStore.purchaseModel(Request.instance());
-			
-		
-			// Enrolling in repair plan.
-			
-			// First appliances of type 1 and 2 are eligible for repair plan.
-			if (index <= 1) {
-				Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
-				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;//getting an assertion error here
-			}
+		/* Test with proper/correct customer ID and appliance ID, 
+		customer has NOT purchased appliance. */
+		int applianceIndex = 10;
+		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
+			// Settings customer ID and appliance ID.
+			Request.instance().setCustomerId(customerIds[index]);
+			Request.instance().setApplianceID(applianceIds[applianceIndex++]);
 
-			// All other appliance types should not be eligible.
-			else if (index >= 2) {
-				Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
-				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
-			}
+			// Enrolling customer in repair plan.
+			Result result = applianceStore.enrollRepairPlan(Request.instance());
+
+			// Validate results.
+			assert result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
 		}
-		
-		// Clearing appliance store data.
-		ApplianceStore.clear();
 	}
 
 	
-	// Use-case 7 - Withdraw customer from a single repair plan. Emmanuel
-	// TODO: change to assert, remove extra stuff. Emmanuel
-	public void testWithDrawCustomer(){
-		final String name = "Nuel";
-		final String address = "007 Krypton Blvd, Asgard, WA 00701";
-		final String phoneNumber = "(001)112-2223";
+	// Use-case 7 - Withdraw customer from a single repair plan. 
+	public void testWithdrawCustomerFromRepairPlan() {
+		/* Withdraw customer from repair plan with incorrect customer ID.
+		Setting customer ID and appliance ID. */
+		Request.instance().setCustomerId("NOT A CUSTOMER ID");
+		Request.instance().setApplianceID(applianceIds[0]);
 
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);;
+		// Withdraw customer from repair plan.
+		Result resultCustomerID = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
 
-		Result resultCustomer = ApplianceStore.instance().addCustomer(Request.instance());
+		// Validation.
+		assert resultCustomerID.getResultCode() == Result.CUSTOMER_NOT_FOUND;
 
-		// The appliance is created and added to the store
-		final String brandName = "GE";
-		final String model = "009";
-		final double price = 100.00;
-		final int quantity = 1;
-		final double repairPlanAmount = 200.00;
-    	final double capacity = 60.00;
-		final double maxHeatingOutput = 86.0;
-		final int amount = 2;
-		final int number = 3;
-		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
-
-		final Result[] appliances = new Result[6];
 		
-		for (int count = 0; count < applianceTypes.length; count++) {
-			Request.instance().setApplianceType(applianceTypes[count]);
-			if (Request.instance().getApplianceType() == 0 || Request.instance().getApplianceType() == 1) {
-				Request.instance().setRepairPlanAmount(repairPlanAmount);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
-			} else if (Request.instance().getApplianceType() == 3) {
-				Request.instance().setCapacity(capacity);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
-			} else if (Request.instance().getApplianceType() == 4) {
-				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
-			} else if (Request.instance().getApplianceType() == 2 || Request.instance().getApplianceType() == 5) {
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
-			}
-			
-			Result applianceResult = ApplianceStore.instance().addModel(Request.instance());
-			// System.out.println(applianceResult.getResultCode());
-			appliances[count] = applianceResult;
+		/* Withdraw customer from repair plan with incorrect appliance ID.
+		Setting customer ID and appliance ID. */
+		Request.instance().setCustomerId(customerIds[0]);
+		Request.instance().setApplianceID("NOT AN APPLIANCE ID");
+
+		// Withdraw customer from repair plan.
+		Result resultApplianceID = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
+
+		// Validation.
+		assert resultApplianceID.getResultCode() == Result.APPLIANCE_NOT_FOUND;
+
+
+		/* Withdraw customer from repair plan with appliance ID not eligible for repair plan.
+		Setting customer ID and appliance ID. */
+		Request.instance().setCustomerId(customerIds[4]);
+		Request.instance().setApplianceID(applianceIds[9]);
+
+		// Withdraw customer from repair plan.
+		Result resultApplianceNotEligible = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
+
+		// Validation.
+		assert resultApplianceNotEligible.getResultCode() == Result.REPAIR_PLAN_NOT_FOUND;
+		
+		
+		// Withdraw customer from repair plan. OPERATION SUCCESSFUL.
+		for (int index = 0; index < 3; index++) {
+			// Setting customer ID and appliance ID.
+			Request.instance().setCustomerId(customerIds[index]);
+			Request.instance().setApplianceID(applianceIds[index]);
+
+			// Withdraw customer from repair plan.
+			Result result = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
+
+			// Validation.
+			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 		}
-		for(int index = 0; index < applianceTypes.length; index++) {
-			Request.instance().setApplianceID(appliances[0].getApplianceId());
-			Request.instance().setCustomerId(resultCustomer.getCustomerId());
-			Result purchaseApplianceResult = ApplianceStore.instance().purchaseModel(Request.instance());
-			
-			if (index <= 1) {
-				Result enrollRepairPlanResult = ApplianceStore.instance().enrollRepairPlan(Request.instance());
-				System.out.println(enrollRepairPlanResult.getResultCode());
-				Result withDrawCustomerResult = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
-				System.out.println(withDrawCustomerResult.getResultCode());
-				//assert withDrawCustomerResult.getResultCode() == Result.OPERATION_SUCCESSFUL;
-			}
-			else if (index >= 2) {
-				System.out.println("REPAIR_PLAN_NOT_FOUND");
-			}
+
+		
+		
+		/* Withdraw customer from repair plan but customer is NOT enrolled in 
+		repair plan. */
+		for (int index = 0; index < 3; index++) {
+			// Setting customer ID and appliance ID.
+			Request.instance().setCustomerId(customerIds[index]);
+			Request.instance().setApplianceID(applianceIds[index]);
+
+			// Withdraw customer from repair plan.
+			Result result = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
+
+			// Validation.
+			assert result.getResultCode() == Result.REPAIR_PLAN_NOT_FOUND;
 		}
 		
 	}
@@ -466,17 +451,6 @@ public class AutomatedTester {
 		System.out.println("The total sale is: " + totalSale + " The total repair plan revenue is: " + totalRepairPlan);
 	}
 
-	/*
-	Just for testing purposes. TODO: delete before turning in.
-	*/
-	public void testFilterApplianceIterator() {
-		String userInput = "DRY";
-		for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), userInput); 
-			applianceFilteredIterator.hasNext();) {
-				Appliance appliance = applianceFilteredIterator.next();
-				
-			}
-	}
 
 	// Use-case 10 - List all or some types of appliances. Sharon
 	public void testListAppliances() {
@@ -700,12 +674,33 @@ public class AutomatedTester {
 	 * All tests to run here.
 	 */
 	public void testAll() {
-		System.out.println("Testing...");
+		System.out.println("Adding appliances...");
 		addAppliances();
+		System.out.println("Adding customers...\n");
 		addCustomers();
+		
+		System.out.println("Beginning testing...");
+		
+		System.out.println("Testing adding appliances to inventory...");
 		testAddToInventoryForModels();
+		System.out.println("Testing adding appliances to inventory COMPLETE!\n");
+		
+		System.out.println("Testing purchasing appliances...");
 		testPurchaseModels();
+		System.out.println("Testing purchasing appliances COMPLETE!\n");
+		
+		System.out.println("Testing fulfilling back orders...");
 		testFulfillBackOrders();
+		System.out.println("Testing fulfilling back orders COMPLETE!\n");
+
+		System.out.println("Testing enrolling customer in repair plan...");
+		testEnrollCustomerInRepairPlan();
+		System.out.println("Testing enrolling customer in repair plan COMPLETE!\n");
+
+		System.out.println("Testing withdraw customer from repair plan...");
+		testWithdrawCustomerFromRepairPlan();
+		System.out.println("Testing withdraw customer from repair plan COMPLETE!\n");
+		
 		System.out.println("Done testing.");
 	}
 
