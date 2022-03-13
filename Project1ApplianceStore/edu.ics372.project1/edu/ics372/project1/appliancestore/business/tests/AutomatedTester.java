@@ -14,7 +14,7 @@ public class AutomatedTester {
 	/*
 	 * Test case for adding a single model.
 	 */
-	private ApplianceStore store;
+	private ApplianceStore store = ApplianceStore.instance();
 	private int[] appliances = { 1, 2, 3, 4, 5, 6 };
 	private String[] brandNames = { "washer", "dryer", "kitchen range", "refrigerator", "furnace", "dishwasher" };
 	private String[] modelNames = { "Kitchenaid", "LG", "GE", "Samsung", "Sony", "Zephyr" };
@@ -37,7 +37,7 @@ public class AutomatedTester {
 			Request.instance().setModelName(modelNames[count]);
 			Request.instance().setBrandName(brandNames[count]);
 			Request.instance().setPrice(prices[count]);
-			Result result = store.addModel(Request.instance());
+			Result result = ApplianceStore.instance().addModel(Request.instance());
 			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			assert result.getBrandName().equals(brandNames[count]);
 			assert result.getModelName().equals(modelNames[count]);
@@ -201,8 +201,8 @@ public class AutomatedTester {
 				System.out.println("NOT_ELIGIBLE_FOR_REPAIR_PLAN");
 			}
 		}
-
 	}
+
 	//Use Case 7 Withdraw Customer from a single repair plan
 	// The customer is created and added to the store
 	public void testWithDrawCustomer(){
@@ -290,8 +290,28 @@ public class AutomatedTester {
 		for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), userInput); 
 			applianceFilteredIterator.hasNext();) {
 				Appliance appliance = applianceFilteredIterator.next();
+				
 			}
 	}
+
+	//Use Case 10 List Appliances
+
+	public void testListAppliances() {
+		String[] apps = {"washer", "dryer", "kitchen range", "refrigerator", "furnace", "dishwasher", "all"};
+		Result result = new Result();
+		for(int i=1; i<=apps.length; i++) {
+			System.out.println(apps[i-1] + ": ");
+			Request.instance().setApplianceType(i);
+			Iterator<Result> resultIterator = store.listAppliances(Request.instance());
+			while (resultIterator.hasNext()){
+				result = resultIterator.next();
+					System.out.println(result.getApplianceId() + " " + result.getModelName() + " " + result.getBrandName()
+					+ " " + result.getPrice() + " " + result.getQuantity());
+			}
+		}
+	}
+
+
 
 
 	/**
@@ -299,11 +319,13 @@ public class AutomatedTester {
 	 */
 	public void testAll() {
 		System.out.println("Testing...");
-		testAddSingleCustomer(); 
-		testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
-		fulfillBackorder(); //TODO: broken
-		testWithDrawCustomer();
-		testPrintRevenue();
+		//testAddSingleCustomer(); 
+		testAddAppliance();
+		//testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
+		//fulfillBackorder(); //TODO: broken
+		//testWithDrawCustomer();
+		//testPrintRevenue();
+		testListAppliances();
 		System.out.println("Done testing.");
 	}
 

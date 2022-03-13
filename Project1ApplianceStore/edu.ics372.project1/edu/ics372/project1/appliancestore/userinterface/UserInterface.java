@@ -430,14 +430,11 @@ public class UserInterface {
 			System.out.println("6 for dishwasher");
 			System.out.println("7 for all");
 			Request.instance().setApplianceType(getNumber("Enter appliance type number"));
-			Result result = applianceStore.listAppliances(Request.instance());
-			if(result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
-				System.out.println("No such models in inventory");
-			} else {
-				for(Appliance appliance: result.getAppliances()) {
-					System.out.println(appliance);
-					//Appliance needs toString
-				}
+			Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
+			while (resultIterator.hasNext()){
+				Result result = resultIterator.next();
+					System.out.println(result.getApplianceId() + " " + result.getModelName() + " " + result.getBrandName()
+					+ " " + result.getPrice() + " " + result.getQuantity());	
 			}
 		} while (yesOrNo("List another type of appliance models?"));
 	}
