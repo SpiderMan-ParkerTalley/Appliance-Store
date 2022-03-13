@@ -441,10 +441,14 @@ public class UserInterface {
 	/**
 	 * Finds all customers with repair plans and prints them out.
 	 */
-	public void ListAllRepairPlanCustomers() {
-		Result result = applianceStore.getAllRepairPlanCustomers();
-		for (Customer customer : result.getCustomers()) {
-			System.out.println(customer);
+	public void listAllRepairPlanCustomers() {
+		Iterator<Result> resultIterator =  applianceStore.getAllRepairPlanCustomers();
+		while(resultIterator.hasNext()) {
+			Result result = resultIterator.next();
+			System.out.println(result.getCustomerName() + " | "
+			+ result.getCustomerAddress() + " | "
+			+ result.getCustomerPhoneNumber() + " | "
+			+ result.getCustomerHasRepairPlan());
 		}
 	}
 	/**
