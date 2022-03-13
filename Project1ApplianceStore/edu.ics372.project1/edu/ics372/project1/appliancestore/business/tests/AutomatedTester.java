@@ -342,7 +342,6 @@ public class AutomatedTester {
 				assert 0 == (appliances[index - 1].getApplianceId().compareTo(result.getApplianceId()));
 				assert 0 == (appliances[index - 1].getModelName().compareTo(result.getModelName()));
 				assert 0 == (appliances[index - 1].getBrandName().compareTo(result.getBrandName()));
-				// assert iterator.next().equals(appliances[index - 1]);
 			}
 		}
 		// End of checking individual appliance types.
