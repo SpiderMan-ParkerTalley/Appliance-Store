@@ -552,7 +552,7 @@ public class UserInterface {
 				listAppliances();
 				break;
 			case LIST_REPAIR_PLAN_USERS:
-				ListAllRepairPlanCustomers();
+				listAllRepairPlanCustomers();
 				break;
 			case LIST_CUSTOMERS:
 				listCustomers();
