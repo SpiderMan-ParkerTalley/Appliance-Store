@@ -156,71 +156,56 @@ public class AutomatedTester {
 		}
 	}
 
-	// Use-case 5 - Fulfill a single back order. Emmanuel
-	// TODO: remove extra stuff. Emmanuel 
+	// Use-case 5 - Fulfill a single back order. Emmanuel 
 	public void fulfillBackOrder(){
 		// The customer is created and added to the store
-		final String name = "Nuel";
-		final String address = "007 Krypton Blvd, Asgard, WA 00701";
-		final String phoneNumber = "(001)112-2223";
-
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);;
+		Request.instance().setCustomerName(customerNames[0]);
+		Request.instance().setCustomerAddress(customerAddresses[0]);
+		Request.instance().setCustomerPhoneNumber(customerPhone[0]);;
 
 		Result resultCustomer = ApplianceStore.instance().addCustomer(Request.instance());
 
 		// The appliance is created and added to the store
 		
-		final String brandName = "GE";
-		final String model = "009";
-		final double price = 100.00;
-		final int quantity = 1;
-		final double repairPlanAmount = 200.00;
-    	final double capacity = 60.00;
-		final double maxHeatingOutput = 86.0;
 		final int amount = 2;
-		final int number = 3;
-		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
-
-		final Result[] appliances = new Result[6];
+		final Result[] appliance = new Result[6];
 		
-		for (int count = 0; count < applianceTypes.length; count++) {
-			Request.instance().setApplianceType(applianceTypes[count]);
+		for (int count = 0; count < appliances.length; count++) {
+			Request.instance().setApplianceType(appliances[count]);
 			if (Request.instance().getApplianceType() == 0 || Request.instance().getApplianceType() == 1) {
 				Request.instance().setRepairPlanAmount(repairPlanAmount);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
+				Request.instance().setModelName(modelNames[count]);
+				Request.instance().setBrandName(brandNames[count]);
+				Request.instance().setPrice(prices[count]);
 			} else if (Request.instance().getApplianceType() == 3) {
 				Request.instance().setCapacity(capacity);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
+				Request.instance().setModelName(modelNames[count]);
+				Request.instance().setBrandName(brandNames[count]);
+				Request.instance().setPrice(prices[count]);
 			} else if (Request.instance().getApplianceType() == 4) {
 				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
+				Request.instance().setModelName(modelNames[count]);
+				Request.instance().setBrandName(brandNames[count]);
+				Request.instance().setPrice(prices[count]);
 			} else if (Request.instance().getApplianceType() == 2 || Request.instance().getApplianceType() == 5) {
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
+				Request.instance().setModelName(modelNames[count]);
+				Request.instance().setBrandName(brandNames[count]);
+				Request.instance().setPrice(prices[count]);
 			}
 			
 			Result applianceResult = ApplianceStore.instance().addModel(Request.instance());
-			appliances[count] = applianceResult;
+			appliance[count] = applianceResult;
 		}
-		for(int count = 0; count < applianceTypes.length; count++){
+		for(int count = 0; count < appliances.length; count++){
 			if(count < 4 && count == 5){
 				Request.instance().setCustomerId(resultCustomer.getCustomerId());
-				Request.instance().setApplianceID(appliances[count].getApplianceId());
+				Request.instance().setApplianceID(appliance[count].getApplianceId());
 				Request.instance().setQuantity(amount);
 				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 				assert resultFulfillBackOrder.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			} else if (count == 4){
 				Request.instance().setCustomerId(resultCustomer.getCustomerId());
-				Request.instance().setApplianceID(appliances[count].getApplianceId());
+				Request.instance().setApplianceID(appliance[count].getApplianceId());
 				Request.instance().setQuantity(amount);
 				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 				assert resultFulfillBackOrder.getResultCode() == Result.BACK_ORDER_NOT_FOUND;
