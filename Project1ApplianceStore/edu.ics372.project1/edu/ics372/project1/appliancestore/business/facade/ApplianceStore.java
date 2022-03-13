@@ -400,6 +400,7 @@ public class ApplianceStore implements Serializable {
 		Result result = new Result();
 		result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);
 		result.setTotalRevenueFromRepairPlans(totalRevenueFromRepairPlans);
+		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		return result;
 	}
 
