@@ -448,6 +448,7 @@ public class AutomatedTester {
 		result = ApplianceStore.instance().getTotalRevenue();
 		double totalSale = result.getTotalRevenueFromTransactions();
 		double totalRepairPlan = result.getTotalRevenueFromRepairPlans();
+		assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 		System.out.println("The total sale is: " + totalSale + " The total repair plan revenue is: " + totalRepairPlan);
 	}
 
@@ -656,7 +657,7 @@ public class AutomatedTester {
 
 
 
-		Iterator<Result> resultIterator = store.getAllBackOrders();
+		Iterator<Result> resultIterator = ApplianceStore.getAllBackOrders();
 		while (resultIterator.hasNext()){
 			Result result = resultIterator.next();
 				System.out.println(result.getBackOrderId() + " " + result.getCustomerId() + " " +

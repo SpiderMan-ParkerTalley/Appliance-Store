@@ -448,7 +448,7 @@ public class ApplianceStore implements Serializable {
 	 * Retrieves a safe iterator for back orders.
 	 * @return Iterator<Result> - iterator of back orders.
 	 */
-	public Iterator<Result> getAllBackOrders() {
+	public static Iterator<Result> getAllBackOrders() {
 		return new SafeBackOrderIterator(backOrders.iterator());
 	}
 
