@@ -186,7 +186,7 @@ public class Customer implements Serializable {
 
     public String getInformation() {
         String customerInfo = "Member name " + name + " address " + address + 
-            " id " + id + " phone number " + phoneNumber + " acount balance " + 
+            " id " + id + " phone number " + phoneNumber + " account balance " + 
             accountBalance + " has repair plan: ";
         if(this.hasRepairPlan()) {
             customerInfo.concat("true");

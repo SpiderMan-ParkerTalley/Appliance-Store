@@ -23,7 +23,7 @@ public class UserInterface {
 	private static final int ADD_CUSTOMER = 2;
 	private static final int ADD_INVENTORY = 3;
 	private static final int PURCHASE_MODEL = 4;
-	private static final int FULFILL_BACKORDER = 5;
+	private static final int FULFILL_BACK_ORDER = 5;
 	private static final int ENROLL_REPAIR_PLAN = 6;
 	private static final int WITHDRAW_REPAIR_PLAN = 7;
 	private static final int CHARGE_REPAIR_PLANS = 8;
@@ -31,7 +31,7 @@ public class UserInterface {
 	private static final int LIST_APPLIANCES = 10;
 	private static final int LIST_REPAIR_PLAN_USERS = 11;
 	private static final int LIST_CUSTOMERS = 12;
-	private static final int LIST_BACKORDERS = 13;
+	private static final int LIST_BACK_ORDERS = 13;
 	private static final int SAVE = 14;
 	private static final int HELP = 15;
 
@@ -51,7 +51,7 @@ public class UserInterface {
 	}
 
 	/**
-	 * Applies the singleton pattern to UserInteface.
+	 * Applies the singleton pattern to UserInterface.
 	 * If an instance of userInterface already exists,
 	 * it returns that instance. Otherwise, it calls the
 	 * constructor and returns a new instance.
@@ -120,7 +120,7 @@ public class UserInterface {
 	 * Prompts for an integer value of a number.
 	 * Takes a string as argument, converters to Integer, then returns as int.
 	 * @param prompt The prompt displayed to the user
-	 * @return The primative int value
+	 * @return The primitive int value
 	 */
 	public int getNumber(String prompt) {
 		do {
@@ -167,7 +167,7 @@ public class UserInterface {
 		System.out.println(ADD_CUSTOMER + " to add a single customer");
 		System.out.println(ADD_INVENTORY + " to add inventory for a single model");
 		System.out.println(PURCHASE_MODEL + " to purchase one or more models for a customer");
-		System.out.println(FULFILL_BACKORDER + " to fulfill a single backorder");
+		System.out.println(FULFILL_BACK_ORDER + " to fulfill a single back order");
 		System.out.println(ENROLL_REPAIR_PLAN + " to enroll customer in a repair plan for a single appliance");
 		System.out.println(WITHDRAW_REPAIR_PLAN + " to withdraw a customer from a repair plan for a single appliance");
 		System.out.println(CHARGE_REPAIR_PLANS + " to charge all repair plans");
@@ -175,7 +175,7 @@ public class UserInterface {
 		System.out.println(LIST_APPLIANCES + " to list all or some types of appliances");
 		System.out.println(LIST_REPAIR_PLAN_USERS + " to list all users in repair plans");
 		System.out.println(LIST_CUSTOMERS + " to list all customers");
-		System.out.println(LIST_BACKORDERS + " to list all backorders");
+		System.out.println(LIST_BACK_ORDERS + " to list all back orders");
 		System.out.println(SAVE + " to save data to disk");
 		System.out.println(HELP + " for help");
 	}
@@ -205,7 +205,7 @@ public class UserInterface {
 		}else if(Request.instance().getApplianceType() == 4){
 			Request.instance().setCapacity(getNumber("Enter capacity in liters"));
 		}else if(Request.instance().getApplianceType() == 5) {
-			Request.instance().setMaxheatingOutput(getNumber("Enter max heating output in BTU"));
+			Request.instance().setMaxHeatingOutput(getNumber("Enter max heating output in BTU"));
 		}
 		Request.instance().setModelName(getName("Enter model name"));
 		Request.instance().setBrandName(getName("Enter brand name"));
@@ -267,7 +267,7 @@ public class UserInterface {
 
 	/**
 	 * Method to be called for purchasing one or more models for a single customer.
-	 * The user inputs the promted values and uses the appropriate ApplicationStore 
+	 * The user inputs the promoted values and uses the appropriate ApplicationStore 
 	 * method purchasing the model.
 	 */
 	public void purchaseModel() {
@@ -283,11 +283,11 @@ public class UserInterface {
 			case Result.OPERATION_SUCCESSFUL:
 				purchaseModelSuccessfulOutput(result);
 				break;
-			case Result.BACKORDER_CREATED:
+			case Result.BACK_ORDER_CREATED:
 				purchaseModelSuccessfulOutput(result);
 				System.out.printf("Could not fulfill entire order." +
 				" Back Order created with Back Order ID %s. Quantity back ordered: %d%n",
-				 result.getBackorderId(), result.getQuantity());
+				 result.getBackOrderId(), result.getQuantity());
 				break;
 			default:
 				System.out.println("Could not process order.");
@@ -343,20 +343,20 @@ public class UserInterface {
 	}
 
 	/**
-	 * Method to be called for fulfilling the backorders associated with the backorder id.
-	 * The user inputs the backorder id and uses the appropriate ApplicationStore 
-	 * method for fulfilling the backorder.
+	 * Method to be called for fulfilling the back orders associated with the back order id.
+	 * The user inputs the back order id and uses the appropriate ApplicationStore 
+	 * method for fulfilling the back order.
 	 */
-	public void fullFillBackorder() {
-		Request.instance().setBackorderId(getToken("Enter backorder id"));
-		Result result = applianceStore.searchBackorder(Request.instance()); 
-		result = applianceStore.fulfillBackorder(Request.instance());
+	public void fulfillBackOrder() {
+		Request.instance().setBackOrderId(getToken("Enter back order id"));
+		Result result = applianceStore.searchBackOrder(Request.instance()); 
+		result = applianceStore.fulfillBackOrder(Request.instance());
 		if(result.getResultCode() == Result.NOT_A_VALID_QUANTITY){
-			System.out.println("Backorder could not be fulfilled due to insufficient inventory");
+			System.out.println("Back order could not be fulfilled due to insufficient inventory");
 		} else if(result.getResultCode() == Result.BACK_ORDER_NOT_FOUND) {
-			System.out.println("Backorder could not be found");
+			System.out.println("Back order could not be found");
 		} else {
-			System.out.println("Backorder fulfilled.");
+			System.out.println("Back order fulfilled.");
 		}
 	}
 
@@ -374,7 +374,7 @@ public class UserInterface {
 		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
 			System.out.println("Could not find appliance id");
 		} else if (result.getResultCode() == Result.REPAIR_PLAN_ENROLLED) {
-			System.out.println("Customer " + result.getCustomerId() + " succesfully " + 
+			System.out.println("Customer " + result.getCustomerId() + " successfully " + 
 			"enrolled in repair plan for " + result.getApplianceId());
 		} else if (result.getResultCode() == Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE) {
 			System.out.println("Cannot enroll customer in repair plan." + 
@@ -388,7 +388,7 @@ public class UserInterface {
 
 	/**
 	 * Method for withdrawing a customer from a repair plan for a single appliance.
-	 * The user inputs the promted values and uses the appropriate ApplicationStore
+	 * The user inputs the promoted values and uses the appropriate ApplicationStore
 	 * methods for withdrawing the customer from the repair plan.
 	 */
 	public void withdrawRepairPlan() {
@@ -396,7 +396,7 @@ public class UserInterface {
 		Request.instance().setApplianceID(getToken("Enter appliance id"));
 		Result result = applianceStore.withdrawRepairPlan(Request.instance());
 		if(result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
-			System.out.println("Appliance not eligable for repair plan");
+			System.out.println("Appliance not eligible for repair plan");
 		} else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
 			System.out.println("Could not find customer id");
 		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
@@ -425,7 +425,7 @@ public class UserInterface {
 			System.out.println("1 for washer");
 			System.out.println("2 for dryer");
 			System.out.println("3 for kitchen range");
-			System.out.println("4 for refridgerator");
+			System.out.println("4 for refrigerator");
 			System.out.println("5 for furnace");
 			System.out.println("6 for dishwasher");
 			System.out.println("7 for all");
@@ -470,12 +470,12 @@ public class UserInterface {
 	 */
 	public void printAllBackOrders() {
 		Iterator<Result> iterator = applianceStore.getAllBackOrders();
-		System.out.println("Backorder ID | Appliance ID | Customer ID| Quantity");
+		System.out.println("Back Order ID | Appliance ID | Customer ID| Quantity");
 		System.out.println("----------------------------------------------------" +
 							"------------------------------------");
 		while(iterator.hasNext()){
 			Result result = iterator.next();
-			System.out.println(result.getBackorderId() + " | " + result.getApplianceId() + " | " + result.getCustomerId()
+			System.out.println(result.getBackOrderId() + " | " + result.getApplianceId() + " | " + result.getCustomerId()
 			+ " | " + result.getQuantity());
 		}
 	}	
@@ -499,7 +499,7 @@ public class UserInterface {
 				if (applianceStore != null) {
 					System.out.println(" The applianceStore has been successfully retrieved from the file LibraryData \n");
 				} else {
-					System.out.println("File doesnt exist; creating new applianceStore");
+					System.out.println("File doesn't exist; creating new applianceStore");
 					applianceStore = ApplianceStore.instance();
 				}
 			}
@@ -529,8 +529,8 @@ public class UserInterface {
 			case PURCHASE_MODEL:
 				purchaseModel();
 				break;
-			case FULFILL_BACKORDER:
-				fullFillBackorder();
+			case FULFILL_BACK_ORDER:
+				fulfillBackOrder();
 				break;
 			case ENROLL_REPAIR_PLAN:
 				enrollRepairPlan();
@@ -553,7 +553,7 @@ public class UserInterface {
 			case LIST_CUSTOMERS:
 				listCustomers();
 				break;
-			case LIST_BACKORDERS:
+			case LIST_BACK_ORDERS:
 				printAllBackOrders();
 				break;
 			case SAVE:

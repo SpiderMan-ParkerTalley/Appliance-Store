@@ -9,7 +9,7 @@ public class Request extends DataTransfer {
     private static Request request;
     private double repairPlanAmount;
     private double capacity;
-    private double maxheatingOutput;
+    private double maxHeatingOutput;
 
     /**
      * Private constructor to support the singleton pattern.
@@ -44,12 +44,12 @@ public class Request extends DataTransfer {
         this.capacity = capacity;
     }
 
-    public double getMaxheatingOutput() {
-        return maxheatingOutput;
+    public double getMaxHeatingOutput() {
+        return maxHeatingOutput;
     }
 
-    public void setMaxheatingOutput(double maxheatingOutput) {
-        this.maxheatingOutput = maxheatingOutput;
+    public void setMaxHeatingOutput(double maxHeatingOutput) {
+        this.maxHeatingOutput = maxHeatingOutput;
     } 
 
     
