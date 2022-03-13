@@ -390,21 +390,129 @@ public class AutomatedTester {
 		}
 		// End of checking appliance.
 
+		// Clearing appliance store data
 		ApplianceStore.clear();
 	}
 
 
 	// Use-case 11 - List all users in repair plans. Parker
-	// TODO: implement testListAllUsersInRepairPlans. Parker
 	public void testListAllUsersInRepairPlans() {
+		// Creating and adding customers.
+		final ApplianceStore applianceStore = ApplianceStore.instance();
+		final String[] name = { "Ryan", "Smith" };
+		final String[] address = { "75 Rockcrest Street Wellington, FL 33414", 
+			"7073 8th St. Warner Robins, GA 31088" };
+		final String[] phoneNumber = { "310-788-4084", "434-348-8295" };
+		String[] customerIds = { "", "" };
 
+		for(int index = 0; index < name.length; index++) {
+			// Set fields.
+			Request.instance().setCustomerName(name[index]);
+			Request.instance().setCustomerAddress(address[index]);
+			Request.instance().setCustomerPhoneNumber(phoneNumber[index]);
+
+			// Create customer.
+			Result customerResult = applianceStore.addCustomer(Request.instance());
+			customerIds[index] = customerResult.getCustomerId();
+		}
+
+		// Adding appliances.
+		final String applianceModel = "ApplianceModel";
+		final String brandName = "KitchenAid";
+		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
+
+		final double price = 5.00;
+		final double repairPlanAmount = 10.0;
+		final double capacity = 15.0;
+		final double maxHeatingOutput = 20.0;
+
+		final Result[] appliances = new Result[6];
+
+		for (int count = 0; count < applianceTypes.length; count++) {
+			Request.instance().setApplianceType(applianceTypes[count]);
+			// Setting repair plans amount for washer and dryer.
+			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
+				Request.instance().setRepairPlanAmount(repairPlanAmount);
+			} 
+			// Setting capacity for refrigerator
+			else if (Request.instance().getApplianceType() == 4) {
+				Request.instance().setCapacity(capacity);
+			} 
+			// Setting heating output for furnace.
+			else if (Request.instance().getApplianceType() == 5) {
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
+			}
+			// Setting general fields.
+			Request.instance().setModelName(applianceModel);
+			Request.instance().setBrandName(brandName);
+			Request.instance().setPrice(price);
+			Result applianceResult = applianceStore.addModel(Request.instance());
+			appliances[count] = applianceResult;
+		}
+
+		// Purchasing and enrolling customer in repair plan.
+		for(int index = 0; index < applianceTypes.length; index++) {
+			// Purchasing of repair plan.
+			Request.instance().setApplianceID(appliances[index].getApplianceId());
+			Request.instance().setCustomerId(customerIds[0]);
+			applianceStore.purchaseModel(Request.instance());
+			
+			// Enrolling in repair plan.
+			applianceStore.enrollRepairPlan(Request.instance());
+		}
+		
+		// Testing get all repair plan customers.
+		int customerInformationIndex = 0;
+		Iterator<Result> iterator = applianceStore.getAllRepairPlanCustomers();
+		while (iterator.hasNext()) {
+			Result result = iterator.next();
+			assert 0 == result.getCustomerName().compareTo(name[customerInformationIndex]);
+			assert 0 == result.getCustomerAddress().compareTo(address[customerInformationIndex]);
+			assert 0 == result.getCustomerPhoneNumber().compareTo(phoneNumber[customerInformationIndex]);
+			assert 0 == result.getCustomerId().compareTo(customerIds[customerInformationIndex]);
+			customerInformationIndex++;
+		}
+
+		// Clearing appliance store data.
+		ApplianceStore.clear();
 	}
 
 
 	// Use-case 12 - List customers. Parker
-	// TODO: implement testListCustomers. Parker
 	public void testListCustomers() {
+		// Creating and adding customers.
+		final ApplianceStore applianceStore = ApplianceStore.instance();
+		final String[] name = { "Ryan", "Smith" };
+		final String[] address = { "75 Rockcrest Street Wellington, FL 33414", 
+			"7073 8th St. Warner Robins, GA 31088" };
+		final String[] phoneNumber = { "310-788-4084", "434-348-8295" };
+		String[] customerIds = { "", "" };
 
+		for(int index = 0; index < name.length; index++) {
+			// Set fields.
+			Request.instance().setCustomerName(name[index]);
+			Request.instance().setCustomerAddress(address[index]);
+			Request.instance().setCustomerPhoneNumber(phoneNumber[index]);
+
+			// Create customer.
+			Result customerResult = applianceStore.addCustomer(Request.instance());
+			customerIds[index] = customerResult.getCustomerId();
+		}
+		
+		// Testing list customers.
+		Iterator<Result> iterator = applianceStore.getAllCustomers();
+		int index = 0;
+		while (iterator.hasNext()) {
+			Result result = iterator.next();
+			assert 0 == result.getCustomerName().compareTo(name[index]);
+			assert 0 == result.getCustomerAddress().compareTo(address[index]);
+			assert 0 == result.getCustomerPhoneNumber().compareTo(phoneNumber[index]);
+			assert 0 == result.getCustomerId().compareTo(customerIds[index]);
+			index++;
+		}
+
+		// Clearing appliance store data.
+		ApplianceStore.clear();
 	}
 
 
@@ -436,13 +544,13 @@ public class AutomatedTester {
 	}
 
 	// Use-case 14 - Save data to disk. Sharon
-	// TODO: Save data to disk test.
+	// TODO: Save data to disk test. Sharon
 	public void testSaveDataToDisk() {
 
 	}
 
 /*
-TODO: All test method should use ApplianceStore.clear() once they are done testing.
+TODO: All test method should use 'ApplianceStore.clear()' once they are done testing.
 TODO: All test methods should be as indepent as possible (varibles created inside of the method AND clear once done testing). Ask Parker for a reason as to why for explination.
 TODO: Add '// Working' after you have tested your method and it meets all the requirements.
 */
@@ -462,6 +570,8 @@ TODO: Add '// Working' after you have tested your method and it meets all the re
 		//testPrintRevenue();
 		//testListAppliances();
 		testListAppliances(); // Working
+		testListAllUsersInRepairPlans(); // Working
+		testListCustomers(); // Working
 		System.out.println("Done testing.");
 	}
 
