@@ -32,7 +32,7 @@ public class AutomatedTester {
 			} else if (Request.instance().getApplianceType() == 4) {
 				Request.instance().setCapacity(capacity);
 			} else if (Request.instance().getApplianceType() == 5) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 			}
 			Request.instance().setModelName(modelNames[count]);
 			Request.instance().setBrandName(brandNames[count]);
@@ -67,7 +67,7 @@ public class AutomatedTester {
 
 	}
 	// Use Case 5 Fulfill a single backOrder
-	public void fulfillBackorder(){
+	public void fulfillBackOrder(){
 		// The customer is created and added to the store
 		final String name = "Nuel";
 		final String address = "007 Krypton Blvd, Asgard, WA 00701";
@@ -107,7 +107,7 @@ public class AutomatedTester {
 				Request.instance().setBrandName(brandName);
 				Request.instance().setPrice(price);
 			} else if (Request.instance().getApplianceType() == 4) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 				Request.instance().setModelName(model);
 				Request.instance().setBrandName(brandName);
 				Request.instance().setPrice(price);
@@ -125,20 +125,20 @@ public class AutomatedTester {
 				Request.instance().setCustomerId(resultCustomer.getCustomerId());
 				Request.instance().setApplianceID(appliances[count].getApplianceId());
 				Request.instance().setQuantity(amount);
-				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackorder(Request.instance());
+				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 				assert resultFulfillBackOrder.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			} else if (count == 4){
 				Request.instance().setCustomerId(resultCustomer.getCustomerId());
 				Request.instance().setApplianceID(appliances[count].getApplianceId());
 				Request.instance().setQuantity(amount);
-				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackorder(Request.instance());
+				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 				assert resultFulfillBackOrder.getResultCode() == Result.BACK_ORDER_NOT_FOUND;
 			}
 		
 		}
 	}
 
-	// Use-case 6 - Enroll a custmer in a repair plan for a single appliance.
+	// Use-case 6 - Enroll a customer in a repair plan for a single appliance. Parker Talley
 	public void testEnrollCustomerInRepairPlan() {
 		// Creating and adding customer.
 		final ApplianceStore applianceStore = ApplianceStore.instance();
@@ -155,7 +155,7 @@ public class AutomatedTester {
 
 		// Adding appliances.
 		final String applianceModel = "ApplianceModel";
-		final String brandName = "Kitchenaid";
+		final String brandName = "KitchenAid";
 		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
 
 		final double price = 5.00;
@@ -164,8 +164,6 @@ public class AutomatedTester {
 		final double maxHeatingOutput = 20.0;
 
 		final Result[] appliances = new Result[6];
-		
-		
 
 		for (int count = 0; count < applianceTypes.length; count++) {
 			Request.instance().setApplianceType(applianceTypes[count]);
@@ -174,7 +172,7 @@ public class AutomatedTester {
 			} else if (Request.instance().getApplianceType() == 4) {
 				Request.instance().setCapacity(capacity);
 			} else if (Request.instance().getApplianceType() == 5) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 			}
 			Request.instance().setModelName(applianceModel);
 			Request.instance().setBrandName(brandName);
@@ -182,23 +180,28 @@ public class AutomatedTester {
 			Result applianceResult = applianceStore.addModel(Request.instance());
 			appliances[count] = applianceResult;
 		}
-		
 
-		// TODO: add purchasing of appliance.
-
-		// Enrolling customer in repair plan.
+		// Purchasing and enrolling customer in repair plan.
 		for(int index = 0; index < applianceTypes.length; index++) {
-			Request.instance().setApplianceID(appliances[0].getApplianceId());
+
+			// Purchasing of repair plan.
+			Request.instance().setApplianceID(appliances[index].getApplianceId());
 			Request.instance().setCustomerId(customerId);
-			Result purchaseApplianceResult = applianceStore.purchaseModel(Request.instance());
+			applianceStore.purchaseModel(Request.instance());
 			
+		
+			// Enrolling in repair plan.
+			
+			// First appliances of type 1 and 2 are eligible for repair plan.
 			if (index <= 1) {
 				Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
-				System.out.println(enrollRepairPlanResult.getResultCode());
 				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;//getting an assertion error here
 			}
+
+			// All other appliance types should not be eligible.
 			else if (index >= 2) {
-				System.out.println("NOT_ELIGIBLE_FOR_REPAIR_PLAN");
+				Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
+				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
 			}
 		}
 	}
@@ -243,7 +246,7 @@ public class AutomatedTester {
 				Request.instance().setBrandName(brandName);
 				Request.instance().setPrice(price);
 			} else if (Request.instance().getApplianceType() == 4) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 				Request.instance().setModelName(model);
 				Request.instance().setBrandName(brandName);
 				Request.instance().setPrice(price);
@@ -284,8 +287,10 @@ public class AutomatedTester {
 		System.out.println("The total sale is: " + totalSale + " The total repair plan revenue is: " + totalRepairPlan);
 	}
 
+	/*
+	Just for testing purposes. TODO: delete before turning in.
+	*/
 	public void testFilterApplianceIterator() {
-		// TODO: a way for the user to input the type they want.
 		String userInput = "DRY";
 		for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), userInput); 
 			applianceFilteredIterator.hasNext();) {
@@ -297,85 +302,18 @@ public class AutomatedTester {
 	//Use Case 10 List Appliances
 
 	public void testListAppliances() {
-		final ApplianceStore applianceStore = ApplianceStore.instance();
-		final String name = "Ryan";
-		final String address = "75 Rockcrest Street Wellington, FL 33414";
-		final String phoneNumber = "310-788-4084";
-
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);;
-
-		Result customerResult = applianceStore.addCustomer(Request.instance());
-		final String customerId = customerResult.getCustomerId();
-
-		// Adding appliances.
-		final String applianceModel = "ApplianceModel";
-		final String brandName = "Kitchenaid";
-		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
-
-		final double price = 5.00;
-		final double repairPlanAmount = 10.0;
-		final double capacity = 15.0;
-		final double maxHeatingOutput = 20.0;
-
-		final Result[] appliances = new Result[6];
 		
-		
-
-		for (int count = 0; count < applianceTypes.length; count++) {
-			Request.instance().setApplianceType(applianceTypes[count]);
-			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
-				Request.instance().setRepairPlanAmount(repairPlanAmount);
-			} else if (Request.instance().getApplianceType() == 4) {
-				Request.instance().setCapacity(capacity);
-			} else if (Request.instance().getApplianceType() == 5) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
-			}
-			Request.instance().setModelName(applianceModel);
-			Request.instance().setBrandName(brandName);
-			Request.instance().setPrice(price);
-			Result applianceResult = applianceStore.addModel(Request.instance());
-			appliances[count] = applianceResult;
-		}
-		
-		Result result = new Result();
 		String[] apps = {"washer", "dryer", "kitchen range", "refrigerator", "furnace", "dishwasher", "all"};
+		Result result = new Result();
 		for(int i=1; i<=apps.length; i++) {
-			System.out.println(apps[i-1] + ": ");
+			// System.out.println(apps[i-1] + ": ");
 			Request.instance().setApplianceType(i);
 			Iterator<Result> resultIterator = store.listAppliances(Request.instance());
 			while (resultIterator.hasNext()){
 				result = resultIterator.next();
-					System.out.println(result.getApplianceId() + " " + result.getModelName() + " " + result.getBrandName()
-					+ " " + result.getPrice() + " " + result.getQuantity());
+					//System.out.println(result.getApplianceId() + " " + result.getModelName() + " " + result.getBrandName()
+					//+ " " + result.getPrice() + " " + result.getQuantity());
 			}
-		}
-	}
-
-	//Use Case 13 Get All Backorders
-	public void testGetAllBackorders() {
-		final String name = "Nuel";
-		final String address = "007 Krypton Blvd, Asgard, WA 00701";
-		final String phoneNumber = "(001)112-2223";
-
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);
-
-		final String brandName = "GE";
-		final String model = "009";
-		final double price = 100.00;
-		final int quantity = 1;
-		final double repairPlanAmount = 200.00;
-
-
-
-		Iterator<Result> resultIterator = store.getAllBackOrders();
-		while (resultIterator.hasNext()){
-			Result result = resultIterator.next();
-				System.out.println(result.getBackOrderId() + " " + result.getCustomerId() + " " +
-				result.getApplianceId() + " " +result.getQuantity());
 		}
 	}
 
@@ -388,12 +326,12 @@ public class AutomatedTester {
 	public void testAll() {
 		System.out.println("Testing...");
 		//testAddSingleCustomer(); 
-		testAddAppliance();
-		//testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
+		testAddAppliance(); // Working
+		testEnrollCustomerInRepairPlan(); // Working.
 		//fulfillBackorder(); //TODO: broken
 		//testWithDrawCustomer();
 		//testPrintRevenue();
-		testListAppliances();
+		//testListAppliances();
 		System.out.println("Done testing.");
 	}
 
