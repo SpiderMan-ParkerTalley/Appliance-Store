@@ -290,7 +290,6 @@ public class AutomatedTester {
 		for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), userInput); 
 			applianceFilteredIterator.hasNext();) {
 				Appliance appliance = applianceFilteredIterator.next();
-				
 			}
 	}
 
