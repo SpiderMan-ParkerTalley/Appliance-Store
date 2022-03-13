@@ -109,7 +109,7 @@ public class UserInterface {
 	 * @return Boolean true for yes, false for no
 	 */
 	private boolean yesOrNo(String prompt) {
-		String more = getToken(prompt + " (Y|y)[es] or anything else for no");
+		String more = getToken(prompt + " Y or y for yes or anything else for no: ");
 		if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
 			return false;
 		}
@@ -142,7 +142,7 @@ public class UserInterface {
 	public int getCommand() {
 		do {
 			try {
-				int value = Integer.parseInt(getToken("Enter command:" + HELP + " for help"));
+				int value = Integer.parseInt(getToken("\nEnter command or " + HELP + " for help: "));
 				if (value >= EXIT && value <= HELP) {
 					if (value == EXIT) {
 						if (yesOrNo("Would you like to save before exiting? ")) {
@@ -152,7 +152,7 @@ public class UserInterface {
 					return value;
 				}
 			} catch (NumberFormatException nfe) {
-				System.out.println("Enter a number");
+				System.out.println("Enter a number: ");
 			}
 		} while (true);
 	}
@@ -161,8 +161,8 @@ public class UserInterface {
 	 * Help menu to remind user of input values.
 	 */
 	public void help() {
-		System.out.println("Enter a number between 0 and 14 as explained below:");
-		System.out.println(EXIT + " to Exit\n");
+		System.out.println("\nEnter a number between 0 and 14 as explained below:\n");
+		System.out.println(EXIT + " to Exit");
 		System.out.println(ADD_MODEL + " to add a single model");
 		System.out.println(ADD_CUSTOMER + " to add a single customer");
 		System.out.println(ADD_INVENTORY + " to add inventory for a single model");
@@ -189,8 +189,8 @@ public class UserInterface {
 		final int  MINIMUM_MENU_INPUT = 1;
 		final int MAXIMUM_MENU_INPUT = 6;
 		modelSubMenu();
-		while ( !goodInput) {
-			Request.instance().setApplianceType(getNumber("Enter appliance type number"));  // TODO: GUARD AGAINST BAD INPUT
+		while (!goodInput) {
+			Request.instance().setApplianceType(getNumber("Enter appliance type number: "));  // TODO: GUARD AGAINST BAD INPUT
 			if (Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT || Request.instance().getApplianceType() < MINIMUM_MENU_INPUT) {
 				System.out.println("This is not a valid menu selection. Please select from the following options.");
 				modelSubMenu();
@@ -201,26 +201,27 @@ public class UserInterface {
 		}
 
 		if(Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2){
-			Request.instance().setRepairPlanAmount(getNumber("Enter repair plan price amount"));
-		}else if(Request.instance().getApplianceType() == 4){
-			Request.instance().setCapacity(getNumber("Enter capacity in liters"));
-		}else if(Request.instance().getApplianceType() == 5) {
-			Request.instance().setMaxHeatingOutput(getNumber("Enter max heating output in BTU"));
+			Request.instance().setRepairPlanAmount(getNumber("Enter repair plan price amount: "));
+		} else if(Request.instance().getApplianceType() == 4){
+			Request.instance().setCapacity(getNumber("Enter capacity in liters: "));
+		} else if(Request.instance().getApplianceType() == 5) {
+			Request.instance().setMaxHeatingOutput(getNumber("Enter max heating output in BTU: "));
 		}
-		Request.instance().setModelName(getName("Enter model name"));
-		Request.instance().setBrandName(getName("Enter brand name"));
-		Request.instance().setPrice(getNumber("Enter price"));
+		Request.instance().setModelName(getName("Enter model name: "));
+		Request.instance().setBrandName(getName("Enter brand name: "));
+		Request.instance().setPrice(getNumber("Enter price: "));
 		Result result = applianceStore.addModel(Request.instance());
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("Could not add appliance model");
+			System.out.println("Could not add appliance model.");
 		} else {
-			System.out.println("Appliance model " + result.getApplianceId() + " has been added");
+			System.out.println("Appliance model has been added. ID: " + result.getApplianceId());
 		}
 	}
 	/**
 	 * Helper function for addModel.
 	 */
 	private void modelSubMenu() {
+		System.out.println("\nAppliance Types:");
 		System.out.println("1 for washer");
 		System.out.println("2 for dryer");
 		System.out.println("3 for kitchen range");
@@ -234,12 +235,12 @@ public class UserInterface {
 	 * uses the appropriate ApplicationStore method for adding the customer.
 	 */
 	public void addCustomer() {
-		Request.instance().setCustomerName(getName("Enter customer name"));
-		Request.instance().setCustomerAddress(getName("Enter address"));
-		Request.instance().setCustomerPhoneNumber(getName("Enter phone"));
+		Request.instance().setCustomerName(getName("Enter name"));
+		Request.instance().setCustomerAddress(getName("Enter address: "));
+		Request.instance().setCustomerPhoneNumber(getName("Enter phone number: "));
 		Result result = applianceStore.addCustomer(Request.instance());
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("Could not add customer");
+			System.out.println("Could not add customer.");
 		} else {
 			System.out.println(result.getCustomerName() + "'s id is " + result.getCustomerId());
 		}

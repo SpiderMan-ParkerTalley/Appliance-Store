@@ -4,7 +4,13 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
+        {
+            "type": "java",
+            "name": "Launch Appliance",
+            "request": "launch",
+            "mainClass": "edu.ics372.project1.appliancestore.business.entities.Appliance",
+            "projectName": "Project1ApplianceStore"
+        },
         {
             "type": "java",
             "name": "Launch Current File",
