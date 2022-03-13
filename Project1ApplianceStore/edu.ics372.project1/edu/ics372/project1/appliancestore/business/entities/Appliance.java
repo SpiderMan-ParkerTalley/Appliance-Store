@@ -197,10 +197,4 @@ public abstract class Appliance implements Serializable {
 		String output = this.getClass().getSimpleName() + " id: " + this.getId() + " Brand: " + brandName + " Model: " + "Price: " + price + " Quantity: " + quantity;
 		return output;
 	}
-
-	public static void main(String[] args) {
-		Appliance appliance = new Appliance("a", "b", 0, 0);
-		System.out.println(appliance);
-	}
-
 } 

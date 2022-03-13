@@ -9,12 +9,12 @@ public abstract class ApplianceWithRepairPlans extends Appliance {
 		
 	}
 
-	public double getRepariPlanAmount() {
+	public double getRepairPlanAmount() {
 		return repairPlanAmount;
 	}
 
-	public void setRepariPlanAmount(double repariPlanAmount) {
-		this.repairPlanAmount = repariPlanAmount;
+	public void setRepairPlanAmount(double repairPlanAmount) {
+		this.repairPlanAmount = repairPlanAmount;
 	}
 	
 	public String toString() {
