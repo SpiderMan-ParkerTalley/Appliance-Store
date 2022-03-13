@@ -12,6 +12,7 @@ import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
+import edu.ics372.project1.appliancestore.business.tests.AutomatedTester;
 
 public class UserInterface {
 
@@ -44,15 +45,21 @@ public class UserInterface {
 	private UserInterface() {
 		if (yesOrNo("Look for saved data and load it if found?")) {
 			retrieve();
+			return;
 		} else {
+			if (yesOrNo("Do you want to generate a test bed and invoke the" +
+						" functionality using asserts?")) {
+				AutomatedTester test = new AutomatedTester();
+				test.testAll();
+			}
 			applianceStore = ApplianceStore.instance();
 		}
 
 	}
 
 	/**
-	 * Applies the singleton pattern to UserInterface.
-	 * If an instance of userInterface already exists,
+	 * Applies the singleton pattern to UserInterface."
+	 * If an instance of userInterface already exists,"
 	 * it returns that instance. Otherwise, it calls the
 	 * constructor and returns a new instance.
 	 * @return A userInterface object
