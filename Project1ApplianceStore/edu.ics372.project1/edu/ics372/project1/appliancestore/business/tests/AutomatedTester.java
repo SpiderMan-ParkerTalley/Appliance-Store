@@ -404,7 +404,7 @@ public class AutomatedTester {
 	// Use-case 12 - List customers. Parker
 	// TODO: implement testListCustomers. Parker
 	public void testListCustomers() {
-		
+
 	}
 
 
@@ -444,6 +444,7 @@ public class AutomatedTester {
 /*
 TODO: All test method should use ApplianceStore.clear() once they are done testing.
 TODO: All test methods should be as indepent as possible (varibles created inside of the method AND clear once done testing). Ask Parker for a reason as to why for explination.
+TODO: Add '// Working' after you have tested your method and it meets all the requirements.
 */
 
 
