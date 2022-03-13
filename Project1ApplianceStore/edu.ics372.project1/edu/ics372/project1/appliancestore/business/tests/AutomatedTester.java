@@ -204,6 +204,7 @@ public class AutomatedTester {
 				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
 			}
 		}
+		ApplianceStore.clear();
 	}
 
 	//Use Case 7 Withdraw Customer from a single repair plan

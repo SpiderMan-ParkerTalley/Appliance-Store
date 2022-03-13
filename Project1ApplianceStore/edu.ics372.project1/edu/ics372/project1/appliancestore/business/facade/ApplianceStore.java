@@ -7,8 +7,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+
+import org.omg.CORBA.portable.ApplicationException;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
@@ -48,7 +48,6 @@ public class ApplianceStore implements Serializable {
 	/**
 	 * If no singleton has been created, creates a singleton. If a singleton already
 	 * exists, returns the singleton.
-	 * 
 	 * @return A singleton of type ApplianceStore.
 	 */
 	public static ApplianceStore instance() {
@@ -57,6 +56,13 @@ public class ApplianceStore implements Serializable {
 		} else {
 			return applianceStore;
 		}
+	}
+
+	/**
+	 * Removes all data from appliance store.
+	 */
+	public static void clear() {
+		applianceStore = new ApplianceStore();
 	}
 
 	/**
