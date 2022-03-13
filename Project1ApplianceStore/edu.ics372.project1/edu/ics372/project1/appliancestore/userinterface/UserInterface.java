@@ -433,7 +433,8 @@ public class UserInterface {
 			Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
 			while (resultIterator.hasNext()){
 				Result result = resultIterator.next();
-					System.out.println(result.getApplianceId() + " " + result.getModelName() + " " + result.getBrandName()
+				System.out.println(result.getApplianceId() + " " + 
+					result.getModelName() + " " + result.getBrandName()
 					+ " " + result.getPrice() + " " + result.getQuantity());	
 			}
 		} while (yesOrNo("List another type of appliance models?"));
@@ -456,15 +457,15 @@ public class UserInterface {
 	 */
 	public void listCustomers() {
 		Iterator<Result> resultIterator = applianceStore.getAllCustomers();
-		System.out.println("Name | Address | Phone| Repair Plan Status");
+		System.out.println("Name | Address | Phone | Repair Plan Status");
 		System.out.println("----------------------------------------------------" +
 							"------------------------------------");
-		while (resultIterator.hasNext()){
-		Result result = resultIterator.next();
-		System.out.println(result.getCustomerName() + " | "
-						 + result.getCustomerAddress() + " | "
-						 + result.getCustomerPhoneNumber() + " | "
-						 + result.getCustomerHasRepairPlan());
+		while (resultIterator.hasNext()) {
+			Result result = resultIterator.next();
+			System.out.println(result.getCustomerName() + " | "
+				+ result.getCustomerAddress() + " | "
+				+ result.getCustomerPhoneNumber() + " | "
+				+ result.getCustomerHasRepairPlan());
 	}
 }
 	/**
@@ -477,7 +478,7 @@ public class UserInterface {
 		System.out.println("Back Order ID | Appliance ID | Customer ID| Quantity");
 		System.out.println("----------------------------------------------------" +
 							"------------------------------------");
-		while(iterator.hasNext()){
+		while(iterator.hasNext()) {
 			Result result = iterator.next();
 			System.out.println(result.getBackOrderId() + " | " + result.getApplianceId() + " | " + result.getCustomerId()
 			+ " | " + result.getQuantity());
@@ -552,7 +553,7 @@ public class UserInterface {
 				listAppliances();
 				break;
 			case LIST_REPAIR_PLAN_USERS:
-				ListAllRepairPlanCustomers();
+				listAllRepairPlanCustomers();
 				break;
 			case LIST_CUSTOMERS:
 				listCustomers();

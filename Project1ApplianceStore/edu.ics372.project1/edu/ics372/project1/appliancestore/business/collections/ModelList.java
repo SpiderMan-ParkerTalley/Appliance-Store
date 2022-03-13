@@ -6,10 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
-import edu.ics372.project1.appliancestore.business.facade.Result;
-import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
-import edu.ics372.project1.appliancestore.business.iterators.SafeApplianceIterator;
-
 
 public class ModelList implements Iterable<Appliance>, Serializable {
     private static final long serialVersionUID = 1L;
@@ -38,17 +34,8 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 		return modelList;
 	}
 
-
-    //TODO figure this shit out lol
-    public Iterator<Result> getTypedAppliance(Appliance appliance) {
-        return new SafeApplianceIterator(
-            new FilteredApplianceIterator(models.iterator(), Predicate<appliance>));
-        
-    }
-
     /**
      * Check whether an appliance with a given appliance id exists.
-     * 
      * @param applianceId String the id of the appliance
      * @return Appliance appliance object if found, null otherwise.
      */
@@ -64,15 +51,18 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 
     /**
      * Inserts an appliance into the collection.
-     * 
      * @param appliance Appliance the appliance to be inserted.
-     * @return boolean true if the appliance could be inserted.
+     * @return boolean true if the appliance could be inserted. false otherwise.
      */
     public boolean insertModel(Appliance appliance) {
 		models.add(appliance);
 		return true;
 	}
 
+    /**
+     * 
+     * @return
+     */
     public Iterator<Appliance> getModels() {
         return models.iterator();
     }
@@ -85,9 +75,4 @@ public class ModelList implements Iterable<Appliance>, Serializable {
     public Iterator<Appliance> iterator() {
         return models.iterator();
     }
-
-
-
-
-
 }
