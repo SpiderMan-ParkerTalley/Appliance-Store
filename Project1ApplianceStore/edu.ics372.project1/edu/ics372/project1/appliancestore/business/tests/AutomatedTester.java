@@ -138,7 +138,7 @@ public class AutomatedTester {
 		}
 	}
 
-	// Use-case 6 - Enroll a custmer in a repair plan for a single appliance.
+	// Use-case 6 - Enroll a customer in a repair plan for a single appliance. Parker Talley
 	public void testEnrollCustomerInRepairPlan() {
 		// Creating and adding customer.
 		final ApplianceStore applianceStore = ApplianceStore.instance();
@@ -155,7 +155,7 @@ public class AutomatedTester {
 
 		// Adding appliances.
 		final String applianceModel = "ApplianceModel";
-		final String brandName = "Kitchenaid";
+		final String brandName = "KitchenAid";
 		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
 
 		final double price = 5.00;
@@ -284,8 +284,10 @@ public class AutomatedTester {
 		System.out.println("The total sale is: " + totalSale + " The total repair plan revenue is: " + totalRepairPlan);
 	}
 
+	/*
+	Just for testing purposes. TODO: delete before turning in.
+	*/
 	public void testFilterApplianceIterator() {
-		// TODO: a way for the user to input the type they want.
 		String userInput = "DRY";
 		for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), userInput); 
 			applianceFilteredIterator.hasNext();) {
