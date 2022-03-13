@@ -390,11 +390,21 @@ public class ApplianceStore implements Serializable {
 	/**
 	 * Charges all repair plans for all customers. 
 	 */
-	public void chargeRepairPlans() {
+	public Result chargeRepairPlans() {
+		Result result = new Result();
+		Double amountCharged = 0.0;
 		for (Iterator<Customer> customerIterator = customers.iterator(); 
 			customerIterator.hasNext();) {
-				customerIterator.next().chargeRepairPlans();
+				double customerAmountCharged = customerIterator.next().chargeRepairPlans();
+				if (customerAmountCharged < 0) {
+					result.setResultCode(Result.OPERATION_FAILED);
+					return result;
+				}
+				amountCharged += customerAmountCharged;
 		}
+		result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		result.setAmountCharged(amountCharged);
+		return result;
 	}
 
 	/**
