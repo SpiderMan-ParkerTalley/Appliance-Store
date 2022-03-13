@@ -83,8 +83,12 @@ public class Customer implements Serializable {
      * Creates and adds a repair plan to customer.
      * @param appliance Appliance appliance to be associated with repair plan.
     **/
-    public void addRepairPlan(Appliance appliance) { // TODO redundant check code? { 
-        repairPlans.add(new RepairPlan(this, appliance));
+    public boolean addRepairPlan(Appliance appliance) {
+        if(appliance.eligibleForRepairPlan()) {
+            repairPlans.add(new RepairPlan(this, appliance));
+            return true;
+        }
+        return false;
     }
 
     /**

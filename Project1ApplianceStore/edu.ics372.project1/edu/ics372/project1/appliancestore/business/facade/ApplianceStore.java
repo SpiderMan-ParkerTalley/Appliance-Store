@@ -158,17 +158,23 @@ public class ApplianceStore implements Serializable {
 	 */
 	public Result enrollRepairPlan(Request request) {
 		Result result = new Result();
-		// Validating Customer and Appliance for repair plan
+		
+		// Check if customer exist in system.
 		Customer customer = customers.search(request.getCustomerId());
 		if (customer == null) {
 			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
 			return result;
 		}
+
+		// Check if appliance exist in system.
 		Appliance appliance = models.search(request.getApplianceId());
 		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 			return result;
-		} else if (appliance.eligibleForRepairPlan() == false) {
+		} 
+
+		// Check if appliance is eligible for repair plan.
+		if (appliance.eligibleForRepairPlan() == false) {
 			result.setResultCode(Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN);
 			return result;
 		}

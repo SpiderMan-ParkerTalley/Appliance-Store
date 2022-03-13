@@ -67,7 +67,7 @@ public class AutomatedTester {
 
 	}
 	// Use Case 5 Fulfill a single backOrder
-	public void fulfillBackorder(){
+	public void fulfillBackOrder(){
 		// The customer is created and added to the store
 		final String name = "Nuel";
 		final String address = "007 Krypton Blvd, Asgard, WA 00701";
@@ -164,8 +164,6 @@ public class AutomatedTester {
 		final double maxHeatingOutput = 20.0;
 
 		final Result[] appliances = new Result[6];
-		
-		
 
 		for (int count = 0; count < applianceTypes.length; count++) {
 			Request.instance().setApplianceType(applianceTypes[count]);
@@ -182,23 +180,28 @@ public class AutomatedTester {
 			Result applianceResult = applianceStore.addModel(Request.instance());
 			appliances[count] = applianceResult;
 		}
-		
 
-		// TODO: add purchasing of appliance.
-
-		// Enrolling customer in repair plan.
+		// Purchasing and enrolling customer in repair plan.
 		for(int index = 0; index < applianceTypes.length; index++) {
-			Request.instance().setApplianceID(appliances[0].getApplianceId());
+
+			// Purchasing of repair plan.
+			Request.instance().setApplianceID(appliances[index].getApplianceId());
 			Request.instance().setCustomerId(customerId);
-			Result purchaseApplianceResult = applianceStore.purchaseModel(Request.instance());
+			applianceStore.purchaseModel(Request.instance());
 			
+		
+			// Enrolling in repair plan.
+			
+			// First appliances of type 1 and 2 are eligible for repair plan.
 			if (index <= 1) {
 				Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
-				System.out.println(enrollRepairPlanResult.getResultCode());
 				assert enrollRepairPlanResult.getResultCode() == Result.OPERATION_SUCCESSFUL;//getting an assertion error here
 			}
+
+			// All other appliance types should not be eligible.
 			else if (index >= 2) {
-				System.out.println("NOT_ELIGIBLE_FOR_REPAIR_PLAN");
+				Result enrollRepairPlanResult = applianceStore.enrollRepairPlan(Request.instance());
+				assert enrollRepairPlanResult.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
 			}
 		}
 	}
@@ -299,16 +302,17 @@ public class AutomatedTester {
 	//Use Case 10 List Appliances
 
 	public void testListAppliances() {
+		
 		String[] apps = {"washer", "dryer", "kitchen range", "refrigerator", "furnace", "dishwasher", "all"};
 		Result result = new Result();
 		for(int i=1; i<=apps.length; i++) {
-			System.out.println(apps[i-1] + ": ");
+			// System.out.println(apps[i-1] + ": ");
 			Request.instance().setApplianceType(i);
 			Iterator<Result> resultIterator = store.listAppliances(Request.instance());
 			while (resultIterator.hasNext()){
 				result = resultIterator.next();
-					System.out.println(result.getApplianceId() + " " + result.getModelName() + " " + result.getBrandName()
-					+ " " + result.getPrice() + " " + result.getQuantity());
+					//System.out.println(result.getApplianceId() + " " + result.getModelName() + " " + result.getBrandName()
+					//+ " " + result.getPrice() + " " + result.getQuantity());
 			}
 		}
 	}
@@ -322,12 +326,12 @@ public class AutomatedTester {
 	public void testAll() {
 		System.out.println("Testing...");
 		//testAddSingleCustomer(); 
-		testAddAppliance();
-		//testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
+		testAddAppliance(); // Working
+		testEnrollCustomerInRepairPlan(); // Working.
 		//fulfillBackorder(); //TODO: broken
 		//testWithDrawCustomer();
 		//testPrintRevenue();
-		testListAppliances();
+		//testListAppliances();
 		System.out.println("Done testing.");
 	}
 
