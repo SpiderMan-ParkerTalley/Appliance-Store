@@ -20,7 +20,7 @@ public class Result extends DataTransfer {
 	public static final int BACK_ORDER_NOT_FOUND = 3;
 	public static final int OPERATION_SUCCESSFUL = 4;
 	public static final int OPERATION_FAILED = 5;
-    public static final int BACKORDER_CREATED = 6;
+    public static final int BACK_ORDER_CREATED = 6;
     public static final int NOT_A_VALID_QUANTITY = 7;
 	public static final int REPAIR_PLAN_NOT_FOUND = 8;
 	public static final int NOT_ELIGIBLE_FOR_REPAIR_PLAN = 9;
@@ -83,7 +83,7 @@ public class Result extends DataTransfer {
 	}
 
 	/**
-	 * Sets the fields neccesary for the implementation of use case 11.
+	 * Sets the fields necessary for the implementation of use case 11.
 	 * @param next The repairPlan in question
 	 */
 	public void setRepairPlanFields(RepairPlan next) {

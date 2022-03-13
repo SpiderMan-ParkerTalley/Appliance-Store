@@ -31,7 +31,7 @@ public class ApplianceFactory {
             request.getCapacity());
             break;
             case FURNACE: appliance =  new Furnace(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
-            request.getMaxheatingOutput());
+            request.getMaxHeatingOutput());
             break;
             case DISHWASHER: appliance =  new Dishwasher(request.getBrandName(), request.getModelName(), request.getPrice(), 0); 
         }

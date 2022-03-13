@@ -28,7 +28,7 @@ public abstract class DataTransfer {
 	private int transactionType;
 	private int applianceType;
 	private boolean customerHasRepairPlan;
-	private String backorderId;
+	private String backOrderId;
     private int transactionQuantity;
 	//Safe way to list appliances? Maybe put in Result? Does Request have a use for this?
 	
@@ -47,12 +47,12 @@ public abstract class DataTransfer {
 	}
 
 
-	public String getBackorderId() {
-		return backorderId;
+	public String getBackOrderId() {
+		return backOrderId;
 	}
 
-	public void setBackorderId(String backorderId) {
-		this.backorderId = backorderId;
+	public void setBackOrderId(String backOrderId) {
+		this.backOrderId = backOrderId;
 	}
 
 	public int getApplianceType() {
@@ -167,11 +167,11 @@ public abstract class DataTransfer {
 		customerHasRepairPlan = customer.hasRepairPlan();
 	}
 
-	public void setBackOrderFields(BackOrder backorder) {
-		backorderId = backorder.getId();
-		customerId = backorder.getCustomer().getId();
-		applianceID = backorder.getAppliance().getId();
-		quantity = backorder.getQuantity();
+	public void setBackOrderFields(BackOrder backOrder) {
+		backOrderId = backOrder.getId();
+		customerId = backOrder.getCustomer().getId();
+		applianceID = backOrder.getAppliance().getId();
+		quantity = backOrder.getQuantity();
 	};
 
 	

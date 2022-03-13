@@ -32,7 +32,7 @@ public class AutomatedTester {
 			} else if (Request.instance().getApplianceType() == 4) {
 				Request.instance().setCapacity(capacity);
 			} else if (Request.instance().getApplianceType() == 5) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 			}
 			Request.instance().setModelName(modelNames[count]);
 			Request.instance().setBrandName(brandNames[count]);
@@ -67,7 +67,7 @@ public class AutomatedTester {
 
 	}
 	// Use Case 5 Fulfill a single backOrder
-	public void fulfillBackorder(){
+	public void fulfillBackOrder(){
 		// The customer is created and added to the store
 		final String name = "Nuel";
 		final String address = "007 Krypton Blvd, Asgard, WA 00701";
@@ -107,7 +107,7 @@ public class AutomatedTester {
 				Request.instance().setBrandName(brandName);
 				Request.instance().setPrice(price);
 			} else if (Request.instance().getApplianceType() == 4) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 				Request.instance().setModelName(model);
 				Request.instance().setBrandName(brandName);
 				Request.instance().setPrice(price);
@@ -125,13 +125,13 @@ public class AutomatedTester {
 				Request.instance().setCustomerId(resultCustomer.getCustomerId());
 				Request.instance().setApplianceID(appliances[count].getApplianceId());
 				Request.instance().setQuantity(amount);
-				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackorder(Request.instance());
+				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 				assert resultFulfillBackOrder.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			} else if (count == 4){
 				Request.instance().setCustomerId(resultCustomer.getCustomerId());
 				Request.instance().setApplianceID(appliances[count].getApplianceId());
 				Request.instance().setQuantity(amount);
-				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackorder(Request.instance());
+				Result resultFulfillBackOrder = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 				assert resultFulfillBackOrder.getResultCode() == Result.BACK_ORDER_NOT_FOUND;
 			}
 		
@@ -174,7 +174,7 @@ public class AutomatedTester {
 			} else if (Request.instance().getApplianceType() == 4) {
 				Request.instance().setCapacity(capacity);
 			} else if (Request.instance().getApplianceType() == 5) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 			}
 			Request.instance().setModelName(applianceModel);
 			Request.instance().setBrandName(brandName);
@@ -243,7 +243,7 @@ public class AutomatedTester {
 				Request.instance().setBrandName(brandName);
 				Request.instance().setPrice(price);
 			} else if (Request.instance().getApplianceType() == 4) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 				Request.instance().setModelName(model);
 				Request.instance().setBrandName(brandName);
 				Request.instance().setPrice(price);
@@ -301,7 +301,7 @@ public class AutomatedTester {
 		System.out.println("Testing...");
 		testAddSingleCustomer(); 
 		testEnrollCustomerInRepairPlan(); // TODO: Will need to be tested after add customer and add appliance.
-		fulfillBackorder(); //TODO: broken
+		fulfillBackOrder(); //TODO: broken
 		testWithDrawCustomer();
 		testPrintRevenue();
 		System.out.println("Done testing.");
