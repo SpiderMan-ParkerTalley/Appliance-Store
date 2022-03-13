@@ -201,12 +201,13 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Withdraws a customer from a repair plan for a single model. If the customer
-	 * withdraws, it returns a success operation code, if something goes wrong, it
-	 * returns the associated error code.
+	 * Withdraws a customer from a repair plan for a single model. 
 	 * 
-	 * @param request
-	 * @return
+	 * @param request Request contains customer ID and appliance ID.
+	 * @param String customerId the customer's ID.
+	 * @param String applianceId the appliance's ID.
+	 * @return Result result containing result code AND repair plan if operation
+	 * was successful.
 	 */
 	public Result withdrawRepairPlan(Request request) {
 		Result result = new Result();
