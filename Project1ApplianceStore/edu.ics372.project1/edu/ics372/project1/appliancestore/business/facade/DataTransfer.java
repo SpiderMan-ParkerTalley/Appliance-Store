@@ -30,11 +30,22 @@ public abstract class DataTransfer {
 	private boolean customerHasRepairPlan;
 	private String backOrderId;
     private int transactionQuantity;
+	private double amountCharged;
 	//Safe way to list appliances? Maybe put in Result? Does Request have a use for this?
 	
 
 	public DataTransfer(){
 		reset();
+	}
+
+
+	public double getAmountCharged() {
+		return amountCharged;
+	}
+
+
+	public void setAmountCharged(double amountCharged) {
+		this.amountCharged = amountCharged;
 	}
 
 

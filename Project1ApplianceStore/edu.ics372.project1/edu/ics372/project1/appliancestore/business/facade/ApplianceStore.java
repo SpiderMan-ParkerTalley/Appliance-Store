@@ -184,9 +184,11 @@ public class ApplianceStore implements Serializable {
 			result.setResultCode(Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN);
 			return result;
 		}
+		// TODO: this should probably be restructured, it is a bit messy right now.
 		result.setCustomerFields(customer);
 		result.setApplianceFields(appliance);
 		result.setResultCode(Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE); // default if appliance not found in transactions
+		
 		// Validating that customer has purchased this appliance. If true, enroll
 		Iterator<Transaction> transactionIterator = customer.getTransactionIterator();
 		while(transactionIterator.hasNext()) {
@@ -201,47 +203,65 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Withdraws a customer from a repair plan for a single model. If the customer
-	 * withdraws, it returns a success operation code, if something goes wrong, it
-	 * returns the associated error code.
+	 * Withdraw a customer from a repair plan for a single model. 
 	 * 
-	 * @param request
-	 * @return
+	 * @param request Request contains customer ID and appliance ID.
+	 * @param String customerId the customer's ID.
+	 * @param String applianceId the appliance's ID.
+	 * @return Result result containing result code AND repair plan if operation
+	 * was successful.
 	 */
 	public Result withdrawRepairPlan(Request request) {
+		// Create result object that will be returned.
 		Result result = new Result();
+
+		// Check if customer exist in the system.
 		Customer customer = customers.search(request.getCustomerId());
 		if (customer == null) {
 			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
 			return result;
-		}
-		result.setCustomerFields(customer);
-		Appliance appliance = models.search(result.getApplianceId());
+		}	
+
+		// Check if appliance exist in the system.
+		Appliance appliance = models.search(request.getApplianceId());
 		if (appliance == null) {
 			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 			return result;
 		}
-		result.setApplianceFields(appliance);
-		RepairPlan repairPlan = customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceId());
+		
+		// Check if repair plan associated to customer exist in the system.
+		RepairPlan repairPlan = 
+			customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceId());
 		if (repairPlan == null) {
 			result.setResultCode(Result.REPAIR_PLAN_NOT_FOUND);
 			return result;
 		}
-		// Do we want to add repairPlan info and back order info to result that we
-		// return?
+
+		// Set return object fields.
+		result.setApplianceFields(appliance);
+		result.setCustomerFields(customer);
+		result.setRepairPlanFields(repairPlan);
+
+		// Remove the repair plan from customer. 
 		if (customer.removeRepairPlan(repairPlan)) {
+			// If the operation is successful...
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			return result;
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
-		return result;
+		else {
+			// Return if the operation was unsuccessful...
+			result.setResultCode(Result.OPERATION_FAILED);
+			return result;
+		}
+		
 	}
 
 
 	/**
-	 * Retrieves an iterator for the appliances requested. This could be all
-	 * appliances or a select category.
-	 * @param applianceType int appliance category code.
+	 * Retrieve an iterator for the appliances requested. A category is chosen 
+	 * and passed as a parameter.
+	 * 
+	 * @param applianceType int appliance category code (1-7).
 	 * @return Iterator<Result> iterator of appliances.
 	 */
 	public Iterator<Result> listAppliances(Request request) {
@@ -400,6 +420,7 @@ public class ApplianceStore implements Serializable {
 		Result result = new Result();
 		result.setTotalRevenueFromTransactions(totalRevenueFromTransactions);
 		result.setTotalRevenueFromRepairPlans(totalRevenueFromRepairPlans);
+		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 		return result;
 	}
 
@@ -417,7 +438,7 @@ public class ApplianceStore implements Serializable {
 	 * Retrieves a safe iterator for back orders.
 	 * @return Iterator<Result> - iterator of back orders.
 	 */
-	public Iterator<Result> getAllBackOrders() {
+	public static Iterator<Result> getAllBackOrders() {
 		return new SafeBackOrderIterator(backOrders.iterator());
 	}
 

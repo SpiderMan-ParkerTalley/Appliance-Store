@@ -12,6 +12,7 @@ import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
+import edu.ics372.project1.appliancestore.business.tests.AutomatedTester;
 
 public class UserInterface {
 
@@ -44,15 +45,21 @@ public class UserInterface {
 	private UserInterface() {
 		if (yesOrNo("Look for saved data and load it if found?")) {
 			retrieve();
+			return;
 		} else {
+			if (yesOrNo("Do you want to generate a test bed and invoke the" +
+						" functionality using asserts?")) {
+				AutomatedTester test = new AutomatedTester();
+				test.testAll();
+			}
 			applianceStore = ApplianceStore.instance();
 		}
 
 	}
 
 	/**
-	 * Applies the singleton pattern to UserInterface.
-	 * If an instance of userInterface already exists,
+	 * Applies the singleton pattern to UserInterface."
+	 * If an instance of userInterface already exists,"
 	 * it returns that instance. Otherwise, it calls the
 	 * constructor and returns a new instance.
 	 * @return A userInterface object
@@ -275,9 +282,9 @@ public class UserInterface {
 		Request.instance().reset(); // TODO Watch this, I think it's a good idea to reset in the UI with each new request. Thoughts?
 		Result result = new Result();
 		do {
-		// customer and appliance search guards
-		customerCheck(); 
-		applianceCheck();
+			// Customer and appliance guards.
+			customerCheck(); 
+			applianceCheck();
 			Request.instance().setQuantity(getNumber("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
 			switch(result.getResultCode()) {
@@ -331,11 +338,11 @@ public class UserInterface {
 		Result result = new Result();
 		boolean customerInputGood = false;
 		while(!customerInputGood) {
-			Request.instance().setCustomerId(getToken("Enter customer id"));
+			Request.instance().setCustomerId(getToken("Enter customer's ID: "));
 			result = applianceStore.searchCustomer(Request.instance());
 			if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-				System.out.println("Error: Customer with id " + Request.instance().getCustomerId() +
-				" not found.");
+				System.out.println("Error: Customer with id " + 
+					Request.instance().getCustomerId() + " not found.");
 			}
 			else if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
 				customerInputGood = true;
@@ -367,25 +374,39 @@ public class UserInterface {
 	 * method for enrolling the customer in the repair plan.
 	 */
 	public void enrollRepairPlan() {
-		Request.instance().setCustomerId(getToken("Enter customer id"));
-		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		// Gather user information.
+		Request.instance().setCustomerId(getToken("Enter customer ID: "));
+		Request.instance().setApplianceID(getToken("Enter appliance ID: "));
+		// Submit request to appliance store.
 		Result result = applianceStore.enrollRepairPlan(Request.instance());
+		// Customer ID is not in system.
 		if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-			System.out.println("Could not find customer id");
-		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
-			System.out.println("Could not find appliance id");
-		} else if (result.getResultCode() == Result.REPAIR_PLAN_ENROLLED) {
+			System.out.println("Could not find customer associate with customer ID entered.");
+		} 
+		// Appliance ID is not in system.
+		else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			System.out.println("Could not find appliance associate with appliance ID entered.");
+		} 
+		// Successful operation.
+		else if (result.getResultCode() == Result.REPAIR_PLAN_ENROLLED) {
 			System.out.println("Customer " + result.getCustomerId() + " successfully " + 
 			"enrolled in repair plan for " + result.getApplianceId());
-		} else if (result.getResultCode() == Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE) {
+		} 
+		// Customer has not purchased the appliance.
+		else if (result.getResultCode() == Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE) {
 			System.out.println("Cannot enroll customer in repair plan." + 
 								"This customer has not purchased this appliance.");
-		} else if (result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
+		} 
+		// Appliance is not eligible for repair plan.
+		else if (result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
 			System.out.println("This appliance is not eligible for a repair plan.");
-		} else {
+		} 
+		// An unknown error has occurred.
+		else {
 			System.out.println("There was an error enrolling the plan.");
-				}
+		}
 	}
+
 
 	/**
 	 * Method for withdrawing a customer from a repair plan for a single appliance.
@@ -393,22 +414,35 @@ public class UserInterface {
 	 * methods for withdrawing the customer from the repair plan.
 	 */
 	public void withdrawRepairPlan() {
-		Request.instance().setCustomerId(getToken("Enter customer id"));
-		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		// Gather user information.
+		Request.instance().setCustomerId(getToken("Enter customer ID: "));
+		Request.instance().setApplianceID(getToken("Enter appliance ID: "));
+		// Submit request to appliance store.
 		Result result = applianceStore.withdrawRepairPlan(Request.instance());
+		// Appliance is not eligible for repair plan.
 		if(result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
-			System.out.println("Appliance not eligible for repair plan");
-		} else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-			System.out.println("Could not find customer id");
-		} else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
-			System.out.println("Could not find appliance id");
-		} else if (result.getResultCode() == Result.OPERATION_FAILED) {
-			System.out.println("Could not enroll customer in repair plan");
-		} else {
+			System.out.println("Appliance not eligible for repair plan.");
+		} 
+		// Customer ID is not in system.
+		else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+			System.out.println("Could not find customer associate with customer ID entered.");
+		} 
+		// Appliance ID is not in system.
+		else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			System.out.println("Could not find appliance associate with appliance ID entered.");
+		} 
+		// Customer has not been enrolled in repair plan with appliance.
+		else if (result.getResultCode() == Result.OPERATION_FAILED) {
+			System.out.println("Customer has not been enrolled in repair plan with appliance.");
+		} 
+		// Successful operation.
+		else {
 			System.out.println("Customer " + Request.instance().getCustomerAddress() + " successfully " + 
 			"enrolled in repair plan for " + Request.instance().getApplianceId());
-			}
 		}
+	}
+
+
 	/**
 	 * Allows the user to charge all active repair plans to the appropriate customers. Updates all customer accounts
 	 * and displays a message when completed.
