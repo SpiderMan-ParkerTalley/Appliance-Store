@@ -15,14 +15,21 @@ public class AutomatedTester {
 	 * Test case for adding a single model.
 	 */
 	private ApplianceStore store = ApplianceStore.instance();
+	private final int TEST_SIZE = 6;
+	// Appliances
 	private int[] appliances = { 1, 2, 3, 4, 5, 6 };
 	private String[] brandNames = { "washer", "dryer", "kitchen range", "refrigerator", "furnace", "dishwasher" };
 	private String[] modelNames = { "Kitchenaid", "LG", "GE", "Samsung", "Sony", "Zephyr" };
-
 	private double[] prices = { 50.00, 60.00, 100.00, 150.00, 175.00, 200.00 };
 	private double repairPlanAmount = 20.50;
 	private double capacity = 100.00;
 	private double maxHeatingOutput = 225.00;
+	// Customers for global use
+	private String[] customerNames = {"n1", "n2", "n3", "n4", "n5", "n6"};
+	private String[] customerIds = {"c1", "c2", "c3", "c4", "c5", "c6"};
+	private String[] customerAddresses = {"a1", "a2", "a3", "a4", "a5", "a6"};
+	private String[] customerPhone = {"p1", "p2", "p3", "p4", "p5", "p6"};
+	private Customer[] customerObjects = new Customer[TEST_SIZE]; 
 
 	// Use-case 1 - Add a single model. Christian
 	// TODO: make idependent and add clear() after testing is complete.
@@ -77,9 +84,74 @@ public class AutomatedTester {
 
 
 	// Use-case 4 - Purchase one or more models. James
-	// TODO: Implement testPurchaseOneOrMoreModels() James
 	public void testPurchaseOneOrMoreModels() {
+		ApplianceStore.clear();
+		for (int index = 0; index < TEST_SIZE; index++) {
+			/*
+			Adding customers to store. ASSERTION: applianceStore.addCustomers()
+			(use case 1) is correct.
+			*/
+			Request.instance().setCustomerName(customerNames[index]);
+			Request.instance().setCustomerId(customerIds[index]);
+			Request.instance().setCustomerAddress(customerAddresses[index]);
+			Request.instance().setCustomerPhoneNumber(customerPhone[index]);
+			ApplianceStore.instance().addCustomer(Request.instance());
+			/*
+			Adding appliances to the store. ASSERTION: applianceStore.addAppliances()
+			(use case 2) and applianceStore.addInventory() (use case 3) 
+			are correct. Adds 2 units to inventory.
+			*/
+			Request.instance().setApplianceType(appliances[index]);
+			Request.instance().setBrandName(brandNames[index]);
+			Request.instance().setModelName(modelNames[index]);
+			Request.instance().setPrice(prices[index]);
+			if (appliances[index] == 1 || appliances[index] == 2) {
+				Request.instance().setRepairPlanAmount(repairPlanAmount);
+			} else if (appliances[index] == 4) {
+				Request.instance().setCapacity(capacity);
+			} else if (appliances[index] == 5) {
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
+			}
+			ApplianceStore.instance().addModel(Request.instance());
+			Request.instance().setQuantity(2);
+			ApplianceStore.instance().addInventory(Request.instance());
+			/*
+			This tests a purchase with no back order created.
+			Quantity purchased (1) <= inventory (2). 0 back orders, so quantity
+			returned is 0.
+			*/
+			Request.instance().setQuantity(1);
+			Result result = ApplianceStore.instance().purchaseModel(Request.instance());
+			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+			assert result.getCustomerName().equals(customerNames[index]);
+			assert result.getCustomerAddress().equals(customerAddresses[index]);
+			assert result.getCustomerPhoneNumber().equals(customerAddresses[index]);
+			assert result.getApplianceType() == appliances[index];
+			assert result.getBrandName().equals(brandNames[index]);
+			assert result.getModelName().equals(modelNames[index]);
+			assert result.getPrice() == prices[index];
+			assert result.getQuantity() == 0; // 0 backorders
+			
+			/*
+			This tests the case where a backOrder is created.
+			Quantity purchased (2) >= inventory (1). 1 back order, so quantity
+			returned is 1.
+			*/
+			Request.instance().setQuantity(2);
+			Result result2 = ApplianceStore.instance().purchaseModel(Request.instance());
+			assert result2.getResultCode() == Result.BACK_ORDER_CREATED;
+			assert result2.getCustomerName().equals(customerNames[index]);
+			assert result2.getCustomerAddress().equals(customerAddresses[index]);
+			assert result2.getCustomerPhoneNumber().equals(customerAddresses[index]);
+			assert result2.getApplianceType() == appliances[index];
+			assert result2.getBrandName().equals(brandNames[index]);
+			assert result2.getModelName().equals(modelNames[index]);
+			assert result2.getPrice() == prices[index];
+			assert result.getQuantity() == 1; // 1 backorders
 
+			Request.instance().reset();
+			ApplianceStore.clear();
+		}
 	}
 
 	// Use-case 5 - Fulfill a single back order. Emmanuel
@@ -565,6 +637,7 @@ TODO: Add '// Working' after you have tested your method and it meets all the re
 		testAddSingleCustomer(); // Working
 		testAddAppliance(); // Working
 		testEnrollCustomerInRepairPlan(); // Working
+		//testPurchaseOneOrMoreModels(); // error when adding quantity.
 		//fulfillBackorder(); //TODO: broken
 		//testWithDrawCustomer();
 		//testPrintRevenue();
