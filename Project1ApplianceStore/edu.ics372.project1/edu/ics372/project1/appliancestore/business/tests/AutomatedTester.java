@@ -303,16 +303,6 @@ public class AutomatedTester {
 
 	public void testListAppliances() {
 		final ApplianceStore applianceStore = ApplianceStore.instance();
-		final String name = "Ryan";
-		final String address = "75 Rockcrest Street Wellington, FL 33414";
-		final String phoneNumber = "310-788-4084";
-
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);;
-
-		Result customerResult = applianceStore.addCustomer(Request.instance());
-		final String customerId = customerResult.getCustomerId();
 
 		// Adding appliances.
 		final String applianceModel = "ApplianceModel";
@@ -326,8 +316,6 @@ public class AutomatedTester {
 
 		final Result[] appliances = new Result[6];
 		
-		
-
 		for (int count = 0; count < applianceTypes.length; count++) {
 			Request.instance().setApplianceType(applianceTypes[count]);
 			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
@@ -335,7 +323,7 @@ public class AutomatedTester {
 			} else if (Request.instance().getApplianceType() == 4) {
 				Request.instance().setCapacity(capacity);
 			} else if (Request.instance().getApplianceType() == 5) {
-				Request.instance().setMaxheatingOutput(maxHeatingOutput);
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 			}
 			Request.instance().setModelName(applianceModel);
 			Request.instance().setBrandName(brandName);
@@ -343,19 +331,29 @@ public class AutomatedTester {
 			Result applianceResult = applianceStore.addModel(Request.instance());
 			appliances[count] = applianceResult;
 		}
-		
-		Result result = new Result();
-		String[] apps = {"washer", "dryer", "kitchen range", "refrigerator", "furnace", "dishwasher", "all"};
-		for(int i=1; i<=apps.length; i++) {
-			// System.out.println(apps[i-1] + ": ");
-			Request.instance().setApplianceType(i);
-			Iterator<Result> resultIterator = store.listAppliances(Request.instance());
-			while (resultIterator.hasNext()){
-				result = resultIterator.next();
-					//System.out.println(result.getApplianceId() + " " + result.getModelName() + " " + result.getBrandName()
-					//+ " " + result.getPrice() + " " + result.getQuantity());
+		// End of adding appliances.
+
+		// Checking individual appliance types.
+		for(int index = 1; index < applianceTypes.length + 1; index++) {
+			Request.instance().setApplianceType(index);
+			Iterator<Result> iterator = applianceStore.listAppliances(Request.instance());
+			while (iterator.hasNext()) {
+				assert 0 == (appliances[index - 1].getApplianceId().compareTo(iterator.next().getApplianceId()));
+				assert 0 == (appliances[index - 1].getModelName().compareTo(iterator.next().getModelName()));
+				assert 0 == (appliances[index - 1].getBrandName().compareTo(iterator.next().getBrandName()));
+				// assert iterator.next().equals(appliances[index - 1]);
 			}
 		}
+		// End of checking individual appliance types.
+
+		// Checking all appliance.
+		Request.instance().setApplianceType(7);
+		Iterator<Result> iterator = applianceStore.listAppliances(Request.instance());
+		int count = 0;
+		while (iterator.hasNext()) {
+			assert iterator.next().equals(appliances[count++]);
+		}
+		// End of checking appliance.
 	}
 
 	//Use Case 13 Get All Backorders
@@ -393,12 +391,13 @@ public class AutomatedTester {
 	public void testAll() {
 		System.out.println("Testing...");
 		//testAddSingleCustomer(); 
-		testAddAppliance(); // Working
-		testEnrollCustomerInRepairPlan(); // Working.
+		// testAddAppliance(); // Working
+		// testEnrollCustomerInRepairPlan(); // Working.
 		//fulfillBackorder(); //TODO: broken
 		//testWithDrawCustomer();
 		//testPrintRevenue();
 		//testListAppliances();
+		testListAppliances();
 		System.out.println("Done testing.");
 	}
 
