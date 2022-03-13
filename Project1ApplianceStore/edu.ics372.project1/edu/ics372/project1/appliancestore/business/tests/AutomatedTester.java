@@ -434,10 +434,9 @@ public class AutomatedTester {
 	}
 
 
-	// Use-case 8 - Charge all repair plans. James
-	// TODO: implement testChargeAllRepairPlans. James
+	// Use-case 8 - Charge all repair plans. 
 	public void testChargeAllRepairPlans() {
-
+		
 	}
 
 
