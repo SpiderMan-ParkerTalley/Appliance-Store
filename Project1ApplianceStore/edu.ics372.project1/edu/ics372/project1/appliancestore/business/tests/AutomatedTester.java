@@ -390,7 +390,7 @@ public class AutomatedTester {
 		assert resultApplianceID.getResultCode() == Result.APPLIANCE_NOT_FOUND;
 
 
-		/* Withdraw customer from repair plan with incorrect appliance ID.
+		/* Withdraw customer from repair plan with appliance ID not eligible for repair plan.
 		Setting customer ID and appliance ID. */
 		Request.instance().setCustomerId(customerIds[4]);
 		Request.instance().setApplianceID(applianceIds[9]);
@@ -398,10 +398,8 @@ public class AutomatedTester {
 		// Withdraw customer from repair plan.
 		Result resultApplianceNotEligible = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
 
-		System.out.println(resultApplianceNotEligible.getResultCode());
-
 		// Validation.
-		assert resultApplianceNotEligible.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN;
+		assert resultApplianceNotEligible.getResultCode() == Result.REPAIR_PLAN_NOT_FOUND;
 		
 		
 		// Withdraw customer from repair plan. OPERATION SUCCESSFUL.
@@ -430,7 +428,7 @@ public class AutomatedTester {
 			Result result = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
 
 			// Validation.
-			assert result.getResultCode() == Result.OPERATION_FAILED;
+			assert result.getResultCode() == Result.REPAIR_PLAN_NOT_FOUND;
 		}
 		
 	}
