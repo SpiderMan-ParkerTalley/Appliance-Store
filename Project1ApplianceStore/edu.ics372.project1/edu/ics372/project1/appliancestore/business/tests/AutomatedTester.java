@@ -95,7 +95,8 @@ public class AutomatedTester {
 			Request.instance().setCustomerId(customerIds[index]);
 			Request.instance().setCustomerAddress(customerAddresses[index]);
 			Request.instance().setCustomerPhoneNumber(customerPhone[index]);
-			ApplianceStore.instance().addCustomer(Request.instance());
+			Result result = ApplianceStore.instance().addCustomer(Request.instance());
+			Request.instance().setCustomerId(result.getCustomerId());
 			/*
 			Adding appliances to the store. ASSERTION: applianceStore.addAppliances()
 			(use case 2) and applianceStore.addInventory() (use case 3) 
@@ -112,7 +113,8 @@ public class AutomatedTester {
 			} else if (appliances[index] == 5) {
 				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 			}
-			ApplianceStore.instance().addModel(Request.instance());
+			result = ApplianceStore.instance().addModel(Request.instance());
+			Request.instance().setApplianceID(result.getApplianceId());
 			Request.instance().setQuantity(2);
 			ApplianceStore.instance().addInventory(Request.instance());
 			/*
@@ -121,12 +123,12 @@ public class AutomatedTester {
 			returned is 0.
 			*/
 			Request.instance().setQuantity(1);
-			Result result = ApplianceStore.instance().purchaseModel(Request.instance());
+			result = ApplianceStore.instance().purchaseModel(Request.instance());
 			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			assert result.getCustomerName().equals(customerNames[index]);
 			assert result.getCustomerAddress().equals(customerAddresses[index]);
-			assert result.getCustomerPhoneNumber().equals(customerAddresses[index]);
-			assert result.getApplianceType() == appliances[index];
+			assert result.getCustomerPhoneNumber().equals(customerPhone[index]);
+			assert result.getApplianceId().equals(Request.instance().getApplianceId());
 			assert result.getBrandName().equals(brandNames[index]);
 			assert result.getModelName().equals(modelNames[index]);
 			assert result.getPrice() == prices[index];
@@ -142,12 +144,12 @@ public class AutomatedTester {
 			assert result2.getResultCode() == Result.BACK_ORDER_CREATED;
 			assert result2.getCustomerName().equals(customerNames[index]);
 			assert result2.getCustomerAddress().equals(customerAddresses[index]);
-			assert result2.getCustomerPhoneNumber().equals(customerAddresses[index]);
-			assert result2.getApplianceType() == appliances[index];
+			assert result2.getCustomerPhoneNumber().equals(customerPhone[index]);
+			assert result2.getApplianceId().equals(Request.instance().getApplianceId());
 			assert result2.getBrandName().equals(brandNames[index]);
 			assert result2.getModelName().equals(modelNames[index]);
 			assert result2.getPrice() == prices[index];
-			assert result.getQuantity() == 1; // 1 backorders
+			assert result2.getQuantity() == 1; // 1 backorders
 
 			Request.instance().reset();
 			ApplianceStore.clear();
@@ -637,7 +639,7 @@ TODO: Add '// Working' after you have tested your method and it meets all the re
 		testAddSingleCustomer(); // Working
 		testAddAppliance(); // Working
 		testEnrollCustomerInRepairPlan(); // Working
-		//testPurchaseOneOrMoreModels(); // error when adding quantity.
+		testPurchaseOneOrMoreModels(); // Working
 		//fulfillBackorder(); //TODO: broken
 		//testWithDrawCustomer();
 		//testPrintRevenue();
