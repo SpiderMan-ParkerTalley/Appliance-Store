@@ -348,14 +348,16 @@ public class AutomatedTester {
 		// End of checking individual appliance types.
 
 		// Checking all appliance.
-		/*
 		Request.instance().setApplianceType(7);
 		Iterator<Result> iterator = applianceStore.listAppliances(Request.instance());
 		int count = 0;
 		while (iterator.hasNext()) {
-			assert iterator.next().equals(appliances[count++]);
+			Result result = iterator.next();
+			assert 0 == (appliances[count].getApplianceId().compareTo(result.getApplianceId()));
+			assert 0 == (appliances[count].getModelName().compareTo(result.getModelName()));
+			assert 0 == (appliances[count].getBrandName().compareTo(result.getBrandName()));
+			count++;
 		}
-		*/
 		// End of checking appliance.
 	}
 
