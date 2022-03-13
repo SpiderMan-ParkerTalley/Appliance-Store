@@ -290,70 +290,56 @@ public class AutomatedTester {
 	// Use-case 7 - Withdraw customer from a single repair plan. Emmanuel
 	// TODO: change to assert, remove extra stuff. Emmanuel
 	public void testWithDrawCustomer(){
-		final String name = "Nuel";
-		final String address = "007 Krypton Blvd, Asgard, WA 00701";
-		final String phoneNumber = "(001)112-2223";
-
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);;
+		// The customer is created and added to the store
+		Request.instance().setCustomerName(customerNames[0]);
+		Request.instance().setCustomerAddress(customerAddresses[0]);
+		Request.instance().setCustomerPhoneNumber(customerPhone[0]);;
 
 		Result resultCustomer = ApplianceStore.instance().addCustomer(Request.instance());
 
 		// The appliance is created and added to the store
-		final String brandName = "GE";
-		final String model = "009";
-		final double price = 100.00;
-		final int quantity = 1;
-		final double repairPlanAmount = 200.00;
-    	final double capacity = 60.00;
-		final double maxHeatingOutput = 86.0;
-		final int amount = 2;
-		final int number = 3;
-		final int[] applianceTypes = { 1, 2, 3, 4, 5, 6 };
-
-		final Result[] appliances = new Result[6];
+		final Result[] appliance = new Result[6];
 		
-		for (int count = 0; count < applianceTypes.length; count++) {
-			Request.instance().setApplianceType(applianceTypes[count]);
+		for (int count = 0; count < appliances.length; count++) {
+			Request.instance().setApplianceType(appliances[count]);
 			if (Request.instance().getApplianceType() == 0 || Request.instance().getApplianceType() == 1) {
 				Request.instance().setRepairPlanAmount(repairPlanAmount);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
+				Request.instance().setModelName(modelNames[count]);
+				Request.instance().setBrandName(brandNames[count]);
+				Request.instance().setPrice(prices[count]);
 			} else if (Request.instance().getApplianceType() == 3) {
 				Request.instance().setCapacity(capacity);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
+				Request.instance().setModelName(modelNames[count]);
+				Request.instance().setBrandName(brandNames[count]);
+				Request.instance().setPrice(prices[count]);
 			} else if (Request.instance().getApplianceType() == 4) {
 				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
+				Request.instance().setModelName(modelNames[count]);
+				Request.instance().setBrandName(brandNames[count]);
+				Request.instance().setPrice(prices[count]);
 			} else if (Request.instance().getApplianceType() == 2 || Request.instance().getApplianceType() == 5) {
-				Request.instance().setModelName(model);
-				Request.instance().setBrandName(brandName);
-				Request.instance().setPrice(price);
+				Request.instance().setModelName(modelNames[count]);
+				Request.instance().setBrandName(brandNames[count]);
+				Request.instance().setPrice(prices[count]);
 			}
 			
 			Result applianceResult = ApplianceStore.instance().addModel(Request.instance());
 			// System.out.println(applianceResult.getResultCode());
-			appliances[count] = applianceResult;
+			appliance[count] = applianceResult;
 		}
-		for(int index = 0; index < applianceTypes.length; index++) {
-			Request.instance().setApplianceID(appliances[0].getApplianceId());
+		for(int count = 0; count < appliances.length; count++) {
+			Request.instance().setApplianceID(appliance[0].getApplianceId());
 			Request.instance().setCustomerId(resultCustomer.getCustomerId());
 			Result purchaseApplianceResult = ApplianceStore.instance().purchaseModel(Request.instance());
 			
-			if (index <= 1) {
+			if (count <= 1) {
 				Result enrollRepairPlanResult = ApplianceStore.instance().enrollRepairPlan(Request.instance());
-				System.out.println(enrollRepairPlanResult.getResultCode());
-				Result withDrawCustomerResult = ApplianceStore.instance().withdrawRepairPlan(Request.instance());
+				//System.out.println(enrollRepairPlanResult.getResultCode());
+				Result withDrawCustomerResult = ApplianceStore.instance().withdrawRepairPlan(Request.instance());// This is giving a problem
 				System.out.println(withDrawCustomerResult.getResultCode());
 				//assert withDrawCustomerResult.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			}
-			else if (index >= 2) {
+			else if (count >= 2) {
 				System.out.println("REPAIR_PLAN_NOT_FOUND");
 			}
 		}
@@ -369,12 +355,12 @@ public class AutomatedTester {
 
 
 	// Use-case 9 - Print total revenue from all sales and repair plans. Emmanuel
-	// TODO: change to assert. Emmanuel
 	public void testPrintRevenue(){
 		Result result = new Result();
 		result = ApplianceStore.instance().getTotalRevenue();
 		double totalSale = result.getTotalRevenueFromTransactions();
 		double totalRepairPlan = result.getTotalRevenueFromRepairPlans();
+		assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 		System.out.println("The total sale is: " + totalSale + " The total repair plan revenue is: " + totalRepairPlan);
 	}
 
@@ -621,17 +607,17 @@ TODO: Add '// Working' after you have tested your method and it meets all the re
 	// TODO: order test cases in a way that test dependences first. Example: testAddSingleCustomer(); come before testEnrollCustomerInRepairPlan();
 	public void testAll() {
 		System.out.println("Testing...");
-		testAddSingleCustomer(); // Working
-		testAddAppliance(); // Working
-		testEnrollCustomerInRepairPlan(); // Working
-		testPurchaseOneOrMoreModels(); // Working
+		//testAddSingleCustomer(); // Working
+		//testAddAppliance(); // Working
+		//testEnrollCustomerInRepairPlan(); // Working
+		//testPurchaseOneOrMoreModels(); // Working
 		//fulfillBackorder(); //TODO: broken
 		//testWithDrawCustomer();
-		//testPrintRevenue();
+		testPrintRevenue();
 		//testListAppliances();
-		testListAppliances(); // Working
-		testListAllUsersInRepairPlans(); // Working
-		testListCustomers(); // Working
+		//testListAppliances(); // Working
+		//testListAllUsersInRepairPlans(); // Working
+		//testListCustomers(); // Working
 		System.out.println("Done testing.");
 	}
 
