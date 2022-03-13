@@ -225,24 +225,23 @@ public class ApplianceStore implements Serializable {
 		return result;
 	}
 
+
 	/**
-	 * Lists all models of a single appliance or all appliances based on user input.
-	 * If there are no such models, it returns an error code, but if there are
-	 * models, it returns the list of models.
-	 * 
-	 * @param request
-	 * @return
+	 * Retrieves an iterator for the appliances requested. This could be all
+	 * appliances or a select category.
+	 * @param applianceType int appliance category code.
+	 * @return Iterator<Result> iterator of appliances.
 	 */
-	public SafeApplianceIterator listAppliances(Request request) {
+	public Iterator<Result> listAppliances(Request request) {
 		// Returns iterator for all appliance(s)
 		if (request.getApplianceType() == 7) {
 			return new SafeApplianceIterator(models.iterator());
 		} 
-
+		// Returns an iterator for a select category of appliances.
 		String applianceCode = ApplianceFactory.findApplianceType(request.getApplianceType());
 		return new SafeApplianceIterator(new FilteredApplianceIterator(ModelList.getInstance().iterator(), applianceCode));
-
 	}
+
 
 	/**
 	 * Searches for a given appliance model and returns the result.
@@ -250,8 +249,8 @@ public class ApplianceStore implements Serializable {
      * quantity in a Result object.
      * If the appliance is not found, returns an error code.
 	 * 
-	 * @param applianceId of the appliance
-	 * @return A Result object with the required information
+	 * @param applianceId String - appliance id.
+	 * @return a code representing the outcome AND appliance information.
 	 */
 	public Result searchModel(Request request) {
 		Result result = new Result();
@@ -266,10 +265,9 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Searches for a given customer
-	 * 
-	 * @param customerId of the customer
-	 * @return true iff the customer is in the customer list collection
+	 * Determines if a customer exist with a given customer id.
+	 * @param customerId String - customer id.
+	 * @return Result - a code representing the outcome AND customer information.
 	 */
 	public Result searchCustomer(Request request) {
 		Result result = new Result();
@@ -284,10 +282,9 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Searches for a given back order
-	 * 
-	 * @param backOrderId of the backOrder
-	 * @return true iff the backOrder is in the backOrder list collection
+	 * Searches for a given back order.
+	 * @param backOrderId String - the back order id.
+	 * @return Result - a code representing the outcome AND back order information.
 	 */
 	public Result searchBackOrder(Request request) {
 		Result result = new Result();
@@ -315,7 +312,7 @@ public class ApplianceStore implements Serializable {
 	 *                    purchased.
 	 * @param CustomerId  - Identifies the customer purchasing the appliance.
 	 * @param quantity    - the amount of appliances being purchased.
-	 * @return A Result object with the appropriate information.
+	 * @return Result - a code representing the outcome.
 	 */
 	public Result purchaseModel(Request request) { 
 		Result result = new Result();
@@ -359,32 +356,26 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Charges all repair plans for all customers. The method acquires an iterator
-	 * from the customerList and then examines each customer. It grabs a repairPlan
-	 * iterator from each customer and charges each repair plan it finds. With each
-	 * repair plan charge, it generates a transaction object and stores it in the
-	 * customer's transactionList.
+	 * Charges all repair plans for all customers. 
 	 */
 	public void chargeRepairPlans() {
-		for (Iterator<Customer> customerIterator = customers.iterator(); customerIterator.hasNext();) {
-			customerIterator.next().chargeRepairPlans();
+		for (Iterator<Customer> customerIterator = customers.iterator(); 
+			customerIterator.hasNext();) {
+				customerIterator.next().chargeRepairPlans();
 		}
 	}
 
 	/**
-	 * Returns a list of all the customers that have repair plans via the Result
-	 * object.
+	 * Retrieves a safe iterator for all customers that have a repair plan.
+	 * @return Iterator<Result> - iterator of customers.
 	 */
-	public Result getAllRepairPlanCustomers() {
-		Result result = new Result();
-		result.setCustomers(customers.getAllCustomersInRepairPlan());
-		return result;
+	public Iterator<Result> getAllRepairPlanCustomers() {
+		return new SafeCustomerIterator(customers.getAllCustomersInRepairPlan().iterator());
 	}
 
 	/**
 	 * Computes the total revenue from transactions and repair plans.
-	 * 
-	 * @return Result result containing total revenue.
+	 * @return Result - result containing total revenues.
 	 */
 	public Result getTotalRevenue() {
 		double totalRevenueFromTransactions = 0;
@@ -403,7 +394,7 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Retrieves a safe iterator for customers.
-	 * @return Iterator<Result>
+	 * @return Iterator<Result> - iterator of customers.
 	 */
 	public Iterator<Result> getAllCustomers() {
 		return new SafeCustomerIterator(customers.iterator());
@@ -412,16 +403,15 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Retrieves a safe iterator for back orders.
-	 * @return Iterator<Result>
+	 * @return Iterator<Result> - iterator of back orders.
 	 */
 	public Iterator<Result> getAllBackOrders() {
 		return new SafeBackOrderIterator(backOrders.iterator());
 	}
 
 	/**
-	 * Saves the data to file ApplianceStoreData,
-	 * 
-	 * @return true if successful, false if not.
+	 * Saves the data to a file called ApplianceStoreData,
+	 * @return Boolean - true if successful, false if not.
 	 */
 	public static boolean save() {
 		try {
@@ -435,16 +425,15 @@ public class ApplianceStore implements Serializable {
             output.close();
 			file.close();
 			return true;
-		} catch (Exception ioexception) {
-			ioexception.printStackTrace();
+		} catch (Exception IOException) {
+			IOException.printStackTrace();
 			return false;
 		}
 	}
 
 	/**
-	 * Retrieves the data from the file ApplianceStoreData
-	 * 
-	 * @return The ApplianceStore object if successful, otherwise null.
+	 * Retrieves the data from the file ApplianceStoreData.
+	 * @return ApplianceStore - ApplianceStore object if successful, otherwise null.
 	 */
 	public static ApplianceStore retrieve() {
 		try {
