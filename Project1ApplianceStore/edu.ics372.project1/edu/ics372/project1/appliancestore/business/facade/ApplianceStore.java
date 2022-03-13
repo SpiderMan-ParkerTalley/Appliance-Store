@@ -16,6 +16,7 @@ import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
 import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
+import edu.ics372.project1.appliancestore.business.iterators.SafeApplianceIterator;
 import edu.ics372.project1.appliancestore.business.iterators.SafeBackOrderIterator;
 import edu.ics372.project1.appliancestore.business.iterators.SafeCustomerIterator;
 import edu.ics372.project1.appliancestore.business.collections.CustomerList;
@@ -232,28 +233,15 @@ public class ApplianceStore implements Serializable {
 	 * @param request
 	 * @return
 	 */
-	public Result listAppliances(Request request) {
-		Result result = new Result();
-		List<Appliance> appliances = new LinkedList<Appliance>();
+	public SafeApplianceIterator listAppliances(Request request) {
+		// Returns iterator for all appliance(s)
 		if (request.getApplianceType() == 7) {
-			for (Appliance model : models) {
-				appliances.add(model);
-			}
-		} else {
-			String applianceCode = ApplianceFactory.findApplianceType(request.getApplianceType());
-			for (Iterator<Appliance> applianceFilteredIterator = new FilteredApplianceIterator(ModelList.getInstance().iterator(), applianceCode); 
-			applianceFilteredIterator.hasNext();) {
-				Appliance appliance = applianceFilteredIterator.next();
-				appliances.add(appliance);
-			}
-		}
-		if (appliances.isEmpty()) {
-			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
-			return result;
-		}
-		result.setAppliances(appliances);
-		result.setResultCode(Result.OPERATION_SUCCESSFUL);
-		return result;
+			return new SafeApplianceIterator(models.iterator());
+		} 
+		
+		String applianceCode = ApplianceFactory.findApplianceType(request.getApplianceType());
+		return new SafeApplianceIterator(new FilteredApplianceIterator(ModelList.getInstance().iterator(), applianceCode));
+
 	}
 
 	/**
@@ -412,21 +400,19 @@ public class ApplianceStore implements Serializable {
 		return result;
 	}
 
+
 	/**
-	 * Gets a List<Customer> object of all the customers from the customers List and
-	 * returns it in the Result singleton. Used to print all customers to the UI.
-	 * 
-	 * @return
+	 * Retrieves a safe iterator for customers.
+	 * @return Iterator<Result>
 	 */
 	public Iterator<Result> getAllCustomers() {
-		Result result = new Result();
-		result.setCustomers(customers.getCustomerList());
 		return new SafeCustomerIterator(customers.iterator());
 	}
 
+
 	/**
-	 * Queries the backOrdersList and assembles a Result object with information to
-	 * be used in the UI for printing back order details.
+	 * Retrieves a safe iterator for back orders.
+	 * @return Iterator<Result>
 	 */
 	public Iterator<Result> getAllBackOrders() {
 		return new SafeBackOrderIterator(backorders.iterator());

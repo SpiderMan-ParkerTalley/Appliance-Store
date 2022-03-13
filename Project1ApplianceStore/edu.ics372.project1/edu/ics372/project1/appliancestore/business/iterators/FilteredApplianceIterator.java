@@ -4,7 +4,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
-import java.util.function.Predicate;
 
 public class FilteredApplianceIterator implements Iterator<Appliance> {
     private Appliance item;
@@ -33,7 +32,7 @@ public class FilteredApplianceIterator implements Iterator<Appliance> {
     @Override
     public Appliance next() {
         if (!hasNext()) {
-            throw new NoSuchElementException("No such elment");
+            throw new NoSuchElementException("No such element");
         }
         Appliance returnValue = item;
         getNextItem();
