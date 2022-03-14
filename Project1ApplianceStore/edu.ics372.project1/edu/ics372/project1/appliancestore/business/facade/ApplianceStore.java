@@ -274,7 +274,7 @@ public class ApplianceStore implements Serializable {
 		} 
 		// Returns an iterator for a select category of appliances.
 		String applianceCode = ApplianceFactory.findApplianceType(request.getApplianceType());
-		return new SafeApplianceIterator(new FilteredApplianceIterator(ModelList.getInstance().iterator(), applianceCode));
+		return new SafeApplianceIterator(new FilteredApplianceIterator(models.iterator(), applianceCode));
 	}
 
 
