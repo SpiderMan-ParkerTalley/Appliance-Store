@@ -1,14 +1,9 @@
 package edu.ics372.project1.appliancestore.business.tests;
 
 import java.util.Iterator;
-
-import edu.ics372.project1.appliancestore.business.collections.ModelList;
-import edu.ics372.project1.appliancestore.business.entities.Appliance;
-import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
-import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 
 public class AutomatedTester {
 	// Storing ApplianceStore entity locally.
@@ -137,7 +132,7 @@ public class AutomatedTester {
 
 
 	// Use-case 2 - Add a single customer. 
-	public static void addCustomers() {
+	public void addCustomers() {
 		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
 
 			// Set customer information.
@@ -181,7 +176,7 @@ public class AutomatedTester {
 
 
 	// Use-case 4 - Purchase one or more models. 
-	public static void testPurchaseModels() {
+	public void testPurchaseModels() {
 		// Stores the current test index for appliance information.
 		int applianceIndex = 0;
 		
