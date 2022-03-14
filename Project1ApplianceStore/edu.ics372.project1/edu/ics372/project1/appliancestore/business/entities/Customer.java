@@ -50,14 +50,19 @@ public class Customer implements Serializable {
 
     // Lists
     /**
-     * A list containing all the customer's transactions.
+     * A list containing all the customer's sale/purchase transactions.
      */
-    private List<Transaction> transactions = new LinkedList<Transaction>();
+    private List<SaleTransaction> saleTransactions = new LinkedList<SaleTransaction>();
     
     /**
      * A list storing all the customer's active repair plans.
      */
     private List<RepairPlan> repairPlans = new LinkedList<RepairPlan>();
+
+    /**
+     * A list storing all the customer's active repair plans.
+     */
+    private List<RepairPlanTransaction> repairPlanTransactions = new LinkedList<RepairPlanTransaction>();
 
     // Constructor
     public Customer(String name, String address, String phoneNumber) {
@@ -68,13 +73,12 @@ public class Customer implements Serializable {
     }
 
     /**
-     * Creates and adds a transaction to customer.
-     * @param appliance Appliance appliance 
-     * @param quantity int quantity of appliance being purchases.
+     * Creates and adds a sale transaction to customer.
+     * @param SaleTransaction transaction.
      * @return boolean true if the transaction was successfully added.
      */
-    public boolean addTransaction(Transaction transaction) {
-        transactions.add(transaction);
+    public boolean addSaleTransaction(SaleTransaction transaction) {
+        saleTransactions.add(transaction);
         return true;
     }
 
@@ -112,7 +116,7 @@ public class Customer implements Serializable {
             // Creates new repair plan transaction.
             RepairPlanTransaction repairPlanTransaction = new RepairPlanTransaction(this, repairPlan.getAppliance());
             // Adds repair plan transaction to customer's transactions.
-            transactions.add(repairPlanTransaction);
+            repairPlanTransactions.add(repairPlanTransaction);
             // Computes total amount charged in repair plans.
             amountCharged += repairPlanTransaction.getTotal();
         }
@@ -225,7 +229,7 @@ public class Customer implements Serializable {
 		return repairPlans.iterator();
 	}
 
-	public Iterator<Transaction> getTransactionIterator() {
-		return transactions.iterator();
+	public Iterator<SaleTransaction> getSalesTransactionIterator() {
+		return saleTransactions.iterator();
 	}
 }

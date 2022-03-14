@@ -15,4 +15,9 @@ public class RepairPlanTransaction extends Transaction {
     private String generateId() {
         return REPAIR_PLAN_STRING + getNextId();
     }
+
+    // Getters
+    public ApplianceWithRepairPlan getAppliance() {
+        return appliance;
+    }
 }
