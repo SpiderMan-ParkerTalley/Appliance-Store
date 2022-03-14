@@ -127,6 +127,38 @@ public class AutomatedTester {
 			assert result.getBrandName().compareTo(brandNames[index]) == 0;
 			assert result.getModelName().compareTo(modelNames[index]) == 0;
 			assert result.getPrice() == (prices[index]);
+			// If the appliance is washer or dryer...
+			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
+				// Check if appliance repair plan is set correctly.
+				assert result.getEligibleForRepairPlan() == true;
+				assert result.getRepairPlanCost() == repairPlanAmount;
+				// CHeck if the eligible for back order is set correctly.
+				assert result.getEligibleForBackOrder() == true;
+			} 
+			// If the appliance is a refrigerator...
+			else if (Request.instance().getApplianceType() == 4) {
+				// Check if the capacity is set correctly.
+				assert result.getCapacity() == capacity;
+				// CHeck if the eligible for back order is set correctly.
+				assert result.getEligibleForBackOrder() == true;
+				// Check if appliance repair plan is set correctly.
+				assert result.getEligibleForRepairPlan() == false;
+			} 
+			// If the appliance is a furnace...
+			else if (Request.instance().getApplianceType() == 5) {
+				// Check if the heating output is set correctly.
+				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
+				// CHeck if the eligible for back order is set correctly.
+				assert result.getEligibleForBackOrder() == false;
+				// Check if appliance repair plan is set correctly.
+				assert result.getEligibleForRepairPlan() == false;
+			}
+			else {
+				// CHeck if the eligible for back order is set correctly.
+				assert result.getEligibleForBackOrder() == true;
+				// Check if appliance repair plan is set correctly.
+				assert result.getEligibleForRepairPlan() == false;
+			}
 		}
 	}
 

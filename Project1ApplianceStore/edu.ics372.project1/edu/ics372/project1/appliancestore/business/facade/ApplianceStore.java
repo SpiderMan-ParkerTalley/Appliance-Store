@@ -100,8 +100,9 @@ public class ApplianceStore implements Serializable {
 	public Result addModel(Request request) {
 		// Create result object that will be returned.
 		Result result = new Result();
-		int type = request.getApplianceType();
-		Appliance appliance = ApplianceFactory.createAppliance(type, request);
+
+		// Generate new appliance using appliance factory.
+		Appliance appliance = ApplianceFactory.createAppliance(request.getApplianceType(), request);
 		if (models.insertModel(appliance)) {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			result.setApplianceFields(appliance);

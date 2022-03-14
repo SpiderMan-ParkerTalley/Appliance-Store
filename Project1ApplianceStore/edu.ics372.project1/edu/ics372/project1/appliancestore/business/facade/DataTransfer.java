@@ -1,8 +1,10 @@
 package edu.ics372.project1.appliancestore.business.facade;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.ApplianceWithRepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
+import edu.ics372.project1.appliancestore.business.entities.Refrigerator;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlanTransaction;
 import edu.ics372.project1.appliancestore.business.entities.SaleTransaction;
 
@@ -14,7 +16,7 @@ import edu.ics372.project1.appliancestore.business.entities.SaleTransaction;
  *
  */
 public abstract class DataTransfer {
-	private String applianceID;
+	private String applianceId;
 	private String brandName;
 	private String modelName;
 	private double price;
@@ -30,6 +32,10 @@ public abstract class DataTransfer {
 	private String backOrderId;
     private int transactionQuantity;
 	private double amountCharged;
+	private double repairPlanCost;
+	private boolean eligibleForRepairPlan;
+	private boolean eligibleForBackOrder;
+	private double capacity;
 	
 
 	public DataTransfer(){
@@ -81,7 +87,7 @@ public abstract class DataTransfer {
 	}
 
 	public String getApplianceId() {
-		return applianceID;
+		return applianceId;
 	}
 
 	public int getTransactionType() {
@@ -125,7 +131,7 @@ public abstract class DataTransfer {
 	}
 
 	public void setApplianceID(String applianceID) {
-		this.applianceID = applianceID;
+		this.applianceId = applianceID;
 	}
 
 	public String getBrandName() {
@@ -168,6 +174,38 @@ public abstract class DataTransfer {
 		this.customerId = customerId;
 	}
 
+	public double getRepairPlanCost() {
+		return repairPlanCost;
+	}
+
+	public void setRepairPlanCost(double repairPlanCost) {
+		this.repairPlanCost = repairPlanCost;
+	}
+
+	public boolean getEligibleForRepairPlan() {
+		return eligibleForRepairPlan;
+	}
+
+	public void setEligibleForRepairPlan(boolean eligibleForRepairPlan) {
+		this.eligibleForRepairPlan = eligibleForRepairPlan;
+	}
+
+	public boolean getEligibleForBackOrder() {
+		return eligibleForBackOrder;
+	}
+
+	public void setEligibleForBackOrder(boolean eligibleForBackOrder) {
+		this.eligibleForBackOrder = eligibleForBackOrder;
+	}
+
+	public double getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(double capacity) {
+		this.capacity = capacity;
+	}
+
 	public void setCustomerFields(Customer customer) {
 		customerId = customer.getId();
 		customerName = customer.getName();
@@ -179,28 +217,36 @@ public abstract class DataTransfer {
 	public void setBackOrderFields(BackOrder backOrder) {
 		backOrderId = backOrder.getId();
 		customerId = backOrder.getCustomer().getId();
-		applianceID = backOrder.getAppliance().getId();
+		applianceId = backOrder.getAppliance().getId();
 		quantity = backOrder.getQuantity();
 	};
 
 	
 	public void setSaleTransactionFields(SaleTransaction transaction) {
 		customerId = transaction.getCustomer().getId();
-		applianceID = transaction.getAppliance().getId();
+		applianceId = transaction.getAppliance().getId();
 		transactionQuantity = transaction.getQuantity();
 	}
 
 	public void setRepairPlanTransactionFields(RepairPlanTransaction transaction) {
 		customerId = transaction.getCustomer().getId();
-		applianceID = transaction.getAppliance().getId();
+		applianceId = transaction.getAppliance().getId();
 	}
 
 	public void setApplianceFields(Appliance appliance){
-		applianceID = appliance.getId();
+		applianceId = appliance.getId();
 		brandName = appliance.getBrandName();
 		modelName = appliance.getModel();
 		price = appliance.getPrice();
 		quantity = appliance.getQuantity();
+		eligibleForRepairPlan = appliance.eligibleForRepairPlan();
+		eligibleForBackOrder = appliance.eligibleForBackOrder();
+		if(eligibleForRepairPlan) {
+			repairPlanCost = ((ApplianceWithRepairPlan) appliance).getRepairPlanAmount();
+		}
+		if(applianceType == ApplianceFactory.REFRIGERATOR) {
+			capacity = ((Refrigerator) appliance).getCapacity();
+		}
 	}
 
 	public boolean getCustomerHasRepairPlan() {
@@ -214,9 +260,8 @@ public abstract class DataTransfer {
 	/**
 	 * Resets all fields to empty so there is no overlap or 
 	 */
-
 	public void reset() {
-		applianceID = "No such appliance ID";
+		applianceId = "No such appliance ID";
 		brandName = "No such appliance brand name";
 		modelName = "No such appliance ID";
 		price = 0;

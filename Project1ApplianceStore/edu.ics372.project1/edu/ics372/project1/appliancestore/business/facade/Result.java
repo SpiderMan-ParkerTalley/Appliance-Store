@@ -34,6 +34,7 @@ public class Result extends DataTransfer {
 	private double totalRevenueFromTransactions;
 	private double totalRevenueFromRepairPlans;
 	private List<Appliance> appliances;
+	
 
 	public List<Appliance> getAppliances() {
 		return appliances;
@@ -82,6 +83,7 @@ public class Result extends DataTransfer {
 	public void setTotalRevenueFromRepairPlans(double totalRevenueFromRepairPlans) {
 		this.totalRevenueFromRepairPlans = totalRevenueFromRepairPlans;
 	}
+
 
 	/**
 	 * Sets the fields necessary for the implementation of use case 11.
