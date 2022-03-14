@@ -4,7 +4,6 @@ import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.ApplianceWithRepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
-import edu.ics372.project1.appliancestore.business.entities.Refrigerator;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlanTransaction;
 import edu.ics372.project1.appliancestore.business.entities.SaleTransaction;
 
@@ -243,9 +242,6 @@ public abstract class DataTransfer {
 		eligibleForBackOrder = appliance.eligibleForBackOrder();
 		if(eligibleForRepairPlan) {
 			repairPlanCost = ((ApplianceWithRepairPlan) appliance).getRepairPlanAmount();
-		}
-		if(applianceType == ApplianceFactory.REFRIGERATOR) {
-			capacity = ((Refrigerator) appliance).getCapacity();
 		}
 	}
 
