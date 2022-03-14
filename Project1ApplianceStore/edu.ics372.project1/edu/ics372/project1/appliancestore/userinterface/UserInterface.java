@@ -649,8 +649,8 @@ public class UserInterface {
 	 */
 	private void printRevenue() {
 		Result result = applianceStore.getTotalRevenue();
-		System.out.println("Sales Revenue: " + result.getTotalRevenueFromTransactions());
-		System.out.println("Repair Plan Revenue: " + result.getTotalRevenueFromRepairPlans());
+		System.out.printf("Sales Revenue: $%,.2f\n" , result.getTotalRevenueFromTransactions());
+		System.out.printf("Repair Plan Revenue: $%,.2f\n", result.getTotalRevenueFromRepairPlans());
 }
 
 	public static void main(String args[]) {
