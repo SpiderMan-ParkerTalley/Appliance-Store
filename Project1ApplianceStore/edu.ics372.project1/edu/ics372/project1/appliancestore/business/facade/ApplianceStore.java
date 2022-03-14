@@ -260,9 +260,9 @@ public class ApplianceStore implements Serializable {
 		}
 		
 		// Validating that customer has purchased this appliance. If true, enroll
-		Iterator<SaleTransaction> transactionIterator = customer.getSalesTransactionIterator();
-		while(transactionIterator.hasNext()) {
-			SaleTransaction transaction = transactionIterator.next();
+		Iterator<SaleTransaction> saleTransactionIterator = customer.getSalesTransactionIterator();
+		while(saleTransactionIterator.hasNext()) {
+			SaleTransaction transaction = saleTransactionIterator.next();
 			// If customer has purchased the appliance...
 			if (transaction.getAppliance().getId().equals(appliance.getId())) {
 				customer.addRepairPlan((ApplianceWithRepairPlan) appliance);
