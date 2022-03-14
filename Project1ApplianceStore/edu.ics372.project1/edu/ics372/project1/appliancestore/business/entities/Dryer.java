@@ -4,7 +4,7 @@ package edu.ics372.project1.appliancestore.business.entities;
  * @author Cristian Zendejas
  * The Dryer subclass for Appliance.
  */
-public class Dryer extends ApplianceWithRepairPlans {
+public class Dryer extends ApplianceWithRepairPlan {
 	//Creates a unique identifier for this subclass
 	private static final String DRYER_STRING = "DRY";
 

@@ -4,7 +4,7 @@ package edu.ics372.project1.appliancestore.business.entities;
  * @author Cristian Zendejas
  * The Washer subclass for Appliance.
  */
-public class Washer extends ApplianceWithRepairPlans {
+public class Washer extends ApplianceWithRepairPlan {
 	//Creates a unique identifier for this subclass
 	private static final String WASHER_STRING = "WASH";
 
