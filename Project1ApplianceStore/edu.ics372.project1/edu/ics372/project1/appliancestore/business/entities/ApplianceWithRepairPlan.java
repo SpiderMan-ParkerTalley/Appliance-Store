@@ -1,9 +1,19 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
-public abstract class ApplianceWithRepairPlan extends Appliance {
+/*
+ * @author Cristian Zendejas
+ * The  abstract subclass for appliances that use a repair plan.
+ */
+public abstract class ApplianceWithRepairPlans extends Appliance {
+	//Stores the amount for the repair plan cost
 	private double repairPlanAmount;
 
-	public ApplianceWithRepairPlan(String brandName, String model, double price, int quantity, double repairPlanAmount) {
+
+	/*
+	 * Creates an appliance with a repair plan
+	 * @return ApplianceWithRepairPlans
+	 */
+	public ApplianceWithRepairPlans(String brandName, String model, double price, int quantity, double repairPlanAmount) {
 		super(brandName, model, price, quantity);
 		this.repairPlanAmount = repairPlanAmount;
 	}
@@ -15,7 +25,7 @@ public abstract class ApplianceWithRepairPlan extends Appliance {
 	public void setRepairPlanAmount(double repairPlanAmount) {
 		this.repairPlanAmount = repairPlanAmount;
 	}
-	
+
 	public String toString() {
 		String output = super.toString() + " Repair Plan Amount: " + repairPlanAmount;
 		return output;
