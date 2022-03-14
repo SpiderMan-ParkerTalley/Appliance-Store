@@ -24,18 +24,33 @@ import edu.ics372.project1.appliancestore.business.collections.BackOrderList;
 import edu.ics372.project1.appliancestore.business.collections.ModelList;
 
 /**
- * This is the facade class. It handles all requests from users.
+ * This is a facade class for appliance store. It handles all the requests from 
+ * users.
  * 
- * @author Jim Sawicki and Sharon Shin
- *
+ * @author Jim Sawicki, Sharon Shin, Parker Talley, Emmanuel Ojogwu, and 
+ * Cristian Zendejas.
  */
 public class ApplianceStore implements Serializable {
-
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * Stores the singleton of appliance store.
+	 */
 	private static ApplianceStore applianceStore;
 
+	/**
+	 * Stores all the customers.
+	 */
 	private CustomerList customers = CustomerList.getInstance();
+
+	/**
+	 * Stores all the models of appliances.
+	 */
 	private ModelList models = ModelList.getInstance();
+
+	/**
+	 * Stores all the back orders.
+	 */
 	private BackOrderList backOrders = BackOrderList.getInstance();
 
 	/**
@@ -46,8 +61,9 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * If no singleton has been created, creates a singleton. If a singleton already
-	 * exists, returns the singleton.
+	 * If no singleton has been created, creates a singleton. If a singleton 
+	 * already exists, returns the singleton.
+	 * 
 	 * @return A singleton of type ApplianceStore.
 	 */
 	public static ApplianceStore instance() {
@@ -68,11 +84,21 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
+	 * Adds a new model to the appliance store.
 	 * 
-	 * @param request
-	 * @return
+	 * @param request Request contains appliance code appliance code, brand name,
+	 * model name, price, quantity and possible more given the type of the 
+	 * appliance.
+	 * @param type int pertaining to appliance code.
+	 * @param brandName String brand name of the appliance.
+	 * @param modelName String model name of the appliance.
+	 * @param price double price of the appliance.
+	 * @param quantity int number of the appliance in-stock.
+	 * @return Result result containing result code and if successful the new 
+	 * appliance details.
 	 */
 	public Result addModel(Request request) {
+		// Create result object that will be returned.
 		Result result = new Result();
 		int type = request.getApplianceType();
 		Appliance appliance = ApplianceFactory.createAppliance(type, request);
@@ -86,85 +112,130 @@ public class ApplianceStore implements Serializable {
 	}
 
 	/**
-	 * Organizes the operations for adding a member.
+	 * Adds a new customer to the appliance store.
 	 * 
-	 * @param customer name
-	 * @param customer address
-	 * @param customer phone number
-	 * @return the Customer objected created
+	 * @param request Request contains name, address, and phone number.
+	 * @param customer String name of the customer.
+	 * @param customer String address of the customer.
+	 * @param customer String phone number of the customer.
+	 * @return Result result containing result code and 
 	 */
 	public Result addCustomer(Request request) {
+		// Create result object that will be returned.
 		Result result = new Result();
-		Customer customer = new Customer(request.getCustomerName(), request.getCustomerAddress(),
-				request.getCustomerPhoneNumber());
+
+		// Create the new customer object.
+		Customer customer = new Customer(request.getCustomerName(), 
+			request.getCustomerAddress(), request.getCustomerPhoneNumber());
+
+		// Attempt to insert the customer into customers collection.
 		if (customers.insertCustomer(customer)) {
 			result.setResultCode(Result.OPERATION_SUCCESSFUL);
 			result.setCustomerFields(customer);
-			return result;
 		}
-		result.setResultCode(Result.OPERATION_FAILED);
+		// If insertion failed...
+		else {
+			result.setResultCode(Result.OPERATION_FAILED);
+		}
+		// Return the result object.
 		return result;
 	}
 
 	/**
-	 * Adds inventory for a single model
+	 * Adds inventory for a single model.
 	 * 
-	 * @param request
-	 * @return result object
+	 * @param request Request contains appliance ID.
+	 * @param String applianceId the appliance's ID.
+	 * @return Result result containing result code and appliance 
 	 */
 	public Result addInventory(Request request) {
+		// Create result object that will be returned.
 		Result result = new Result();
-		models.search(request.getApplianceId()).setQuantity(request.getQuantity());
+
+		// Check if appliance exist in the system.
 		Appliance appliance = models.search(request.getApplianceId());
-		result.setApplianceFields(appliance);
-		result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		// If the appliance does not exist in the system...
+		if (appliance == null) {
+			// Set return object field.
+			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
+		}
+		// If the appliance does exist in the system...
+		else {
+			// Set new quantity appliance model quantity.
+			appliance.setQuantity(request.getQuantity() + appliance.getQuantity());
+			// Set return object fields.
+			result.setApplianceFields(appliance);
+			result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		}
+		// Return the result object.
 		return result;
 	}
 
 	/**
-	 * Fulfills back orders, given the inventory has enough to do so. If not, it will
-	 * return a result code stating that is not able to do so.
+	 * Fulfill a back order, given correct circumstances.
 	 * 
-	 * @param request
-	 * @return
+	 * @param request Request contains back order ID.
+	 * @param String backOrderId the back order ID.
+	 * @return Result result containing result code and if successful transaction
+	 * information, back order information, customer information and appliance
+	 * information.
 	 */
 	public Result fulfillBackOrder(Request request) {
+		// Create result object that will be returned.
 		Result result = new Result();
+
+		// Check if the back order exist in the system.
 		BackOrder backOrder = backOrders.search(request.getBackOrderId());
 		if (backOrder == null) {
 			result.setResultCode(Result.BACK_ORDER_NOT_FOUND);
-		} else {
+		} 
+		
+		// If the back order exist in the system....
+		else {
+			// Check if there is enough inventory in the appliance store to fulfill back order.
 			if (backOrder.getQuantity() > models.search(backOrder.getAppliance().getId()).getQuantity()) {
 				result.setResultCode(Result.NOT_A_VALID_QUANTITY);
-			} else {
-				SaleTransaction transaction = new SaleTransaction(backOrder.getCustomer(), backOrder.getAppliance(),
-						backOrder.getQuantity());
+			} 
+			// If there is enough inventory in the appliance store to fulfill back order...
+			else {
+				SaleTransaction transaction = new SaleTransaction(backOrder.getCustomer(), 
+					backOrder.getAppliance(), backOrder.getQuantity());
+				
+				// Check if transaction can be added to customer.
 				if (backOrder.getCustomer().addSaleTransaction(transaction)) {
+					// Remove the back order from the back order list.
+					backOrders.removeBackOrder(backOrder);
+					// Compute new quantity of appliance model.
+					int newQuantity = models.search(backOrder.getAppliance().getId()).getQuantity() 
+						- backOrder.getQuantity();
+					// Locate actual appliance object.
+					Appliance appliance = models.search(backOrder.getAppliance().getId());
+					// Set new appliance quantity.
+					appliance.setQuantity(newQuantity);
+					
+					// Set return object fields.
+					result.setSaleTransactionFields(transaction);
 					result.setBackOrderFields(backOrder);
 					result.setCustomerFields(backOrder.getCustomer());
-					backOrders.removeBackOrder(backOrder);
-					result.setSaleTransactionFields(transaction);
-					int newQuantity = models.search(backOrder.getAppliance().getId()).getQuantity()
-							- backOrder.getQuantity();
-					models.search(backOrder.getAppliance().getId()).setQuantity(newQuantity);
-					Appliance appliance = models.search(backOrder.getAppliance().getId());
 					result.setApplianceFields(appliance);
 					result.setResultCode(Result.OPERATION_SUCCESSFUL);
 				}
 			}
 		}
+		// Return the result object.
 		return result;
 	}
 
 	/**
-	 * Enrolls a customer into a repair plan. If the customer successfully enrolls,
-	 * it returns a success operation code, and if not, it returns a failed
-	 * operation code.
+	 * Enrolls a customer into a repair plan. 
 	 * 
-	 * @param request
-	 * @return
+	 * @param request Request contains customer ID and appliance ID.
+	 * @param String customerId the customer's ID.
+	 * @param String applianceId the appliance's ID.
+	 * @return Result result containing result code.
 	 */
 	public Result enrollRepairPlan(Request request) {
+		// Create result object that will be returned.
 		Result result = new Result();
 		
 		// Check if customer exist in system.
@@ -198,10 +269,11 @@ public class ApplianceStore implements Serializable {
 				return result;
 			}
 		}
-		// If customer has NOT purchased the appliance...
+		// If customer has NOT purchased the appliance, set the proper fields.
 		result.setCustomerFields(customer);
 		result.setApplianceFields(appliance);
 		result.setResultCode(Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE); 
+		// Return the result object.
 		return result;
 	}
 
@@ -264,6 +336,7 @@ public class ApplianceStore implements Serializable {
 	 * Retrieve an iterator for the appliances requested. A category is chosen 
 	 * and passed as a parameter.
 	 * 
+	 * @param request Request contains int pertaining to appliance type.
 	 * @param applianceType int appliance category code (1-7).
 	 * @return Iterator<Result> iterator of appliances.
 	 */
@@ -301,6 +374,8 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Determines if a customer exist with a given customer id.
+	 * 
+	 * @param request Request contains customer id.
 	 * @param customerId String customer id.
 	 * @return Result a code representing the outcome AND customer information.
 	 */

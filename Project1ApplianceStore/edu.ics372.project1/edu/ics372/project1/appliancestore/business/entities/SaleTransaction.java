@@ -21,6 +21,10 @@ public class SaleTransaction extends Transaction {
         this.setTotal(appliance.getPrice() * quantity);
     }
 
+    /**
+     * Generates the next sales transaction ID.
+     * @return transactionId String the next sales transaction ID.
+     */
     public String generateId() {
         return SALES_TRANSACTION + getNextId();
     }

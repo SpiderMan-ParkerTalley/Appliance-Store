@@ -5,6 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+/**
+ * Back order class for creating back order objects.
+ * 
+ * @author Parker Talley.
+ */
 public class BackOrder implements Serializable {
     private static final long serialVersionUID = 1L;
     private static final String BACK_ORDER_STRING = "BCKORD";
@@ -30,10 +35,11 @@ public class BackOrder implements Serializable {
     private int quantity;
 
     /**
+     * Constructor for back orders.
      * 
-     * @param customer Customer 
-     * @param appliance Appliance
-     * @param quantity int 
+     * @param customer Customer the customer placing the back order.
+     * @param appliance Appliance the appliance on back order.
+     * @param quantity int the number of appliance(s) on back order.
      */
     public BackOrder(Customer customer, Appliance appliance, int quantity) {
         this.setCustomer(customer);
@@ -71,13 +77,15 @@ public class BackOrder implements Serializable {
     public Appliance getAppliance() {
         return appliance;
     }
-    	    /**
+    
+    /**
      * Saves the static idCounter.
      * @param output
      */
     public static void save(ObjectOutputStream output) throws IOException {
         output.writeObject(idCounter);
     }
+    
     /**
     * Retrieves the static id counter.
     */

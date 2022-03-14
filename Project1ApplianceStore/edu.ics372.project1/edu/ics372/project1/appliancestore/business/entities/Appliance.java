@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 /*
  * @author Cristian Zendejas
- * The  abstract parent class for all appliances within the store.
+ * The abstract parent class for all appliances within the store.
  */
 public abstract class Appliance implements Serializable {
 	protected static int nextId = 0;

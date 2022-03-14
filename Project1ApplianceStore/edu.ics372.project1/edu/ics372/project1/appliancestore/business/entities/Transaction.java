@@ -8,6 +8,11 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * A class for creating transaction objects.
+ * 
+ * @author Parker Talley.
+ */
 public abstract class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
     private static int nextId = 1;
@@ -78,8 +83,8 @@ public abstract class Transaction implements Serializable {
     }
 
     /**
-     * 
-     * @return
+     * Retrieves the next transaction ID.
+     * @return nextId int the next transaction ID.
      */
     public int getNextId() {
         return ++nextId;
@@ -103,6 +108,7 @@ public abstract class Transaction implements Serializable {
     public static void save(ObjectOutputStream output) throws IOException {
         output.writeObject(nextId);
     }
+
     /**
     * Retrieves the static fields.
     */
