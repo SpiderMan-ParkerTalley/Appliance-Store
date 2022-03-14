@@ -33,7 +33,7 @@ public abstract class DataTransfer {
 	
 
 	public DataTransfer(){
-		reset();
+		//TODO reset();
 	}
 
 
@@ -214,25 +214,27 @@ public abstract class DataTransfer {
 	/**
 	 * Resets all fields to empty so there is no overlap or 
 	 */
+
 	public void reset() {
 		applianceID = "No such appliance ID";
 		brandName = "No such appliance brand name";
 		modelName = "No such appliance ID";
-		price = -1;
-		quantity = -1;
+		price = 0;
+		quantity = 0;
 		customerId = "No such customer ID";
 		customerName = "No such customer name";
 		customerAddress = "No such customer address";
 		customerPhoneNumber = "No such customer phone number";
 		timeStamp = "No such time stamp";
-		transactionType = -1;
-		applianceType = -1;
+		transactionType = 0;
+		applianceType = 0;
 		customerHasRepairPlan = false;
 		backOrderId = "No such back order ID";
-		transactionQuantity = -1;
-		amountCharged = -1;
+		transactionQuantity = 0;
+		amountCharged = 0;
 		Request.instance().reset();
 	}
+
 
 
 

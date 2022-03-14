@@ -464,6 +464,7 @@ public class ApplianceStore implements Serializable {
 	/**
 	 * Charges all repair plans for all customers. 
 	 */
+	//TODO fix
 	public Result chargeRepairPlans() {
 		Result result = new Result();
 		Double amountCharged = 0.0;
