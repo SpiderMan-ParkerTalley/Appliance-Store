@@ -301,8 +301,8 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Determines if a customer exist with a given customer id.
-	 * @param customerId String - customer id.
-	 * @return Result - a code representing the outcome AND customer information.
+	 * @param customerId String customer id.
+	 * @return Result a code representing the outcome AND customer information.
 	 */
 	public Result searchCustomer(Request request) {
 		Result result = new Result();
@@ -318,8 +318,8 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Searches for a given back order.
-	 * @param backOrderId String - the back order id.
-	 * @return Result - a code representing the outcome AND back order information.
+	 * @param backOrderId String the back order id.
+	 * @return Result a code representing the outcome AND back order information.
 	 */
 	public Result searchBackOrder(Request request) {
 		Result result = new Result();
@@ -412,7 +412,7 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Retrieves a safe iterator for all customers that have a repair plan.
-	 * @return Iterator<Result> - iterator of customers.
+	 * @return Iterator<Result> iterator of customers.
 	 */
 	public Iterator<Result> getAllRepairPlanCustomers() {
 		return new SafeCustomerIterator(customers.getAllCustomersInRepairPlan().iterator());
@@ -420,14 +420,14 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Computes the total revenue from transactions and repair plans.
-	 * @return Result - result containing total revenues.
+	 * @return Result result containing total revenues.
 	 */
 	public Result getTotalRevenue() {
 		double totalRevenueFromTransactions = 0;
 		double totalRevenueFromRepairPlans = 0;
 		for (Iterator<Customer> customerIterator = customers.iterator(); customerIterator.hasNext();) {
 			Customer customer = customerIterator.next();
-			totalRevenueFromTransactions += customer.getTransactionTotalCost();
+			totalRevenueFromTransactions += customer.getSalesTotalCost();
 			totalRevenueFromRepairPlans += customer.getRepairPlansTotalCost();
 		}
 		Result result = new Result();

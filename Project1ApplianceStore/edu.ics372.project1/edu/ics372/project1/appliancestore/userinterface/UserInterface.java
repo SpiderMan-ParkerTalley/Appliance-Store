@@ -6,9 +6,6 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import edu.ics372.project1.appliancestore.business.entities.Appliance;
-import edu.ics372.project1.appliancestore.business.entities.BackOrder;
-import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
