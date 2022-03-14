@@ -52,6 +52,12 @@ public class Request extends DataTransfer {
         this.maxHeatingOutput = maxHeatingOutput;
     } 
 
+    public void reset() {
+        repairPlanAmount = -1;
+        capacity = -1;
+        maxHeatingOutput = -1;
+	}
+
     
 
 }
