@@ -3,8 +3,6 @@ package edu.ics372.project1.appliancestore.userinterface;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
