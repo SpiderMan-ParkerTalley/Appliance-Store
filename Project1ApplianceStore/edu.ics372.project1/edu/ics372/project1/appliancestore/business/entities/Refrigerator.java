@@ -1,9 +1,20 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+/*
+ * @author Cristian Zendejas
+ * The refrigerator subclass for Appliance.
+ */
 public class Refrigerator extends Appliance{
+	//Creates a unique identifier for this subclass
 	private static final String REFRIGERATOR_STRING = "REFR";
+	//Stores the numerical value for the capacity of the refrigerator.
 	private double capacity;
 	
+	
+	/*
+	 * Creates a refrigerator object
+	 * @return Refrigerator object
+	 */
 	public Refrigerator(String brandName, String model, double price, int quantity, double capacity) {
 		super(brandName, model, price, quantity);
 		this.capacity = capacity;

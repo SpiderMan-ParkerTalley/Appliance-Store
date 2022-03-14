@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 
 /*
  * @author Cristian Zendejas
- * The parent class for all appliances within the store.
+ * The  abstract parent class for all appliances within the store.
  */
 public abstract class Appliance implements Serializable {
 	protected static int nextId = 0;
@@ -72,7 +72,7 @@ public abstract class Appliance implements Serializable {
 	/**
 	 * Generates a generic string for the appliance.
 	 * Will be overridden in each subclass to keep track of the id.
-	 * @return String a generated ID.
+	 * @return a generated ID.
 	 */
 	public String createId() {
 		return "";
