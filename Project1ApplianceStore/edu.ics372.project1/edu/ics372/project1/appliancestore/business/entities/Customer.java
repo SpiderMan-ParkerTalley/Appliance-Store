@@ -15,6 +15,10 @@ import java.util.List;
  */
 public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 
+     */
     private static final String CUSTOMER_STRING = "C";
     // Fields
     /**
@@ -61,7 +65,8 @@ public class Customer implements Serializable {
     /**
      * A list storing all the customer's active repair plans.
      */
-    private List<RepairPlanTransaction> repairPlanTransactions = new LinkedList<RepairPlanTransaction>();
+    private List<RepairPlanTransaction> repairPlanTransactions = 
+        new LinkedList<RepairPlanTransaction>();
 
     // Constructor
     public Customer(String name, String address, String phoneNumber) {
@@ -74,8 +79,9 @@ public class Customer implements Serializable {
     /**
      * Creates and adds a sale transaction to customer.
      * 
-     * @param SaleTransaction transaction.
-     * @return boolean true if the transaction was successfully added.
+     * @param transaction SaleTransaction being added to customer..
+     * @return boolean true if the sales transaction was successfully added, 
+     * false if the sales transaction was not able to be added..
      */
     public boolean addSaleTransaction(SaleTransaction transaction) {
         saleTransactions.add(transaction);
@@ -84,7 +90,9 @@ public class Customer implements Serializable {
 
     /**
      * Creates and adds a repair plan to customer.
+     * 
      * @param appliance Appliance appliance to be associated with repair plan.
+     * @return boolean true if the repair plan was added, false otherwise.
      */
     public boolean addRepairPlan(ApplianceWithRepairPlan appliance) {
         if(appliance.eligibleForRepairPlan()) {
@@ -121,7 +129,8 @@ public class Customer implements Serializable {
             // Computes total amount charged in repair plans.
             amountCharged += repairPlanTransaction.getTotal();
         }
-        return amountCharged ;
+        // Returns the amount charged to the customer.
+        return amountCharged;
     }
 
     /**
@@ -243,7 +252,7 @@ public class Customer implements Serializable {
     }
 
     /**
-     * Saves the static idCounter.
+     * Saves the static fields in Customer class.
      * 
      * @param output ObjectOutputStream object.
      */
@@ -251,7 +260,7 @@ public class Customer implements Serializable {
         output.writeObject(nextId);
     }
     /**
-    * Retrieves the static id counter.
+    * Retrieves the static fields in Customer class.
     */
     public static void retrieve(ObjectInputStream input) throws IOException, 
         ClassNotFoundException {

@@ -1,5 +1,10 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+/**
+ * A class for creating sale transaction objects.
+ * 
+ * @author Parker Talley.
+ */
 public class SaleTransaction extends Transaction {
     private static final String SALES_TRANSACTION = "SALE-TRAN";
     
@@ -13,6 +18,12 @@ public class SaleTransaction extends Transaction {
      */
     private Appliance appliance;
 
+    /**
+     * 
+     * @param customer Customer 
+     * @param appliance Appliance
+     * @param quantity int
+     */
     public SaleTransaction(Customer customer, Appliance appliance, int quantity) {
         super(customer);
         this.appliance = appliance;
@@ -23,7 +34,7 @@ public class SaleTransaction extends Transaction {
 
     /**
      * Generates the next sales transaction ID.
-     * @return transactionId String the next sales transaction ID.
+     * @return String the next sales transaction ID.
      */
     public String generateId() {
         return SALES_TRANSACTION + getNextId();
