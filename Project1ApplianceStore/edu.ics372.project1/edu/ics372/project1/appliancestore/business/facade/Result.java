@@ -93,5 +93,6 @@ public class Result extends DataTransfer {
 		setHasRepairPlan(next.getCustomer().hasRepairPlan());
 	}
 
+
 }
 

@@ -332,7 +332,7 @@ public class UserInterface {
 			default:
 				System.out.println("Could not process order.");
 			}
-		} while (yesOrNo("Purchase more models?")); //TODO Does the use case specifically ask for this?
+		} while (yesOrNo("Purchase more models?")); 
 	}
 
 	/**
@@ -475,7 +475,7 @@ public class UserInterface {
 	}
 	/**
 	 * Allows the user to charge all active repair plans to the appropriate customers. Updates all customer accounts
-	 * and displays a message when completed. //TODO finish
+	 * and displays a message when completed.
 	 */
 	public void chargeAllRepairPlans() {
 		Result result = applianceStore.chargeRepairPlans();
@@ -501,7 +501,6 @@ public class UserInterface {
 			System.out.println("7 for all");
 			Request.instance().setApplianceType(getInteger("Enter appliance type number"));
 			Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
-			//TODO Can we add a label of the Appliance Type being printed here? Might need a new field in Result
 			System.out.println("ApplianceID | Model Name | Brand Name | Price | Quantity ");
 			System.out.println("---------------------------------------------------------");
 			while (resultIterator.hasNext()){

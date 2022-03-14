@@ -30,21 +30,10 @@ public abstract class DataTransfer {
 	private String backOrderId;
     private int transactionQuantity;
 	private double amountCharged;
-	private double repairPlanCost;
 	
 
 	public DataTransfer(){
 		reset();
-	}
-
-
-	public double getRepairPlanCost() {
-		return repairPlanCost;
-	}
-
-
-	public void setRepairPlanCost(double repairPlanCost) {
-		this.repairPlanCost = repairPlanCost;
 	}
 
 
@@ -204,7 +193,6 @@ public abstract class DataTransfer {
 	public void setRepairPlanTransactionFields(RepairPlanTransaction transaction) {
 		customerId = transaction.getCustomer().getId();
 		applianceID = transaction.getAppliance().getId();
-		setRepairPlanCost(transaction.getTotal());
 	}
 
 	public void setApplianceFields(Appliance appliance){
@@ -223,17 +211,27 @@ public abstract class DataTransfer {
 		this.customerHasRepairPlan = customerHasRepairPlan;
 	}
 
+	/**
+	 * Resets all fields to empty so there is no overlap or 
+	 */
 	public void reset() {
-		applianceID = "Invalid appliance id";
-		modelName = "No such model";
-		price = 0;
-		timeStamp = "Not applicable (not processed)";
-		brandName = "No such brand";
-		customerId = "Invalid customer id";
-		customerName = "No such customer";
-		customerPhoneNumber = "No such customer";
-		customerAddress = "No such customer";
-		quantity = 0;
+		applianceID = "No such appliance ID";
+		brandName = "No such appliance brand name";
+		modelName = "No such appliance ID";
+		price = -1;
+		quantity = -1;
+		customerId = "No such customer ID";
+		customerName = "No such customer name";
+		customerAddress = "No such customer address";
+		customerPhoneNumber = "No such customer phone number";
+		timeStamp = "No such time stamp";
+		transactionType = -1;
+		applianceType = -1;
+		customerHasRepairPlan = false;
+		backOrderId = "No such back order ID";
+		transactionQuantity = -1;
+		amountCharged = -1;
+		Request.instance().reset();
 	}
 
 
