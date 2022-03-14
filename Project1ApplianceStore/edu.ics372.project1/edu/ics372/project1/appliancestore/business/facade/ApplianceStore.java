@@ -12,6 +12,7 @@ import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
+import edu.ics372.project1.appliancestore.business.entities.SaleTransaction;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
 import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 import edu.ics372.project1.appliancestore.business.iterators.SafeApplianceIterator;
@@ -135,7 +136,7 @@ public class ApplianceStore implements Serializable {
 			if (backOrder.getQuantity() > models.search(backOrder.getAppliance().getId()).getQuantity()) {
 				result.setResultCode(Result.NOT_A_VALID_QUANTITY);
 			} else {
-				Transaction transaction = new Transaction(backOrder.getCustomer(), backOrder.getAppliance(),
+				Transaction transaction = new SaleTransaction(backOrder.getCustomer(), backOrder.getAppliance(),
 						backOrder.getQuantity());
 				if (backOrder.getCustomer().addTransaction(transaction)) {
 					result.setBackOrderFields(backOrder);
@@ -369,12 +370,12 @@ public class ApplianceStore implements Serializable {
         not be fulfilled. This amount is used to create the backOrder.
         */
         backOrdersNeeded = appliance.purchase(request.getQuantity());
-		Transaction transaction = new Transaction(customer, appliance, Request.instance().getQuantity() - backOrdersNeeded);
+		Transaction transaction = new SaleTransaction(customer, appliance, Request.instance().getQuantity() - backOrdersNeeded);
         customer.addTransaction(transaction); 
 		result.setCustomerFields(customer);
 		result.setApplianceFields(appliance);
 		result.setQuantity(backOrdersNeeded);  //Note: the quantity being returned is the backOrders needed
-		result.setTimeStamp(transaction.getStringStamp());
+		result.setTimeStamp(transaction.getStringTimeStamp());
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 
         if (backOrdersNeeded > 0) {
@@ -448,7 +449,7 @@ public class ApplianceStore implements Serializable {
 	 * Retrieves a safe iterator for back orders.
 	 * @return Iterator<Result> - iterator of back orders.
 	 */
-	public static Iterator<Result> getAllBackOrders() {
+	public Iterator<Result> getAllBackOrders() {
 		return new SafeBackOrderIterator(backOrders.iterator());
 	}
 

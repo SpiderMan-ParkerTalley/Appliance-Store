@@ -71,11 +71,10 @@ public class Customer implements Serializable {
      * Creates and adds a transaction to customer.
      * @param appliance Appliance appliance 
      * @param quantity int quantity of appliance being purchases.
-     * @return boolean true if the transaction was sucessfully added.
+     * @return boolean true if the transaction was successfully added.
      */
     public boolean addTransaction(Transaction transaction) {
         transactions.add(transaction);
-        transactionTotalCost += transaction.getAppliance().getPrice() * transaction.getQuantity();
         return true;
     }
 
@@ -83,7 +82,7 @@ public class Customer implements Serializable {
      * Creates and adds a repair plan to customer.
      * @param appliance Appliance appliance to be associated with repair plan.
      */
-    public boolean addRepairPlan(Appliance appliance) {
+    public boolean addRepairPlan(ApplianceWithRepairPlan appliance) {
         if(appliance.eligibleForRepairPlan()) {
             repairPlans.add(new RepairPlan(this, appliance));
             return true;
@@ -106,12 +105,18 @@ public class Customer implements Serializable {
      * Charges the customer for all active repair plans.
      */
     public double chargeRepairPlans() {
-        double amountCharged = 0;
+        // Stores the total amount changed for repair plans.
+        double amountCharged = 0.0;
         for(Iterator<RepairPlan> iterator = repairPlans.iterator(); iterator.hasNext();) {
             RepairPlan repairPlan = iterator.next();
-            repairPlansTotalCost += repairPlan.getCost();
-            // TODO: Might need to add the repair plan as a transaction. Not sure..
+            // Creates new repair plan transaction.
+            RepairPlanTransaction repairPlanTransaction = new RepairPlanTransaction(this, repairPlan.getAppliance());
+            // Adds repair plan transaction to customer's transactions.
+            transactions.add(repairPlanTransaction);
+            // Computes total amount charged in repair plans.
+            amountCharged += repairPlanTransaction.getTotal();
         }
+        return amountCharged ;
     }
 
     /**

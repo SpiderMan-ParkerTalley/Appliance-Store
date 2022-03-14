@@ -1,6 +1,6 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
-public class Dryer extends ApplianceWithRepairPlans {
+public class Dryer extends ApplianceWithRepairPlan {
 	private static final String DRYER_STRING = "DRY";
 //	private double repairPlanAmount;
 

@@ -1,6 +1,6 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
-public class Washer extends ApplianceWithRepairPlans {
+public class Washer extends ApplianceWithRepairPlan {
 	private static final String WASHER_STRING = "WASH";
 	
 //	private double repairPlanAmount;

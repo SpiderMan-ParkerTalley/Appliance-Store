@@ -1,12 +1,11 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
-public abstract class ApplianceWithRepairPlans extends Appliance {
+public abstract class ApplianceWithRepairPlan extends Appliance {
 	private double repairPlanAmount;
 
-	public ApplianceWithRepairPlans(String brandName, String model, double price, int quantity, double repairPlanAmount) {
+	public ApplianceWithRepairPlan(String brandName, String model, double price, int quantity, double repairPlanAmount) {
 		super(brandName, model, price, quantity);
 		this.repairPlanAmount = repairPlanAmount;
-		
 	}
 
 	public double getRepairPlanAmount() {
