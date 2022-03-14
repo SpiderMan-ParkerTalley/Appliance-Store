@@ -79,7 +79,6 @@ public class Customer implements Serializable {
 
     /**
      * Creates and adds a repair plan to customer.
-     * 
      * @param appliance Appliance appliance to be associated with repair plan.
      */
     public boolean addRepairPlan(ApplianceWithRepairPlan appliance) {
@@ -117,7 +116,7 @@ public class Customer implements Serializable {
             // Computes total amount charged in repair plans.
             amountCharged += repairPlanTransaction.getTotal();
         }
-        return amountCharged;
+        return amountCharged ;
     }
 
     /**
