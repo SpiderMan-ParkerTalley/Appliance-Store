@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class BackOrder implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final String BACKORDER_STRING = "BCKORD";
+    private static final String BACK_ORDER_STRING = "BCKORD";
     private static int idCounter = 0;
 
     /**
@@ -39,7 +39,7 @@ public class BackOrder implements Serializable {
         this.setCustomer(customer);
         this.setAppliance(appliance);
         this.setQuantity(quantity);
-        id = BACKORDER_STRING + idCounter++;
+        id = BACK_ORDER_STRING + idCounter++;
     }
 
     // Setters

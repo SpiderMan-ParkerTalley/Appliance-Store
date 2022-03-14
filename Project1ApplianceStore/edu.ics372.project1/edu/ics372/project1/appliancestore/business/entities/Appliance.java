@@ -74,9 +74,7 @@ public abstract class Appliance implements Serializable {
 	 * Will be overridden in each subclass to keep track of the id.
 	 * @return a generated ID.
 	 */
-	public String createId() {
-		return "";
-	}
+	public abstract String createId();
 
 	// Setters
 	public void setId(String applianceId) {
@@ -117,8 +115,7 @@ public abstract class Appliance implements Serializable {
 	}
 	
 	public int getNextId() {
-		nextId++;
-		return nextId;
+		return ++nextId;
 	}
 
 	public String getBrandName() {

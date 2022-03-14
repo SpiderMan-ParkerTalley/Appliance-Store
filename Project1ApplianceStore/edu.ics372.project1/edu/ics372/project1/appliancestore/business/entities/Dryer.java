@@ -17,7 +17,7 @@ public class Dryer extends ApplianceWithRepairPlans {
 		this.setEligibleForRepairPlan(true);
 		this.setEligibleForBackOrder(true);
 	}
-	
+
 	@Override
 	public String createId() {
 		return DRYER_STRING + super.getNextId();

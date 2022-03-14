@@ -17,10 +17,10 @@ public class Washer extends ApplianceWithRepairPlans {
 		this.setEligibleForRepairPlan(true);
 		this.setEligibleForBackOrder(true);
 	}
-	
+
 	@Override
 	public String createId() {
 		return WASHER_STRING + super.getNextId();
 	}
-	
+
 }
