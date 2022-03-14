@@ -156,8 +156,6 @@ public class UserInterface {
 	 * @return The primitive double value
 	 */
 	private double getDouble(String prompt) {
-		final DecimalFormat df = new DecimalFormat("0.00");
-		df.setRoundingMode(RoundingMode.UP);
 		do {
 			try {
 				String item = getToken(prompt);
@@ -165,7 +163,6 @@ public class UserInterface {
 				if (number.doubleValue() <= 0) {
 					System.out.println("Please enter a positive value.");
 				} else {
-				number = Double.valueOf(df.format(number.doubleValue()));
 				return number.doubleValue();
 				}
 			} catch (NumberFormatException nfe) {
@@ -474,8 +471,6 @@ public class UserInterface {
 			"enrolled in repair plan for " + Request.instance().getApplianceId());
 		}
 	}
-
-
 	/**
 	 * Allows the user to charge all active repair plans to the appropriate customers. Updates all customer accounts
 	 * and displays a message when completed.
@@ -499,11 +494,14 @@ public class UserInterface {
 			System.out.println("7 for all");
 			Request.instance().setApplianceType(getInteger("Enter appliance type number"));
 			Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
+			//TODO Can we add a label of the Appliance Type being printed here? Might need a new field in Result
+			System.out.println("ApplianceID | Model Name | Brand Name | Price | Quantity ");
+			System.out.println("---------------------------------------------------------");
 			while (resultIterator.hasNext()){
 				Result result = resultIterator.next();
-				System.out.println(result.getApplianceId() + " " + 
-					result.getModelName() + " " + result.getBrandName()
-					+ " " + result.getPrice() + " " + result.getQuantity());	
+				System.out.printf("%s | %s | %s | $%,.2f | %d\n", result.getApplianceId(),
+									result.getModelName(),result.getBrandName(),
+									result.getPrice(),result.getQuantity());	
 			}
 		} while (yesOrNo("List another type of appliance models?"));
 	}
@@ -512,6 +510,9 @@ public class UserInterface {
 	 */
 	public void listAllRepairPlanCustomers() {
 		Iterator<Result> resultIterator =  applianceStore.getAllRepairPlanCustomers();
+		System.out.println("Customers currently enrolled in repair plans");
+		System.out.println("Name | Address | Phone | Has Repair Plan?");
+		System.out.println("------------------------------------------");
 		while(resultIterator.hasNext()) {
 			Result result = resultIterator.next();
 			System.out.println(result.getCustomerName() + " | "
@@ -526,8 +527,7 @@ public class UserInterface {
 	public void listCustomers() {
 		Iterator<Result> resultIterator = applianceStore.getAllCustomers();
 		System.out.println("Name | Address | Phone | Repair Plan Status");
-		System.out.println("----------------------------------------------------" +
-							"------------------------------------");
+		System.out.println("-----------------------------------------------------");
 		while (resultIterator.hasNext()) {
 			Result result = resultIterator.next();
 			System.out.println(result.getCustomerName() + " | "
@@ -543,9 +543,8 @@ public class UserInterface {
 	 */
 	public void printAllBackOrders() {
 		Iterator<Result> iterator = applianceStore.getAllBackOrders();
-		System.out.println("Back Order ID | Appliance ID | Customer ID| Quantity");
-		System.out.println("----------------------------------------------------" +
-							"------------------------------------");
+		System.out.println("Back Order ID | Appliance ID | Customer ID | Quantity");
+		System.out.println("-----------------------------------------------------");
 		while(iterator.hasNext()) {
 			Result result = iterator.next();
 			System.out.println(result.getBackOrderId() + " | " + result.getApplianceId() + " | " + result.getCustomerId()
