@@ -664,11 +664,6 @@ public class AutomatedTester {
 		}
 	}
 
-	// Use-case 14 - Save data to disk. Sharon
-	// TODO: Save data to disk test. Sharon
-	public void testSaveDataToDisk() {
-
-	}
 
 	/**
 	 * All tests to run here.
