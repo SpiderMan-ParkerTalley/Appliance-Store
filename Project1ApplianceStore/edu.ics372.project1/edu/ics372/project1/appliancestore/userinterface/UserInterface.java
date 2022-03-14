@@ -225,7 +225,7 @@ public class UserInterface {
 		final int MAXIMUM_MENU_INPUT = 6;
 		modelSubMenu();
 		while (!goodInput) {
-			Request.instance().setApplianceType(getInteger("Enter appliance type number: "));  // TODO: GUARD AGAINST BAD INPUT
+			Request.instance().setApplianceType(getInteger("Enter appliance type number: "));  
 			if (Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT || Request.instance().getApplianceType() < MINIMUM_MENU_INPUT) {
 				System.out.println("This is not a valid menu selection. Please select from the following options.");
 				modelSubMenu();
@@ -471,11 +471,16 @@ public class UserInterface {
 	}
 	/**
 	 * Allows the user to charge all active repair plans to the appropriate customers. Updates all customer accounts
-	 * and displays a message when completed.
+	 * and displays a message when completed. //TODO finish
 	 */
 	public void chargeAllRepairPlans() {
-		applianceStore.chargeRepairPlans();
-		System.out.println("All active repair plans have been charged"); //TODO How do we make sure this is true?
+		Result result = applianceStore.chargeRepairPlans();
+
+		if(result.getResultCode() == Result.OPERATION_FAILED) {
+			System.out.println("Error in charging repair plans");
+		} else if (result.getResultCode() == Result.OPERATION_SUCCESSFUL){ 
+			System.out.println("Repair plans have been charged.");
+		}
 	}
 	/**
 	 * Lists all appliances or a specific type of appliance. It lists each item with its id, brand name, model name, price,

@@ -353,18 +353,10 @@ public class ApplianceStore implements Serializable {
 		Result result = new Result();
         int backOrdersNeeded = 0;
         /* This block searches for the customer and appliance. It returns error codes
-        if either are not found. TODO: This is guarded in the UI. Should never return bad.
+        if either are not found. 
         */
 		Customer customer = customers.search(request.getCustomerId());
-        if(customer == null) {
-            result.setResultCode(Result.CUSTOMER_NOT_FOUND);
-            return result;
-        }
 		Appliance appliance = models.search(request.getApplianceId());
-        if(appliance == null) {
-            result.setResultCode(Result.APPLIANCE_NOT_FOUND);
-            return result;
-        }
         /*
         Here, the purchase method in the Appliance class deducts the quantity in the request
         to purchase from the actual number available. If the requested purchase amount exceeds
@@ -490,8 +482,8 @@ public class ApplianceStore implements Serializable {
 			Appliance.retrieve(input);
 			BackOrder.retrieve(input);
 			Transaction.retrieve(input);
-            input.close(); // TODO check if neccesary
-            file.close(); // TODO check if neccesary
+            input.close(); 
+            file.close(); 
 			return applianceStore;
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
