@@ -381,11 +381,15 @@ public class ApplianceStore implements Serializable {
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 
         if (backOrdersNeeded > 0) {
+			if (appliance.eligibleForBackOrder()) {
             BackOrder backOrder = new BackOrder(customer, appliance, backOrdersNeeded);
             backOrders.insertBackOrder(backOrder);
 			result.setBackOrderId(backOrder.getId());
 			result.setQuantity(backOrdersNeeded); //Note: the quantity being returned is the backOrders needed
             result.setResultCode(Result.BACK_ORDER_CREATED);
+			} else {
+				result.setResultCode(Result.PARTIAL_FULFILLMENT);
+			}
         }
 		return result;
 	}

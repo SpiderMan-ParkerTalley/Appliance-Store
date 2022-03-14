@@ -26,6 +26,7 @@ public class Result extends DataTransfer {
 	public static final int NOT_ELIGIBLE_FOR_REPAIR_PLAN = 9;
 	public static final int REPAIR_PLAN_ENROLLED = 10;
 	public static final int CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE = 11;
+	public static final int PARTIAL_FULFILLMENT = 12;
 
 	private List<Customer> customers;
 	private List<BackOrder> backOrders;

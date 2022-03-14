@@ -325,6 +325,10 @@ public class UserInterface {
 				" Back Order created with Back Order ID %s. Quantity back ordered: %d%n",
 				 result.getBackOrderId(), result.getQuantity());
 				break;
+			case Result.PARTIAL_FULFILLMENT:
+				purchaseModelSuccessfulOutput(result);
+				System.out.println("Ineligible for back order. Partial fulfillment.");
+				break;
 			default:
 				System.out.println("Could not process order.");
 			}
