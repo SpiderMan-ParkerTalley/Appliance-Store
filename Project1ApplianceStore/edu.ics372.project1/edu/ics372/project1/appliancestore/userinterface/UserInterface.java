@@ -465,12 +465,13 @@ public class UserInterface {
 		} 
 		// Customer has not been enrolled in repair plan with appliance.
 		else if (result.getResultCode() == Result.OPERATION_FAILED) {
-			System.out.println("Customer has not been enrolled in repair plan with appliance.");
+			System.out.println("Customer has not been enrolled in a repair plan with that appliance.");
 		} 
 		// Successful operation.
 		else {
-			System.out.println("Customer " + Request.instance().getCustomerAddress() + " successfully " + 
-			"enrolled in repair plan for " + Request.instance().getApplianceId());
+			System.out.println("Repair plan successfully withdrawn for customer with ID " + 
+								Request.instance().getCustomerId() + 
+								"and Appliance ID " + Request.instance().getApplianceId());
 		}
 	}
 	/**
@@ -492,14 +493,27 @@ public class UserInterface {
 	 */
 	public void listAppliances() {
 		do {
-			System.out.println("1 for washer");
-			System.out.println("2 for dryer");
-			System.out.println("3 for kitchen range");
-			System.out.println("4 for refrigerator");
-			System.out.println("5 for furnace");
-			System.out.println("6 for dishwasher");
-			System.out.println("7 for all");
-			Request.instance().setApplianceType(getInteger("Enter appliance type number"));
+			final int MINIMUM_MENU_INPUT = 1;
+			final int MAXIMUM_MENU_INPUT = 7;
+			boolean goodInput = false;
+			while(!goodInput) {
+				System.out.println("\nAppliance Types:");
+				System.out.println("1 for washer");
+				System.out.println("2 for dryer");
+				System.out.println("3 for kitchen range");
+				System.out.println("4 for refrigerator");
+				System.out.println("5 for furnace");
+				System.out.println("6 for dishwasher");
+				System.out.println("7 for all");
+				Request.instance().setApplianceType(getInteger("Enter appliance type number"));
+				if(Request.instance().getApplianceType() < MINIMUM_MENU_INPUT || 
+					Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT) {
+						System.out.println("Invalid input. Please input a number between " + 
+						MINIMUM_MENU_INPUT + " and " + MAXIMUM_MENU_INPUT + ".");
+					} else {
+						goodInput = true;
+					}
+			}
 			Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
 			System.out.println("ApplianceID | Model Name | Brand Name | Price | Quantity ");
 			System.out.println("---------------------------------------------------------");

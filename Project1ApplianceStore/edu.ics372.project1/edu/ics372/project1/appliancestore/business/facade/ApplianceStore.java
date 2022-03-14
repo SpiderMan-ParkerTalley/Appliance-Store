@@ -266,7 +266,9 @@ public class ApplianceStore implements Serializable {
 			// If customer has purchased the appliance...
 			if (transaction.getAppliance().getId().equals(appliance.getId())) {
 				customer.addRepairPlan((ApplianceWithRepairPlan) appliance);
-				result.setResultCode(Result.OPERATION_SUCCESSFUL);
+				result.setCustomerFields(customer);
+				result.setApplianceFields(appliance);
+				result.setResultCode(Result.REPAIR_PLAN_ENROLLED);
 				return result;
 			}
 		}
