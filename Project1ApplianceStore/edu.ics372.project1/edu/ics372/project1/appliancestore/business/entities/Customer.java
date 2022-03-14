@@ -82,7 +82,7 @@ public class Customer implements Serializable {
     /**
      * Creates and adds a repair plan to customer.
      * @param appliance Appliance appliance to be associated with repair plan.
-    **/
+     */
     public boolean addRepairPlan(Appliance appliance) {
         if(appliance.eligibleForRepairPlan()) {
             repairPlans.add(new RepairPlan(this, appliance));
@@ -105,7 +105,8 @@ public class Customer implements Serializable {
     /**
      * Charges the customer for all active repair plans.
      */
-    public void chargeRepairPlans() {
+    public double chargeRepairPlans() {
+        double amountCharged = 0;
         for(Iterator<RepairPlan> iterator = repairPlans.iterator(); iterator.hasNext();) {
             RepairPlan repairPlan = iterator.next();
             repairPlansTotalCost += repairPlan.getCost();
