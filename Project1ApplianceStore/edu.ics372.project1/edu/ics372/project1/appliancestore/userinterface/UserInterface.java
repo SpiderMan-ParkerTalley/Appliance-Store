@@ -3,6 +3,8 @@ package edu.ics372.project1.appliancestore.userinterface;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
@@ -123,15 +125,49 @@ public class UserInterface {
 	/**
 	 * Prompts for an integer value of a number.
 	 * Takes a string as argument, converters to Integer, then returns as int.
-	 * @param prompt The prompt displayed to the user
+	 * Guarantees a positive value.
+	 * @param prompt A String asking for input
+	 * The prompt displayed to the user
 	 * @return The primitive int value
 	 */
-	public int getNumber(String prompt) {
+	private int getInteger(String prompt) {
 		do {
 			try {
 				String item = getToken(prompt);
 				Integer number = Integer.valueOf(item);
+				if (number.intValue() <= 0) {
+					System.out.println("Please enter a positive number.");
+				} else {
 				return number.intValue();
+				}
+			} catch (NumberFormatException nfe) {
+				System.out.println("Please input a number ");
+			}
+		} while (true);
+	}
+
+		/**
+	 * Prompts for an double value of a number.
+	 * Takes a string as argument, converters to double, then returns as double.
+	 * Guarantees a number to two decimal places, rounded up.
+	 * Guarantees a positive value.
+	 * @param prompt A String asking for input
+	 * The prompt displayed to the user
+	 * @return The primitive double value
+	 */
+	private double getDouble(String prompt) {
+		final DecimalFormat df = new DecimalFormat("0.00");
+		df.setRoundingMode(RoundingMode.UP);
+		do {
+			try {
+				String item = getToken(prompt);
+				Double number = Double.valueOf(item);
+				if (number.doubleValue() <= 0) {
+					System.out.println("Please enter a positive value.");
+				} else {
+				number = Double.valueOf(df.format(number.doubleValue()));
+				return number.doubleValue();
+				}
 			} catch (NumberFormatException nfe) {
 				System.out.println("Please input a number ");
 			}
@@ -194,7 +230,7 @@ public class UserInterface {
 		final int MAXIMUM_MENU_INPUT = 6;
 		modelSubMenu();
 		while (!goodInput) {
-			Request.instance().setApplianceType(getNumber("Enter appliance type number: "));  // TODO: GUARD AGAINST BAD INPUT
+			Request.instance().setApplianceType(getInteger("Enter appliance type number: "));  // TODO: GUARD AGAINST BAD INPUT
 			if (Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT || Request.instance().getApplianceType() < MINIMUM_MENU_INPUT) {
 				System.out.println("This is not a valid menu selection. Please select from the following options.");
 				modelSubMenu();
@@ -205,15 +241,15 @@ public class UserInterface {
 		}
 
 		if(Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2){
-			Request.instance().setRepairPlanAmount(getNumber("Enter repair plan price amount: "));
+			Request.instance().setRepairPlanAmount(getDouble("Enter repair plan price amount: "));
 		} else if(Request.instance().getApplianceType() == 4){
-			Request.instance().setCapacity(getNumber("Enter capacity in liters: "));
+			Request.instance().setCapacity(getInteger("Enter capacity in liters: "));
 		} else if(Request.instance().getApplianceType() == 5) {
-			Request.instance().setMaxHeatingOutput(getNumber("Enter max heating output in BTU: "));
+			Request.instance().setMaxHeatingOutput(getInteger("Enter max heating output in BTU: "));
 		}
 		Request.instance().setModelName(getName("Enter model name: "));
 		Request.instance().setBrandName(getName("Enter brand name: "));
-		Request.instance().setPrice(getNumber("Enter price: "));
+		Request.instance().setPrice(getDouble("Enter price: "));
 		Result result = applianceStore.addModel(Request.instance());
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("Could not add appliance model.");
@@ -260,7 +296,7 @@ public class UserInterface {
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("No appliance with id " + Request.instance().getApplianceId());
 		} else {
-			Request.instance().setQuantity(getNumber("Enter quantity to add"));
+			Request.instance().setQuantity(getInteger("Enter quantity to add"));
 			result = applianceStore.addInventory(Request.instance());
 		}
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
@@ -282,7 +318,7 @@ public class UserInterface {
 			// Customer and appliance guards.
 			customerCheck(); 
 			applianceCheck();
-			Request.instance().setQuantity(getNumber("Enter amount to buy"));
+			Request.instance().setQuantity(getInteger("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
 			switch(result.getResultCode()) {
 			case Result.OPERATION_SUCCESSFUL:
@@ -461,7 +497,7 @@ public class UserInterface {
 			System.out.println("5 for furnace");
 			System.out.println("6 for dishwasher");
 			System.out.println("7 for all");
-			Request.instance().setApplianceType(getNumber("Enter appliance type number"));
+			Request.instance().setApplianceType(getInteger("Enter appliance type number"));
 			Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
 			while (resultIterator.hasNext()){
 				Result result = resultIterator.next();
