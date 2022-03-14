@@ -6,9 +6,6 @@ import java.io.InputStreamReader;
 import java.util.Iterator;
 import java.util.StringTokenizer;
 
-import edu.ics372.project1.appliancestore.business.entities.Appliance;
-import edu.ics372.project1.appliancestore.business.entities.BackOrder;
-import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
@@ -126,15 +123,46 @@ public class UserInterface {
 	/**
 	 * Prompts for an integer value of a number.
 	 * Takes a string as argument, converters to Integer, then returns as int.
-	 * @param prompt The prompt displayed to the user
+	 * Guarantees a positive value.
+	 * @param prompt A String asking for input
+	 * The prompt displayed to the user
 	 * @return The primitive int value
 	 */
-	public int getNumber(String prompt) {
+	private int getInteger(String prompt) {
 		do {
 			try {
 				String item = getToken(prompt);
 				Integer number = Integer.valueOf(item);
+				if (number.intValue() <= 0) {
+					System.out.println("Please enter a positive number.");
+				} else {
 				return number.intValue();
+				}
+			} catch (NumberFormatException nfe) {
+				System.out.println("Please input a number ");
+			}
+		} while (true);
+	}
+
+		/**
+	 * Prompts for an double value of a number.
+	 * Takes a string as argument, converters to double, then returns as double.
+	 * Guarantees a number to two decimal places, rounded up.
+	 * Guarantees a positive value.
+	 * @param prompt A String asking for input
+	 * The prompt displayed to the user
+	 * @return The primitive double value
+	 */
+	private double getDouble(String prompt) {
+		do {
+			try {
+				String item = getToken(prompt);
+				Double number = Double.valueOf(item);
+				if (number.doubleValue() <= 0) {
+					System.out.println("Please enter a positive value.");
+				} else {
+				return number.doubleValue();
+				}
 			} catch (NumberFormatException nfe) {
 				System.out.println("Please input a number ");
 			}
@@ -197,7 +225,7 @@ public class UserInterface {
 		final int MAXIMUM_MENU_INPUT = 6;
 		modelSubMenu();
 		while (!goodInput) {
-			Request.instance().setApplianceType(getNumber("Enter appliance type number: "));  // TODO: GUARD AGAINST BAD INPUT
+			Request.instance().setApplianceType(getInteger("Enter appliance type number: "));  // TODO: GUARD AGAINST BAD INPUT
 			if (Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT || Request.instance().getApplianceType() < MINIMUM_MENU_INPUT) {
 				System.out.println("This is not a valid menu selection. Please select from the following options.");
 				modelSubMenu();
@@ -208,15 +236,15 @@ public class UserInterface {
 		}
 
 		if(Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2){
-			Request.instance().setRepairPlanAmount(getNumber("Enter repair plan price amount: "));
+			Request.instance().setRepairPlanAmount(getDouble("Enter repair plan price amount: "));
 		} else if(Request.instance().getApplianceType() == 4){
-			Request.instance().setCapacity(getNumber("Enter capacity in liters: "));
+			Request.instance().setCapacity(getInteger("Enter capacity in liters: "));
 		} else if(Request.instance().getApplianceType() == 5) {
-			Request.instance().setMaxHeatingOutput(getNumber("Enter max heating output in BTU: "));
+			Request.instance().setMaxHeatingOutput(getInteger("Enter max heating output in BTU: "));
 		}
 		Request.instance().setModelName(getName("Enter model name: "));
 		Request.instance().setBrandName(getName("Enter brand name: "));
-		Request.instance().setPrice(getNumber("Enter price: "));
+		Request.instance().setPrice(getDouble("Enter price: "));
 		Result result = applianceStore.addModel(Request.instance());
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("Could not add appliance model.");
@@ -263,7 +291,7 @@ public class UserInterface {
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("No appliance with id " + Request.instance().getApplianceId());
 		} else {
-			Request.instance().setQuantity(getNumber("Enter quantity to add"));
+			Request.instance().setQuantity(getInteger("Enter quantity to add"));
 			result = applianceStore.addInventory(Request.instance());
 		}
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
@@ -285,7 +313,7 @@ public class UserInterface {
 			// Customer and appliance guards.
 			customerCheck(); 
 			applianceCheck();
-			Request.instance().setQuantity(getNumber("Enter amount to buy"));
+			Request.instance().setQuantity(getInteger("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
 			switch(result.getResultCode()) {
 			case Result.OPERATION_SUCCESSFUL:
@@ -441,8 +469,6 @@ public class UserInterface {
 			"enrolled in repair plan for " + Request.instance().getApplianceId());
 		}
 	}
-
-
 	/**
 	 * Allows the user to charge all active repair plans to the appropriate customers. Updates all customer accounts
 	 * and displays a message when completed.
@@ -464,13 +490,16 @@ public class UserInterface {
 			System.out.println("5 for furnace");
 			System.out.println("6 for dishwasher");
 			System.out.println("7 for all");
-			Request.instance().setApplianceType(getNumber("Enter appliance type number"));
+			Request.instance().setApplianceType(getInteger("Enter appliance type number"));
 			Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
+			//TODO Can we add a label of the Appliance Type being printed here? Might need a new field in Result
+			System.out.println("ApplianceID | Model Name | Brand Name | Price | Quantity ");
+			System.out.println("---------------------------------------------------------");
 			while (resultIterator.hasNext()){
 				Result result = resultIterator.next();
-				System.out.println(result.getApplianceId() + " " + 
-					result.getModelName() + " " + result.getBrandName()
-					+ " " + result.getPrice() + " " + result.getQuantity());	
+				System.out.printf("%s | %s | %s | $%,.2f | %d\n", result.getApplianceId(),
+									result.getModelName(),result.getBrandName(),
+									result.getPrice(),result.getQuantity());	
 			}
 		} while (yesOrNo("List another type of appliance models?"));
 	}
@@ -479,6 +508,9 @@ public class UserInterface {
 	 */
 	public void listAllRepairPlanCustomers() {
 		Iterator<Result> resultIterator =  applianceStore.getAllRepairPlanCustomers();
+		System.out.println("Customers currently enrolled in repair plans");
+		System.out.println("Name | Address | Phone | Has Repair Plan?");
+		System.out.println("------------------------------------------");
 		while(resultIterator.hasNext()) {
 			Result result = resultIterator.next();
 			System.out.println(result.getCustomerName() + " | "
@@ -493,8 +525,7 @@ public class UserInterface {
 	public void listCustomers() {
 		Iterator<Result> resultIterator = applianceStore.getAllCustomers();
 		System.out.println("Name | Address | Phone | Repair Plan Status");
-		System.out.println("----------------------------------------------------" +
-							"------------------------------------");
+		System.out.println("-----------------------------------------------------");
 		while (resultIterator.hasNext()) {
 			Result result = resultIterator.next();
 			System.out.println(result.getCustomerName() + " | "
@@ -510,9 +541,8 @@ public class UserInterface {
 	 */
 	public void printAllBackOrders() {
 		Iterator<Result> iterator = applianceStore.getAllBackOrders();
-		System.out.println("Back Order ID | Appliance ID | Customer ID| Quantity");
-		System.out.println("----------------------------------------------------" +
-							"------------------------------------");
+		System.out.println("Back Order ID | Appliance ID | Customer ID | Quantity");
+		System.out.println("-----------------------------------------------------");
 		while(iterator.hasNext()) {
 			Result result = iterator.next();
 			System.out.println(result.getBackOrderId() + " | " + result.getApplianceId() + " | " + result.getCustomerId()

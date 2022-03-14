@@ -8,11 +8,19 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Transaction implements Serializable {
+public abstract class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
-    private static final String TRANSACTION_STRING = "TRANS";
-    private static int idCounter = 1;
+    private static int nextId = 1;
+    
+    /**
+     * Stores the a time stamp that contain the time the transaction was created.
+     */
     private Calendar timeStamp;
+    
+    /**
+     * Stores the Transaction identification number.
+     */
+    private String id;
 
     /**
      * Stores reference to customer.
@@ -20,117 +28,86 @@ public class Transaction implements Serializable {
     private Customer customer;
 
     /**
-     * Stores reference to appliance.
+     * Stores the total of the transaction.
      */
-    private Appliance appliance;
-
-    /**
-     * Stores the number of appliance purchased.
-     */
-    private int quantity;
-
-    /**
-     * Stores transaction code.
-     */
-    private String code;
+    private double total;
 
     /**
      * Constructor for transaction.
-     * @param customer Customer customer associated with transction.
+     * @param customer Customer customer associated with transaction.
      * @param appliance Appliance appliance associated with transaction.
      * @param quantity int quantity of appliance in transaction.
      */
-    public Transaction(Customer customer, Appliance appliance, int quantity) {
+    public Transaction(Customer customer) {
         this.setCustomer(customer);
-        this.setAppliance(appliance);
-        this.setQuantity(quantity);
         this.timeStamp = new GregorianCalendar();
-        setCode(TRANSACTION_STRING + idCounter++);
     }
 
     // Setters
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public void setAppliance(Appliance appliance) {
-        this.appliance = appliance;
-    }
-
     public void setCustomer(Customer customer) {
         this.customer = customer;
-    }
-
-    // Getters
-    public String getCode() {
-        return code;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-    
-    public Appliance getAppliance() {
-        return appliance;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public Calendar getTimeStamp() {
-        return this.timeStamp;
-    }
-
-    public String getStringStamp() {
-        SimpleDateFormat formattedDate = new SimpleDateFormat("dd-MMM-yyy");
-        String stringStamp = formattedDate.format(this.timeStamp.getTime());
-        return stringStamp;
     }
 
     public void setTimeStamp(Calendar timeStamp) {
         this.timeStamp = timeStamp;
     }
 
-    /**
-     * Returns the TRANSACTION_STRING field to help with the matches method.
-     * @return TRANSACTION_STRING field as a String
-     */
-    public String getTransactionString() {
-        return TRANSACTION_STRING;
+    public void setId(String id) {
+        this.id = id;
     }
-    /**
-     * Tests if the classes are the same by testing the static TRANSACTION_STRING
-     * field. If they are the same, returns true. If they are not, returns false.
-     * The assertion we make so that this holds true is that all Transaction type
-     * classes have the same TRANSACTION_STRING field, as it is static.
-     * @param transaction The transaction being compared.
-     * @return true if the TRANSACTION_STRING fields match, else false.
-     */
-    public boolean matches(Transaction transaction) {
-        if(TRANSACTION_STRING.equals(transaction.getTransactionString())) {
-            return true;
-        } else {
-            return false;
-        }
+
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    // Getters
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public Calendar getTimeStamp() {
+        return timeStamp;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public double getTotal() {
+        return total;
     }
 
     /**
-     * Saves the static idCounter.
-     * @param output
+     * 
+     * @return
+     */
+    public int getNextId() {
+        return ++nextId;
+    }
+
+    /**
+     * Generates a string formate of time space based on the transactions time
+     * of creation.
+     * @return String time stamp in string formate.
+     */
+    public String getStringTimeStamp() {
+        SimpleDateFormat formattedDate = new SimpleDateFormat("dd-MM-yyyy");
+        String stringStamp = formattedDate.format(this.timeStamp.getTime());
+        return stringStamp;
+    }
+
+    /**
+     * Saves the static fields.
+     * @param output ObjectOutputStream
      */
     public static void save(ObjectOutputStream output) throws IOException {
-        output.writeObject(idCounter);
+        output.writeObject(nextId);
     }
     /**
-    * Retrieves the static id counter.
+    * Retrieves the static fields.
     */
     public static void retrieve(ObjectInputStream input) throws IOException, 
-                            ClassNotFoundException {
-        idCounter = (int) input.readObject();
+        ClassNotFoundException {
+            nextId = (int) input.readObject();
     }
 }

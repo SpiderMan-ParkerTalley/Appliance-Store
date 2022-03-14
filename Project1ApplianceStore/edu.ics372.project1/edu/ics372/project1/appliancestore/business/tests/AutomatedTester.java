@@ -1,14 +1,9 @@
 package edu.ics372.project1.appliancestore.business.tests;
 
 import java.util.Iterator;
-
-import edu.ics372.project1.appliancestore.business.collections.ModelList;
-import edu.ics372.project1.appliancestore.business.entities.Appliance;
-import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
-import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 
 public class AutomatedTester {
 	// Storing ApplianceStore entity locally.
@@ -37,7 +32,7 @@ public class AutomatedTester {
 		80.00, 90.00, 100.00, 110.00, 120.00, 130.00, 140.00, 150.00, 160.00, 
 		170.00, 180.00, 190.00, 200.00 };
 	
-	private static final double repairPlanAmount = 23.50;
+	private static final double repairPlanAmount = 50.00;
 	
 	private static final double capacity = 100.00;
 	
@@ -137,7 +132,7 @@ public class AutomatedTester {
 
 
 	// Use-case 2 - Add a single customer. 
-	public static void addCustomers() {
+	public void addCustomers() {
 		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
 
 			// Set customer information.
@@ -181,7 +176,7 @@ public class AutomatedTester {
 
 
 	// Use-case 4 - Purchase one or more models. 
-	public static void testPurchaseModels() {
+	public void testPurchaseModels() {
 		// Stores the current test index for appliance information.
 		int applianceIndex = 0;
 		
@@ -434,21 +429,26 @@ public class AutomatedTester {
 	}
 
 
-	// Use-case 8 - Charge all repair plans. James
-	// TODO: implement testChargeAllRepairPlans. James
+	// Use-case 8 - Charge all repair plans. 
 	public void testChargeAllRepairPlans() {
+		// Charge all repair plans.
+		Result result = ApplianceStore.instance().chargeRepairPlans();
 
+		// Validation.
+		assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+		assert result.getAmountCharged() == repairPlanAmount * 2;
 	}
 
 
-	// Use-case 9 - Print total revenue from all sales and repair plans. Emmanuel
-	// TODO: change to assert. Emmanuel
-	public void testPrintRevenue(){
-		Result result = new Result();
-		result = ApplianceStore.instance().getTotalRevenue();
-		double totalSale = result.getTotalRevenueFromTransactions();
-		double totalRepairPlan = result.getTotalRevenueFromRepairPlans();
-		System.out.println("The total sale is: " + totalSale + " The total repair plan revenue is: " + totalRepairPlan);
+	// Use-case 9 - Print total revenue from all sales and repair plans. 
+	public void testPrintRevenue() {
+		// Compute total revenue.
+		Result result = ApplianceStore.instance().getTotalRevenue();
+
+		// Validation.
+		assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+		assert result.getTotalRevenueFromTransactions() == 1730.0;
+		assert result.getTotalRevenueFromRepairPlans() == repairPlanAmount * 2;
 	}
 
 
@@ -638,32 +638,13 @@ public class AutomatedTester {
 
 
 	// Use-case 13 - List all back orders. Sharon
-	// TODO: Change to assert, remove extra unused stuff.
-	public void testGetAllBackorders() {
-		final String name = "Nuel";
-		final String address = "007 Krypton Blvd, Asgard, WA 00701";
-		final String phoneNumber = "(001)112-2223";
-
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);
-
-		final String brandName = "GE";
-		final String model = "009";
-		final double price = 100.00;
-		final int quantity = 1;
-		final double repairPlanAmount = 200.00;
-
-
-
-		Iterator<Result> resultIterator = store.getAllBackOrders();
-		while (resultIterator.hasNext()){
-			Result result = resultIterator.next();
-				System.out.println(result.getBackOrderId() + " " + result.getCustomerId() + " " +
-				result.getApplianceId() + " " +result.getQuantity());
-		}
+	public void testGetAllBackOrders() {
 	}
 
+	// Use-case 14 - Save data to disk. Sharon
+	public void testSaveDataToDisk() {
+
+	}
 
 	/**
 	 * All tests to run here.
@@ -695,6 +676,14 @@ public class AutomatedTester {
 		System.out.println("Testing withdraw customer from repair plan...");
 		testWithdrawCustomerFromRepairPlan();
 		System.out.println("Testing withdraw customer from repair plan COMPLETE!\n");
+
+		System.out.println("Testing charge all repair plans...");
+		testChargeAllRepairPlans();
+		System.out.println("Testing charge all repair plans COMPLETE!\n");
+
+		System.out.println("Testing print revenue...");
+		testPrintRevenue();
+		System.out.println("Testing print revenue COMPLETE!\n");
 		
 		System.out.println("Done testing.");
 	}

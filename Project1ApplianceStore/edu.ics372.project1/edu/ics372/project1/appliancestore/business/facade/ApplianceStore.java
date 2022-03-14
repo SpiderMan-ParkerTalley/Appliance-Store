@@ -9,9 +9,11 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
+import edu.ics372.project1.appliancestore.business.entities.ApplianceWithRepairPlan;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlan;
+import edu.ics372.project1.appliancestore.business.entities.SaleTransaction;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
 import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 import edu.ics372.project1.appliancestore.business.iterators.SafeApplianceIterator;
@@ -135,13 +137,13 @@ public class ApplianceStore implements Serializable {
 			if (backOrder.getQuantity() > models.search(backOrder.getAppliance().getId()).getQuantity()) {
 				result.setResultCode(Result.NOT_A_VALID_QUANTITY);
 			} else {
-				Transaction transaction = new Transaction(backOrder.getCustomer(), backOrder.getAppliance(),
+				SaleTransaction transaction = new SaleTransaction(backOrder.getCustomer(), backOrder.getAppliance(),
 						backOrder.getQuantity());
-				if (backOrder.getCustomer().addTransaction(transaction)) {
+				if (backOrder.getCustomer().addSaleTransaction(transaction)) {
 					result.setBackOrderFields(backOrder);
 					result.setCustomerFields(backOrder.getCustomer());
 					backOrders.removeBackOrder(backOrder);
-					result.setTransactionFields(transaction);
+					result.setSaleTransactionFields(transaction);
 					int newQuantity = models.search(backOrder.getAppliance().getId()).getQuantity()
 							- backOrder.getQuantity();
 					models.search(backOrder.getAppliance().getId()).setQuantity(newQuantity);
@@ -184,21 +186,22 @@ public class ApplianceStore implements Serializable {
 			result.setResultCode(Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN);
 			return result;
 		}
-		// TODO: this should probably be restructured, it is a bit messy right now.
-		result.setCustomerFields(customer);
-		result.setApplianceFields(appliance);
-		result.setResultCode(Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE); // default if appliance not found in transactions
 		
 		// Validating that customer has purchased this appliance. If true, enroll
-		Iterator<Transaction> transactionIterator = customer.getTransactionIterator();
+		Iterator<SaleTransaction> transactionIterator = customer.getSalesTransactionIterator();
 		while(transactionIterator.hasNext()) {
-			Transaction transaction = transactionIterator.next();
+			SaleTransaction transaction = transactionIterator.next();
+			// If customer has purchased the appliance...
 			if (transaction.getAppliance().getId().equals(appliance.getId())) {
-				customer.addRepairPlan(appliance);
+				customer.addRepairPlan((ApplianceWithRepairPlan) appliance);
 				result.setResultCode(Result.OPERATION_SUCCESSFUL);
 				return result;
 			}
 		}
+		// If customer has NOT purchased the appliance...
+		result.setCustomerFields(customer);
+		result.setApplianceFields(appliance);
+		result.setResultCode(Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE); 
 		return result;
 	}
 
@@ -271,7 +274,7 @@ public class ApplianceStore implements Serializable {
 		} 
 		// Returns an iterator for a select category of appliances.
 		String applianceCode = ApplianceFactory.findApplianceType(request.getApplianceType());
-		return new SafeApplianceIterator(new FilteredApplianceIterator(ModelList.getInstance().iterator(), applianceCode));
+		return new SafeApplianceIterator(new FilteredApplianceIterator(models.iterator(), applianceCode));
 	}
 
 
@@ -298,8 +301,8 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Determines if a customer exist with a given customer id.
-	 * @param customerId String - customer id.
-	 * @return Result - a code representing the outcome AND customer information.
+	 * @param customerId String customer id.
+	 * @return Result a code representing the outcome AND customer information.
 	 */
 	public Result searchCustomer(Request request) {
 		Result result = new Result();
@@ -315,8 +318,8 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Searches for a given back order.
-	 * @param backOrderId String - the back order id.
-	 * @return Result - a code representing the outcome AND back order information.
+	 * @param backOrderId String the back order id.
+	 * @return Result a code representing the outcome AND back order information.
 	 */
 	public Result searchBackOrder(Request request) {
 		Result result = new Result();
@@ -369,12 +372,12 @@ public class ApplianceStore implements Serializable {
         not be fulfilled. This amount is used to create the backOrder.
         */
         backOrdersNeeded = appliance.purchase(request.getQuantity());
-		Transaction transaction = new Transaction(customer, appliance, Request.instance().getQuantity() - backOrdersNeeded);
-        customer.addTransaction(transaction); 
+		SaleTransaction transaction = new SaleTransaction(customer, appliance, Request.instance().getQuantity() - backOrdersNeeded);
+        customer.addSaleTransaction(transaction); 
 		result.setCustomerFields(customer);
 		result.setApplianceFields(appliance);
 		result.setQuantity(backOrdersNeeded);  //Note: the quantity being returned is the backOrders needed
-		result.setTimeStamp(transaction.getStringStamp());
+		result.setTimeStamp(transaction.getStringTimeStamp());
 		result.setResultCode(Result.OPERATION_SUCCESSFUL);
 
         if (backOrdersNeeded > 0) {
@@ -390,16 +393,26 @@ public class ApplianceStore implements Serializable {
 	/**
 	 * Charges all repair plans for all customers. 
 	 */
-	public void chargeRepairPlans() {
+	public Result chargeRepairPlans() {
+		Result result = new Result();
+		Double amountCharged = 0.0;
 		for (Iterator<Customer> customerIterator = customers.iterator(); 
 			customerIterator.hasNext();) {
-				customerIterator.next().chargeRepairPlans();
+				double customerAmountCharged = customerIterator.next().chargeRepairPlans();
+				if (customerAmountCharged < 0) {
+					result.setResultCode(Result.OPERATION_FAILED);
+					return result;
+				}
+				amountCharged += customerAmountCharged;
 		}
+		result.setResultCode(Result.OPERATION_SUCCESSFUL);
+		result.setAmountCharged(amountCharged);
+		return result;
 	}
 
 	/**
 	 * Retrieves a safe iterator for all customers that have a repair plan.
-	 * @return Iterator<Result> - iterator of customers.
+	 * @return Iterator<Result> iterator of customers.
 	 */
 	public Iterator<Result> getAllRepairPlanCustomers() {
 		return new SafeCustomerIterator(customers.getAllCustomersInRepairPlan().iterator());
@@ -407,14 +420,14 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Computes the total revenue from transactions and repair plans.
-	 * @return Result - result containing total revenues.
+	 * @return Result result containing total revenues.
 	 */
 	public Result getTotalRevenue() {
 		double totalRevenueFromTransactions = 0;
 		double totalRevenueFromRepairPlans = 0;
 		for (Iterator<Customer> customerIterator = customers.iterator(); customerIterator.hasNext();) {
 			Customer customer = customerIterator.next();
-			totalRevenueFromTransactions += customer.getTransactionTotalCost();
+			totalRevenueFromTransactions += customer.getSalesTotalCost();
 			totalRevenueFromRepairPlans += customer.getRepairPlansTotalCost();
 		}
 		Result result = new Result();

@@ -10,9 +10,13 @@ import java.util.List;
 
 public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
-    // Fields
-    private static int idCounter;
     private static final String CUSTOMER_STRING = "C";
+    // Fields
+    /**
+     * Stores customer ID counter.
+     */
+    private static int nextId;
+
     /**
      * Stores the customer's identification number.
      */
@@ -38,52 +42,46 @@ public class Customer implements Serializable {
      */
     private double accountBalance;
 
-    /**
-     * Stores the total amount the customer has paid in repair plans.
-     */
-    private double repairPlansTotalCost;
-
-    /**
-     * Stores the total amount the customer has paid for appliances.
-     */
-    private double transactionTotalCost;
-
     // Lists
     /**
-     * A list containing all the customer's transactions.
+     * A list containing all the customer's sale/purchase transactions.
      */
-    private List<Transaction> transactions = new LinkedList<Transaction>();
+    private List<SaleTransaction> saleTransactions = new LinkedList<SaleTransaction>();
     
     /**
      * A list storing all the customer's active repair plans.
      */
     private List<RepairPlan> repairPlans = new LinkedList<RepairPlan>();
 
+    /**
+     * A list storing all the customer's active repair plans.
+     */
+    private List<RepairPlanTransaction> repairPlanTransactions = new LinkedList<RepairPlanTransaction>();
+
     // Constructor
     public Customer(String name, String address, String phoneNumber) {
         this.name = name;
         this.address = address;
         this.phoneNumber = phoneNumber;
-        id = CUSTOMER_STRING + idCounter++;
+        id = CUSTOMER_STRING + nextId++;
     }
 
     /**
-     * Creates and adds a transaction to customer.
-     * @param appliance Appliance appliance 
-     * @param quantity int quantity of appliance being purchases.
-     * @return boolean true if the transaction was sucessfully added.
+     * Creates and adds a sale transaction to customer.
+     * 
+     * @param SaleTransaction transaction.
+     * @return boolean true if the transaction was successfully added.
      */
-    public boolean addTransaction(Transaction transaction) {
-        transactions.add(transaction);
-        transactionTotalCost += transaction.getAppliance().getPrice() * transaction.getQuantity();
+    public boolean addSaleTransaction(SaleTransaction transaction) {
+        saleTransactions.add(transaction);
         return true;
     }
 
     /**
      * Creates and adds a repair plan to customer.
      * @param appliance Appliance appliance to be associated with repair plan.
-    **/
-    public boolean addRepairPlan(Appliance appliance) {
+     */
+    public boolean addRepairPlan(ApplianceWithRepairPlan appliance) {
         if(appliance.eligibleForRepairPlan()) {
             repairPlans.add(new RepairPlan(this, appliance));
             return true;
@@ -93,6 +91,7 @@ public class Customer implements Serializable {
 
     /**
      * Removes a repair plan from customer.
+     * 
      * @param repairPlan RepairPlan the repair plan to be removed.
      * @return boolean true if the repair plan was removed, false if no repair 
      * plan was removed.
@@ -105,16 +104,24 @@ public class Customer implements Serializable {
     /**
      * Charges the customer for all active repair plans.
      */
-    public void chargeRepairPlans() {
+    public double chargeRepairPlans() {
+        // Stores the total amount changed for repair plans.
+        double amountCharged = 0.0;
         for(Iterator<RepairPlan> iterator = repairPlans.iterator(); iterator.hasNext();) {
             RepairPlan repairPlan = iterator.next();
-            repairPlansTotalCost += repairPlan.getCost();
-            // TODO: Might need to add the repair plan as a transaction. Not sure..
+            // Creates new repair plan transaction.
+            RepairPlanTransaction repairPlanTransaction = new RepairPlanTransaction(this, repairPlan.getAppliance());
+            // Adds repair plan transaction to customer's transactions.
+            repairPlanTransactions.add(repairPlanTransaction);
+            // Computes total amount charged in repair plans.
+            amountCharged += repairPlanTransaction.getTotal();
         }
+        return amountCharged ;
     }
 
     /**
      * Getter for repair plan list iterator.
+     * 
      * @return iterator for repair plans.
      */
     public Iterator<RepairPlan> getRepairPlans() {
@@ -123,6 +130,7 @@ public class Customer implements Serializable {
 
     /**
      * Searches a customer for a repair plan matching the applianceId.
+     * 
      * @param applianceId String appliance id for search.
      * @return RepairPlan repair plan if a match is found, otherwise null.
      */
@@ -169,16 +177,40 @@ public class Customer implements Serializable {
         return id;
     }
 
+    /**
+     * Computes customer's total amount paid for repair plans.
+     * 
+     * @return double repair plan total cost.
+     */
     public double getRepairPlansTotalCost() {
+        double repairPlansTotalCost = 0.0;
+        for(Iterator<RepairPlanTransaction> iterator = repairPlanTransactions.iterator(); 
+            iterator.hasNext();) {
+                RepairPlanTransaction repairPlanTransaction = iterator.next();
+                repairPlansTotalCost += repairPlanTransaction.getTotal();
+        }
         return repairPlansTotalCost;
     }
 
-    public double getTransactionTotalCost() {
-        return transactionTotalCost;
+    /**
+     * Computes customer's total amount paid for sales.
+     * 
+     * @return double sale transaction total cost.
+     */
+    public double getSalesTotalCost() {
+        double saleTransactionsTotalCost = 0.0;
+        for(Iterator<SaleTransaction> iterator = saleTransactions.iterator(); 
+            iterator.hasNext();) {
+                SaleTransaction saleTransaction = iterator.next();
+                saleTransactionsTotalCost += saleTransaction.getTotal();
+        }
+        
+        return saleTransactionsTotalCost;
     }
 
     /**
      * Checks if a customer has one or more repair plans.
+     * 
      * @return boolean true customer has repair plan, false otherwise.
      */
     public boolean hasRepairPlan() {
@@ -188,6 +220,11 @@ public class Customer implements Serializable {
         return false;
     }
 
+    /**
+     * Generates a string using the customer's information.
+     * 
+     * @return String of customer information.
+     */
     public String getInformation() {
         String customerInfo = "Member name " + name + " address " + address + 
             " id " + id + " phone number " + phoneNumber + " account balance " + 
@@ -202,24 +239,35 @@ public class Customer implements Serializable {
 
     /**
      * Saves the static idCounter.
-     * @param output
+     * 
+     * @param output ObjectOutputStream object.
      */
     public static void save(ObjectOutputStream output) throws IOException {
-        output.writeObject(idCounter);
+        output.writeObject(nextId);
     }
     /**
     * Retrieves the static id counter.
     */
     public static void retrieve(ObjectInputStream input) throws IOException, 
-                            ClassNotFoundException {
-        idCounter = (int) input.readObject();
+        ClassNotFoundException {
+            nextId = (int) input.readObject();
     }
 
+    /**
+     * Retrieves a customer's repair plan transaction iterator.
+     * 
+     * @return Iterator<RepairPlan> iterator.
+     */
 	public Iterator<RepairPlan> getRepairPlanIterator() {
 		return repairPlans.iterator();
 	}
 
-	public Iterator<Transaction> getTransactionIterator() {
-		return transactions.iterator();
+    /**
+     * Retrieves a customer's sales transaction iterator.
+     * 
+     * @return Iterator<SaleTransaction> iterator.
+     */
+	public Iterator<SaleTransaction> getSalesTransactionIterator() {
+		return saleTransactions.iterator();
 	}
 }

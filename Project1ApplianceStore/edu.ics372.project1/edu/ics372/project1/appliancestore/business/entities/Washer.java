@@ -1,35 +1,26 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
-public class Washer extends Appliance {
+/*
+ * @author Cristian Zendejas
+ * The Washer subclass for Appliance.
+ */
+public class Washer extends ApplianceWithRepairPlan {
+	//Creates a unique identifier for this subclass
 	private static final String WASHER_STRING = "WASH";
-	
-	private double repairPlanAmount;
 
+	/*
+	 * Creates a washer object
+	 * @returns Washer object
+	 */
 	public Washer(String brandName, String model, double price, int quantity, double repairPlanAmount) {
-		super(brandName, model, price, quantity);
-		this.repairPlanAmount = repairPlanAmount;
+		super(brandName, model, price, quantity, repairPlanAmount);
 		this.setEligibleForRepairPlan(true);
 		this.setEligibleForBackOrder(true);
 	}
-	
+
 	@Override
 	public String createId() {
 		return WASHER_STRING + super.getNextId();
 	}
 
-	public double getRepairPlanAmount() {
-		return repairPlanAmount;
-	}
-
-	public void setRepairPlanAmount(double repairPlanAmount) {
-		this.repairPlanAmount = repairPlanAmount;
-	}
-	
-	@Override
-	public String toString() {
-		String output = super.toString() + " Repair Plan Amount: " + repairPlanAmount;
-		return output;
-	}
-	
-	
 }
