@@ -12,7 +12,6 @@ import edu.ics372.project1.appliancestore.business.facade.Result;
 import edu.ics372.project1.appliancestore.business.tests.AutomatedTester;
 
 public class UserInterface {
-
 	private static UserInterface userInterface;
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 	private static ApplianceStore applianceStore;
@@ -134,17 +133,17 @@ public class UserInterface {
 				String item = getToken(prompt);
 				Integer number = Integer.valueOf(item);
 				if (number.intValue() <= 0) {
-					System.out.println("Please enter a positive number.");
+					System.out.println("Please enter a positive number: ");
 				} else {
 				return number.intValue();
 				}
 			} catch (NumberFormatException nfe) {
-				System.out.println("Please input a number ");
+				System.out.println("Please input a number: ");
 			}
 		} while (true);
 	}
 
-		/**
+	/**
 	 * Prompts for an double value of a number.
 	 * Takes a string as argument, converters to double, then returns as double.
 	 * Guarantees a number to two decimal places, rounded up.
@@ -169,11 +168,11 @@ public class UserInterface {
 		} while (true);
 	}
 
-/**
- * Directs the flow of the system via integer input from the user. 
- * Offers to save data upon an exit request.
- * @return an int
- */
+	/**
+	 * Directs the flow of the system via integer input from the user. 
+	 * Offers to save data upon an exit request.
+	 * @return an int
+	 */
 	public int getCommand() {
 		do {
 			try {
@@ -270,14 +269,14 @@ public class UserInterface {
 	 * uses the appropriate ApplicationStore method for adding the customer.
 	 */
 	public void addCustomer() {
-		Request.instance().setCustomerName(getName("Enter name"));
+		Request.instance().setCustomerName(getName("Enter name: "));
 		Request.instance().setCustomerAddress(getName("Enter address: "));
 		Request.instance().setCustomerPhoneNumber(getName("Enter phone number: "));
 		Result result = applianceStore.addCustomer(Request.instance());
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("Could not add customer.");
 		} else {
-			System.out.println(result.getCustomerName() + "'s id is " + result.getCustomerId());
+			System.out.println(result.getCustomerName() + "'s id is " + result.getCustomerId() + ".");
 		}
 	}
 
@@ -286,12 +285,12 @@ public class UserInterface {
 	 * values and uses the appropriate ApplicationStore method for adding the model inventory.
 	 */
 	public void addInventory() {
-		Request.instance().setApplianceID(getToken("Enter appliance id"));
+		Request.instance().setApplianceID(getToken("Enter appliance's ID: "));
 		Result result = applianceStore.searchModel(Request.instance());
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("No appliance with id " + Request.instance().getApplianceId());
 		} else {
-			Request.instance().setQuantity(getInteger("Enter quantity to add"));
+			Request.instance().setQuantity(getInteger("Enter the quantity to be added: "));
 			result = applianceStore.addInventory(Request.instance());
 		}
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
@@ -365,6 +364,7 @@ public class UserInterface {
 			}
 		}
 	}
+
 	/**
 	 * Helper method to check the validity of the applianceId.
 	 */
@@ -441,7 +441,6 @@ public class UserInterface {
 		}
 	}
 
-
 	/**
 	 * Method for withdrawing a customer from a repair plan for a single appliance.
 	 * The user inputs the promoted values and uses the appropriate ApplicationStore
@@ -476,6 +475,7 @@ public class UserInterface {
 								" and Appliance ID " + Request.instance().getApplianceId());
 		}
 	}
+
 	/**
 	 * Allows the user to charge all active repair plans to the appropriate customers. Updates all customer accounts
 	 * and displays a message when completed.
@@ -489,6 +489,7 @@ public class UserInterface {
 			System.out.println("Repair plans have been charged.");
 		}
 	}
+
 	/**
 	 * Lists all appliances or a specific type of appliance. It lists each item with its id, brand name, model name, price,
 	 * and quantity.
@@ -507,7 +508,7 @@ public class UserInterface {
 				System.out.println("5 for furnace");
 				System.out.println("6 for dishwasher");
 				System.out.println("7 for all");
-				Request.instance().setApplianceType(getInteger("Enter appliance type number"));
+				Request.instance().setApplianceType(getInteger("Enter appliance type number: "));
 				if(Request.instance().getApplianceType() < MINIMUM_MENU_INPUT || 
 					Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT) {
 						System.out.println("Invalid input. Please input a number between " + 
@@ -527,6 +528,7 @@ public class UserInterface {
 			}
 		} while (yesOrNo("List another type of appliance models?"));
 	}
+
 	/**
 	 * Finds all customers with repair plans and prints them out.
 	 */
@@ -543,6 +545,7 @@ public class UserInterface {
 			+ result.getCustomerHasRepairPlan());
 		}
 	}
+
 	/**
 	 * Prints out every customer and their details.
 	 */
@@ -556,8 +559,9 @@ public class UserInterface {
 				+ result.getCustomerAddress() + " | "
 				+ result.getCustomerPhoneNumber() + " | "
 				+ result.getCustomerHasRepairPlan());
+		}
 	}
-}
+
 	/**
 	 * Prints out all back orders with the appliance brand, model,
 	 * customer name, customer id, and quantity
@@ -573,6 +577,7 @@ public class UserInterface {
 			+ " | " + result.getQuantity());
 		}
 	}	
+	
 	/**
 	 * Saves the data to a file.
 	 */
@@ -583,6 +588,7 @@ public class UserInterface {
 			System.out.println("There has been an error in saving.");
 		}
 	}
+	
 	/**
 	 * Retrieves the data from a a file
 	 */
