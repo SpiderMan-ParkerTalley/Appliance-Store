@@ -605,7 +605,8 @@ public class UserInterface {
 			cnfe.printStackTrace();
 		}
 	}
-/**
+	
+	/**
 	 * Orchestrates the whole process. Calls the appropriate method for the
 	 * different functionalities.
 	 * 
@@ -663,6 +664,7 @@ public class UserInterface {
 			}
 		}
 	}
+
 	/**
 	 * Prints the revenues from sales and repair plan charge in a convenient
 	 * format.
@@ -671,11 +673,9 @@ public class UserInterface {
 		Result result = applianceStore.getTotalRevenue();
 		System.out.printf("Sales Revenue: $%,.2f\n" , result.getTotalRevenueFromTransactions());
 		System.out.printf("Repair Plan Revenue: $%,.2f\n", result.getTotalRevenueFromRepairPlans());
-}
+	}
 
 	public static void main(String args[]) {
 		UserInterface.instance().process();
-
-
 	}
 }
