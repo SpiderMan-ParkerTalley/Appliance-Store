@@ -50,7 +50,7 @@ public class AutomatedTester {
 	private static String[] customerIds = new String[CUSTOMER_TEST_SIZE]; 
 
 	private static final String[] customerNames = { "Christian Zendejas" , 
-		" Emmanuel Ojogwu", "James Sawicki", "Sharon Shin", "Parker Talley" };
+		"Emmanuel Ojogwu", "James Sawicki", "Sharon Shin", "Parker Talley" };
 
 	private static final String[] customerAddresses = {
 		"8946 South Fieldstone Ave. Ambler, PA 19002", 
@@ -366,7 +366,7 @@ public class AutomatedTester {
 			Result result = applianceStore.enrollRepairPlan(Request.instance());
 
 			// Validate results.
-			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+			assert result.getResultCode() == Result.REPAIR_PLAN_ENROLLED;
 		}
 
 
