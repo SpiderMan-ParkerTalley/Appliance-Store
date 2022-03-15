@@ -15,6 +15,10 @@ import java.util.GregorianCalendar;
  */
 public abstract class Transaction implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Stores the next transaction ID code.
+     */
     private static int nextId = 1;
     
     /**
@@ -86,7 +90,7 @@ public abstract class Transaction implements Serializable {
      * Retrieves the next transaction ID.
      * @return nextId int the next transaction ID.
      */
-    public int getNextId() {
+    protected static int getNextId() {
         return ++nextId;
     }
 

@@ -6,6 +6,9 @@ package edu.ics372.project1.appliancestore.business.entities;
  * @author Parker Talley.
  */
 public class SaleTransaction extends Transaction {
+    /**
+     * Stores the sale transaction ID code.
+     */
     private static final String SALES_TRANSACTION = "SALE-TRAN";
     
     /**
@@ -36,13 +39,8 @@ public class SaleTransaction extends Transaction {
      * Generates the next sales transaction ID.
      * @return String the next sales transaction ID.
      */
-    public String generateId() {
+    private String generateId() {
         return SALES_TRANSACTION + getNextId();
-    }
-
-    // Setters
-    public void setAppliance(Appliance appliance) {
-        this.appliance = appliance;
     }
 
     // Getters

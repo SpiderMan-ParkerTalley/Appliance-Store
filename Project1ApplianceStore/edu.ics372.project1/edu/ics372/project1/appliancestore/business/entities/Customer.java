@@ -17,9 +17,10 @@ public class Customer implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
+     * Stores the customer ID code.
      */
     private static final String CUSTOMER_STRING = "C";
+    
     // Fields
     /**
      * Stores customer ID counter.
@@ -89,25 +90,39 @@ public class Customer implements Serializable {
     }
 
     /**
+     * Computes customer's total amount paid for sales.
+     * 
+     * @return double sale transaction total cost.
+     */
+    public double getSalesTotalCost() {
+        double saleTransactionsTotalCost = 0.0;
+        for(Iterator<SaleTransaction> iterator = saleTransactions.iterator(); 
+            iterator.hasNext();) {
+                SaleTransaction saleTransaction = iterator.next();
+                saleTransactionsTotalCost += saleTransaction.getTotal();
+        }
+        
+        return saleTransactionsTotalCost;
+    }
+
+    /**
      * Creates and adds a repair plan to customer.
      * 
      * @param appliance Appliance appliance to be associated with repair plan.
-     * @return boolean true if the repair plan was added, false otherwise.
+     * @return boolean true if the repair plan was added, always returns true in
+     * current iteration.
      */
     public boolean addRepairPlan(ApplianceWithRepairPlan appliance) {
-        if(appliance.eligibleForRepairPlan()) {
-            repairPlans.add(new RepairPlan(this, appliance));
-            return true;
-        }
-        return false;
+        repairPlans.add(new RepairPlan(this, appliance));
+        return true;
     }
 
     /**
      * Removes a repair plan from customer.
      * 
      * @param repairPlan RepairPlan the repair plan to be removed.
-     * @return boolean true if the repair plan was removed, false if no repair 
-     * plan was removed.
+     * @return boolean true if the repair plan was removed, always returns true 
+     * in current iteration.
      */
     public boolean removeRepairPlan(RepairPlan repairPlan) {
         repairPlans.remove(repairPlan);
@@ -134,13 +149,19 @@ public class Customer implements Serializable {
     }
 
     /**
-     * Getter for repair plan list iterator.
+     * Computes customer's total amount paid for repair plans.
      * 
-     * @return iterator for repair plans.
+     * @return double repair plan total cost.
      */
-    public Iterator<RepairPlan> getRepairPlans() {
-		return repairPlans.iterator();
-	}
+    public double getRepairPlansTotalCost() {
+        double repairPlansTotalCost = 0.0;
+        for(Iterator<RepairPlanTransaction> iterator = repairPlanTransactions.iterator(); 
+            iterator.hasNext();) {
+                RepairPlanTransaction repairPlanTransaction = iterator.next();
+                repairPlansTotalCost += repairPlanTransaction.getTotal();
+        }
+        return repairPlansTotalCost;
+    }
 
     /**
      * Searches a customer for a repair plan matching the applianceId.
@@ -157,6 +178,53 @@ public class Customer implements Serializable {
             }
         }
         return null;
+    }
+
+    /**
+     * Retrieves a customer's repair plan transaction iterator.
+     * 
+     * @return Iterator<RepairPlan> iterator.
+     */
+	public Iterator<RepairPlan> getRepairPlanIterator() {
+		return repairPlans.iterator();
+	}
+
+    /**
+     * Retrieves a customer's sales transaction iterator.
+     * 
+     * @return Iterator<SaleTransaction> iterator.
+     */
+	public Iterator<SaleTransaction> getSalesTransactionIterator() {
+		return saleTransactions.iterator();
+	}
+
+    /**
+     * Checks if a customer has one or more repair plans.
+     * 
+     * @return boolean true customer has repair plan, false otherwise.
+     */
+    public boolean hasRepairPlan() {
+        if (!this.repairPlans.isEmpty()) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Generates a string using the customer's information.
+     * 
+     * @return String of customer information.
+     */
+    public String getInformation() {
+        String customerInfo = "Member name " + name + " address " + address + 
+            " id " + id + " phone number " + phoneNumber + " account balance " + 
+            accountBalance + " has repair plan: ";
+        if(this.hasRepairPlan()) {
+            customerInfo.concat("true");
+        } else {
+            customerInfo.concat("false");
+        }
+        return customerInfo;
     }
  
     // Setters
@@ -192,66 +260,6 @@ public class Customer implements Serializable {
     }
 
     /**
-     * Computes customer's total amount paid for repair plans.
-     * 
-     * @return double repair plan total cost.
-     */
-    public double getRepairPlansTotalCost() {
-        double repairPlansTotalCost = 0.0;
-        for(Iterator<RepairPlanTransaction> iterator = repairPlanTransactions.iterator(); 
-            iterator.hasNext();) {
-                RepairPlanTransaction repairPlanTransaction = iterator.next();
-                repairPlansTotalCost += repairPlanTransaction.getTotal();
-        }
-        return repairPlansTotalCost;
-    }
-
-    /**
-     * Computes customer's total amount paid for sales.
-     * 
-     * @return double sale transaction total cost.
-     */
-    public double getSalesTotalCost() {
-        double saleTransactionsTotalCost = 0.0;
-        for(Iterator<SaleTransaction> iterator = saleTransactions.iterator(); 
-            iterator.hasNext();) {
-                SaleTransaction saleTransaction = iterator.next();
-                saleTransactionsTotalCost += saleTransaction.getTotal();
-        }
-        
-        return saleTransactionsTotalCost;
-    }
-
-    /**
-     * Checks if a customer has one or more repair plans.
-     * 
-     * @return boolean true customer has repair plan, false otherwise.
-     */
-    public boolean hasRepairPlan() {
-        if (!this.repairPlans.isEmpty()) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Generates a string using the customer's information.
-     * 
-     * @return String of customer information.
-     */
-    public String getInformation() {
-        String customerInfo = "Member name " + name + " address " + address + 
-            " id " + id + " phone number " + phoneNumber + " account balance " + 
-            accountBalance + " has repair plan: ";
-        if(this.hasRepairPlan()) {
-            customerInfo.concat("true");
-        } else {
-            customerInfo.concat("false");
-        }
-        return customerInfo;
-    }
-
-    /**
      * Saves the static fields in Customer class.
      * 
      * @param output ObjectOutputStream object.
@@ -259,29 +267,12 @@ public class Customer implements Serializable {
     public static void save(ObjectOutputStream output) throws IOException {
         output.writeObject(nextId);
     }
+
     /**
     * Retrieves the static fields in Customer class.
     */
     public static void retrieve(ObjectInputStream input) throws IOException, 
         ClassNotFoundException {
             nextId = (int) input.readObject();
-    }
-
-    /**
-     * Retrieves a customer's repair plan transaction iterator.
-     * 
-     * @return Iterator<RepairPlan> iterator.
-     */
-	public Iterator<RepairPlan> getRepairPlanIterator() {
-		return repairPlans.iterator();
-	}
-
-    /**
-     * Retrieves a customer's sales transaction iterator.
-     * 
-     * @return Iterator<SaleTransaction> iterator.
-     */
-	public Iterator<SaleTransaction> getSalesTransactionIterator() {
-		return saleTransactions.iterator();
-	}
+    }    
 }

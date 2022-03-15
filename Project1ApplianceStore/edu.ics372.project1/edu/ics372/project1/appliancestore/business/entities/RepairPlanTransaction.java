@@ -6,7 +6,10 @@ package edu.ics372.project1.appliancestore.business.entities;
  * @author Parker Talley.
  */
 public class RepairPlanTransaction extends Transaction {
-    private static final String REPAIR_PLAN_STRING = "REPAIR-PLAN";
+    /**
+     * Stores the repair plan transaction ID code.
+     */
+    private static final String REPAIR_PLAN_STRING = "REPAIR-PLAN-TRAN";
 
     /**
      * Stores the appliance associated with repair plan transaction.
