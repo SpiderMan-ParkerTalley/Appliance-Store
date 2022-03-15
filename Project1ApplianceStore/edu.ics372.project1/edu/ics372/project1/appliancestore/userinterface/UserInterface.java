@@ -249,7 +249,7 @@ public class UserInterface {
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
 			System.out.println("Could not add appliance model.");
 		} else {
-			System.out.println("Appliance model has been added. ID: " + result.getApplianceId());
+			System.out.println("Appliance model has been added. Appliance ID: " + result.getApplianceId());
 		}
 	}
 	/**
@@ -295,9 +295,11 @@ public class UserInterface {
 			result = applianceStore.addInventory(Request.instance());
 		}
 		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("Quantity " + Request.instance().getQuantity() + "could not be added");
+			System.out.println("Quantity " + Request.instance().getQuantity() + 
+								"could not be added to Appliance with ID" + result.getApplianceId());
 		} else {
-			System.out.println("Quantity " + Request.instance().getQuantity() + " added");
+			System.out.println(Request.instance().getQuantity() + " units were added to the inventory of "
+								 + result.getApplianceId());
 		}
 	}
 
@@ -471,7 +473,7 @@ public class UserInterface {
 		else {
 			System.out.println("Repair plan successfully withdrawn for customer with ID " + 
 								Request.instance().getCustomerId() + 
-								"and Appliance ID " + Request.instance().getApplianceId());
+								" and Appliance ID " + Request.instance().getApplianceId());
 		}
 	}
 	/**
