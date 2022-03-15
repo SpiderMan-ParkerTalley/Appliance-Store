@@ -467,7 +467,6 @@ public class ApplianceStore implements Serializable {
 	/**
 	 * Charges all repair plans for all customers. 
 	 */
-	//TODO fix
 	public Result chargeRepairPlans() {
 		Result result = new Result();
 		Double amountCharged = 0.0;
@@ -475,9 +474,7 @@ public class ApplianceStore implements Serializable {
 			customerIterator.hasNext();) {
 				Customer customer = customerIterator.next();
 				double customerAmountCharged = customer.chargeRepairPlans();
-				System.out.println(customerAmountCharged + " " + customer.getName());
 				if (customerAmountCharged < 0) {
-					System.out.println("Less than 0");
 					result.setResultCode(Result.OPERATION_FAILED);
 					return result;
 				}
