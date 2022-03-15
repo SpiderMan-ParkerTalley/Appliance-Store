@@ -18,22 +18,22 @@ public class RepairPlan implements Serializable {
     /**
      * Stores reference to appliance associated with repair plan.
      */
-    private ApplianceWithRepairPlan appliance;
+    private Appliance appliance;
 
     /**
      * Creates a repair plan with the given customer and appliance.
      * 
      * @param customer Customer customer.
-     * @param appliance Appliance appliance.
+     * @param appliance2 Appliance appliance.
      */
-    public RepairPlan(Customer customer, ApplianceWithRepairPlan appliance) {
+    public RepairPlan(Customer customer, ApplianceWithRepairPlan appliance2) {
         this.customer = customer;
-        this.appliance = appliance;
+        this.appliance = appliance2;
     }
 
     // Getters
     public double getCost() {
-        return appliance.getRepairPlanAmount();
+        return ((ApplianceWithRepairPlan) appliance).getRepairPlanAmount();
     }
     
     public Customer getCustomer() {
@@ -41,6 +41,6 @@ public class RepairPlan implements Serializable {
     }
 
     public ApplianceWithRepairPlan getAppliance() {
-        return appliance;
+        return (ApplianceWithRepairPlan) appliance;
     }
 }
