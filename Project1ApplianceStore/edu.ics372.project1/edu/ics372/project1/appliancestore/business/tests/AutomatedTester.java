@@ -2,13 +2,10 @@ package edu.ics372.project1.appliancestore.business.tests;
 
 import java.util.Iterator;
 
-import edu.ics372.project1.appliancestore.business.collections.ModelList;
-import edu.ics372.project1.appliancestore.business.entities.Appliance;
-import edu.ics372.project1.appliancestore.business.entities.Customer;
+import edu.ics372.project1.appliancestore.business.facade.ApplianceFactory;
 import edu.ics372.project1.appliancestore.business.facade.ApplianceStore;
 import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
-import edu.ics372.project1.appliancestore.business.iterators.FilteredApplianceIterator;
 
 public class AutomatedTester {
 	// Storing ApplianceStore entity locally.
@@ -37,7 +34,7 @@ public class AutomatedTester {
 		80.00, 90.00, 100.00, 110.00, 120.00, 130.00, 140.00, 150.00, 160.00, 
 		170.00, 180.00, 190.00, 200.00 };
 	
-	private static final double repairPlanAmount = 23.50;
+	private static final double repairPlanAmount = 50.00;
 	
 	private static final double capacity = 100.00;
 	
@@ -53,7 +50,7 @@ public class AutomatedTester {
 	private static String[] customerIds = new String[CUSTOMER_TEST_SIZE]; 
 
 	private static final String[] customerNames = { "Christian Zendejas" , 
-		" Emmanuel Ojogwu", "James Sawicki", "Sharon Shin", "Parker Talley" };
+		"Emmanuel Ojogwu", "James Sawicki", "Sharon Shin", "Parker Talley" };
 
 	private static final String[] customerAddresses = {
 		"8946 South Fieldstone Ave. Ambler, PA 19002", 
@@ -101,17 +98,17 @@ public class AutomatedTester {
 			Request.instance().setApplianceType(applianceTypes[index]);
 
 			// If the appliance is washer or dryer...
-			if (Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2) {
+			if (Request.instance().getApplianceType() == ApplianceFactory.WASHER || Request.instance().getApplianceType() == ApplianceFactory.DRYER) {
 				// Set the repair plan amount.
 				Request.instance().setRepairPlanAmount(repairPlanAmount);
 			} 
 			// If the appliance is a refrigerator...
-			else if (Request.instance().getApplianceType() == 4) {
+			else if (Request.instance().getApplianceType() == ApplianceFactory.REFRIGERATOR) {
 				// Set the capacity.
 				Request.instance().setCapacity(capacity);
 			} 
 			// If the appliance is a furnace...
-			else if (Request.instance().getApplianceType() == 5) {
+			else if (Request.instance().getApplianceType() == ApplianceFactory.FURNACE) {
 				// Set the heating output.
 				Request.instance().setMaxHeatingOutput(maxHeatingOutput);
 			}
@@ -132,12 +129,40 @@ public class AutomatedTester {
 			assert result.getBrandName().compareTo(brandNames[index]) == 0;
 			assert result.getModelName().compareTo(modelNames[index]) == 0;
 			assert result.getPrice() == (prices[index]);
+			// If the appliance is washer or dryer...
+			if (Request.instance().getApplianceType() == ApplianceFactory.WASHER || Request.instance().getApplianceType() == ApplianceFactory.DRYER) {
+				// Check if appliance repair plan is set correctly.
+				assert result.getEligibleForRepairPlan() == true;
+				assert result.getRepairPlanCost() == repairPlanAmount;
+				// CHeck if the eligible for back order is set correctly.
+				assert result.getEligibleForBackOrder() == true;
+			} 
+			// If the appliance is a refrigerator...
+			else if (Request.instance().getApplianceType() == ApplianceFactory.REFRIGERATOR) {
+				// CHeck if the eligible for back order is set correctly.
+				assert result.getEligibleForBackOrder() == true;
+				// Check if appliance repair plan is set correctly.
+				assert result.getEligibleForRepairPlan() == false;
+			} 
+			// If the appliance is a furnace...
+			else if (Request.instance().getApplianceType() == ApplianceFactory.FURNACE) {
+				// Check if the eligible for back order is set correctly.
+				assert result.getEligibleForBackOrder() == false;
+				// Check if appliance repair plan is set correctly.
+				assert result.getEligibleForRepairPlan() == false;
+			}
+			else {
+				// CHeck if the eligible for back order is set correctly.
+				assert result.getEligibleForBackOrder() == true;
+				// Check if appliance repair plan is set correctly.
+				assert result.getEligibleForRepairPlan() == false;
+			}
 		}
 	}
 
 
 	// Use-case 2 - Add a single customer. 
-	public static void addCustomers() {
+	public void addCustomers() {
 		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
 
 			// Set customer information.
@@ -181,7 +206,7 @@ public class AutomatedTester {
 
 
 	// Use-case 4 - Purchase one or more models. 
-	public static void testPurchaseModels() {
+	public void testPurchaseModels() {
 		// Stores the current test index for appliance information.
 		int applianceIndex = 0;
 		
@@ -196,12 +221,12 @@ public class AutomatedTester {
 			Result result = ApplianceStore.instance().purchaseModel(Request.instance());
 			
 			// Validate results.
-			// Customer asserts.
+			// Customer checks.
 			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 			assert result.getCustomerName().equals(customerNames[index]);
 			assert result.getCustomerAddress().equals(customerAddresses[index]);
 			assert result.getCustomerPhoneNumber().equals(customerPhoneNumbers[index]);
-			// Appliance asserts.
+			// Appliance checks.
 			assert result.getApplianceId().equals(applianceIds[applianceIndex]);
 			assert result.getBrandName().equals(brandNames[applianceIndex]);
 			assert result.getModelName().equals(modelNames[applianceIndex]);
@@ -280,7 +305,7 @@ public class AutomatedTester {
 			Result result = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 
 			// Validate results.
-			assert result.getResultCode() ==  Result.OPERATION_SUCCESSFUL;
+			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 		}
 
 		// Test with appliances NOT in-stock. Back orders NOT FULFILLED.
@@ -292,7 +317,7 @@ public class AutomatedTester {
 			Result result = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 
 			// Validate results.
-			assert result.getResultCode() ==  Result.NOT_A_VALID_QUANTITY;
+			assert result.getResultCode() == Result.NOT_A_VALID_QUANTITY;
 		}
 
 		// Test with invalid back order ID. Back order NOT FOUND.
@@ -303,7 +328,7 @@ public class AutomatedTester {
 		Result result = ApplianceStore.instance().fulfillBackOrder(Request.instance());
 
 		// Validate results.
-		assert result.getResultCode() ==  Result.BACK_ORDER_NOT_FOUND;
+		assert result.getResultCode() == Result.BACK_ORDER_NOT_FOUND;
 	}
 
 
@@ -319,7 +344,6 @@ public class AutomatedTester {
 
 		// Validate results.
 		assert resultApplianceID.getResultCode() == Result.APPLIANCE_NOT_FOUND;
-		
 
 		/* Test with incorrect customer ID. Appliance NOT found.
 		Setting appliance ID and customer ID. */
@@ -332,7 +356,6 @@ public class AutomatedTester {
 		// Validate results.
 		assert resultCustomerID.getResultCode() == Result.CUSTOMER_NOT_FOUND;
 
-
 		// Test with proper/correct appliance IDs and customer IDs. Repair plan ENROLLED.
 		for (int index = 0; index < CUSTOMER_TEST_SIZE; index++) {
 			// Settings appliance ID and customer ID.
@@ -343,7 +366,7 @@ public class AutomatedTester {
 			Result result = applianceStore.enrollRepairPlan(Request.instance());
 
 			// Validate results.
-			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+			assert result.getResultCode() == Result.REPAIR_PLAN_ENROLLED;
 		}
 
 
@@ -376,7 +399,6 @@ public class AutomatedTester {
 
 		// Validation.
 		assert resultCustomerID.getResultCode() == Result.CUSTOMER_NOT_FOUND;
-
 		
 		/* Withdraw customer from repair plan with incorrect appliance ID.
 		Setting customer ID and appliance ID. */
@@ -389,7 +411,6 @@ public class AutomatedTester {
 		// Validation.
 		assert resultApplianceID.getResultCode() == Result.APPLIANCE_NOT_FOUND;
 
-
 		/* Withdraw customer from repair plan with appliance ID not eligible for repair plan.
 		Setting customer ID and appliance ID. */
 		Request.instance().setCustomerId(customerIds[4]);
@@ -400,7 +421,6 @@ public class AutomatedTester {
 
 		// Validation.
 		assert resultApplianceNotEligible.getResultCode() == Result.REPAIR_PLAN_NOT_FOUND;
-		
 		
 		// Withdraw customer from repair plan. OPERATION SUCCESSFUL.
 		for (int index = 0; index < 3; index++) {
@@ -414,8 +434,6 @@ public class AutomatedTester {
 			// Validation.
 			assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
 		}
-
-		
 		
 		/* Withdraw customer from repair plan but customer is NOT enrolled in 
 		repair plan. */
@@ -430,27 +448,29 @@ public class AutomatedTester {
 			// Validation.
 			assert result.getResultCode() == Result.REPAIR_PLAN_NOT_FOUND;
 		}
-		
 	}
 
 
-	// Use-case 8 - Charge all repair plans. James
-	// TODO: implement testChargeAllRepairPlans. James
+	// Use-case 8 - Charge all repair plans. 
 	public void testChargeAllRepairPlans() {
-		
+		// Charge all repair plans.
+		Result result = ApplianceStore.instance().chargeRepairPlans();
 
+		// Validation.
+		assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
+		assert result.getAmountCharged() == repairPlanAmount * 2;
 	}
 
 
-	// Use-case 9 - Print total revenue from all sales and repair plans. Emmanuel
-	// TODO: change to assert. Emmanuel
-	public void testPrintRevenue(){
-		Result result = new Result();
-		result = ApplianceStore.instance().getTotalRevenue();
-		double totalSale = result.getTotalRevenueFromTransactions();
-		double totalRepairPlan = result.getTotalRevenueFromRepairPlans();
+	// Use-case 9 - Print total revenue from all sales and repair plans. 
+	public void testPrintRevenue() {
+		// Compute total revenue.
+		Result result = ApplianceStore.instance().getTotalRevenue();
+
+		// Validation.
 		assert result.getResultCode() == Result.OPERATION_SUCCESSFUL;
-		System.out.println("The total sale is: " + totalSale + " The total repair plan revenue is: " + totalRepairPlan);
+		assert result.getTotalRevenueFromTransactions() == 1730.0;
+		assert result.getTotalRevenueFromRepairPlans() == repairPlanAmount * 2;
 	}
 
 
@@ -640,34 +660,10 @@ public class AutomatedTester {
 
 
 	// Use-case 13 - List all back orders. Sharon
-	// TODO: Change to assert, remove extra unused stuff.
-	public void testGetAllBackorders() {
-		final String name = "Nuel";
-		final String address = "007 Krypton Blvd, Asgard, WA 00701";
-		final String phoneNumber = "(001)112-2223";
-
-		Request.instance().setCustomerName(name);
-		Request.instance().setCustomerAddress(address);
-		Request.instance().setCustomerPhoneNumber(phoneNumber);
-
-		final String brandName = "GE";
-		final String model = "009";
-		final double price = 100.00;
-		final int quantity = 1;
-		final double repairPlanAmount = 200.00;
-
-
-
-		Iterator<Result> resultIterator = ApplianceStore.getAllBackOrders();
-		while (resultIterator.hasNext()){
-			Result result = resultIterator.next();
-				System.out.println(result.getBackOrderId() + " " + result.getCustomerId() + " " +
-				result.getApplianceId() + " " +result.getQuantity());
-		}
+	public void testGetAllBackOrders() {
 	}
 
 	// Use-case 14 - Save data to disk. Sharon
-	// TODO: Save data to disk test. Sharon
 	public void testSaveDataToDisk() {
 
 	}
@@ -702,6 +698,14 @@ public class AutomatedTester {
 		System.out.println("Testing withdraw customer from repair plan...");
 		testWithdrawCustomerFromRepairPlan();
 		System.out.println("Testing withdraw customer from repair plan COMPLETE!\n");
+
+		System.out.println("Testing charge all repair plans...");
+		testChargeAllRepairPlans();
+		System.out.println("Testing charge all repair plans COMPLETE!\n");
+
+		System.out.println("Testing print revenue...");
+		testPrintRevenue();
+		System.out.println("Testing print revenue COMPLETE!\n");
 		
 		System.out.println("Done testing.");
 	}
