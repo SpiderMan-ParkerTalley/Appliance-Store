@@ -38,7 +38,7 @@ public abstract class DataTransfer {
 	
 
 	public DataTransfer(){
-		//TODO reset();
+		reset();
 	}
 
 
@@ -273,7 +273,6 @@ public abstract class DataTransfer {
 		backOrderId = "No such back order ID";
 		transactionQuantity = 0;
 		amountCharged = 0;
-		Request.instance().reset();
 	}
 
 

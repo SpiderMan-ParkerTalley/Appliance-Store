@@ -495,38 +495,36 @@ public class UserInterface {
 	 * and quantity.
 	 */
 	public void listAppliances() {
-		do {
-			final int MINIMUM_MENU_INPUT = 1;
-			final int MAXIMUM_MENU_INPUT = 7;
-			boolean goodInput = false;
-			while(!goodInput) {
-				System.out.println("\nAppliance Types:");
-				System.out.println("1 for washer");
-				System.out.println("2 for dryer");
-				System.out.println("3 for kitchen range");
-				System.out.println("4 for refrigerator");
-				System.out.println("5 for furnace");
-				System.out.println("6 for dishwasher");
-				System.out.println("7 for all");
-				Request.instance().setApplianceType(getInteger("Enter appliance type number: "));
-				if(Request.instance().getApplianceType() < MINIMUM_MENU_INPUT || 
-					Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT) {
-						System.out.println("Invalid input. Please input a number between " + 
-						MINIMUM_MENU_INPUT + " and " + MAXIMUM_MENU_INPUT + ".");
-					} else {
-						goodInput = true;
-					}
-			}
-			Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
-			System.out.println("ApplianceID | Model Name | Brand Name | Price | Quantity ");
-			System.out.println("---------------------------------------------------------");
-			while (resultIterator.hasNext()){
-				Result result = resultIterator.next();
-				System.out.printf("%s | %s | %s | $%,.2f | %d\n", result.getApplianceId(),
-									result.getModelName(),result.getBrandName(),
-									result.getPrice(),result.getQuantity());	
-			}
-		} while (yesOrNo("List another type of appliance models?"));
+		final int MINIMUM_MENU_INPUT = 1;
+		final int MAXIMUM_MENU_INPUT = 7;
+		boolean goodInput = false;
+		while(!goodInput) {
+			System.out.println("\nAppliance Types:");
+			System.out.println("1 for washer");
+			System.out.println("2 for dryer");
+			System.out.println("3 for kitchen range");
+			System.out.println("4 for refrigerator");
+			System.out.println("5 for furnace");
+			System.out.println("6 for dishwasher");
+			System.out.println("7 for all");
+			Request.instance().setApplianceType(getInteger("Enter appliance type number: "));
+			if(Request.instance().getApplianceType() < MINIMUM_MENU_INPUT || 
+				Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT) {
+					System.out.println("Invalid input. Please input a number between " + 
+					MINIMUM_MENU_INPUT + " and " + MAXIMUM_MENU_INPUT + ".");
+				} else {
+					goodInput = true;
+				}
+		}
+		Iterator<Result> resultIterator = applianceStore.listAppliances(Request.instance());
+		System.out.println("ApplianceID | Model Name | Brand Name | Price | Quantity ");
+		System.out.println("---------------------------------------------------------");
+		while (resultIterator.hasNext()){
+			Result result = resultIterator.next();
+			System.out.printf("%s | %s | %s | $%,.2f | %d\n", result.getApplianceId(),
+								result.getModelName(),result.getBrandName(),
+								result.getPrice(),result.getQuantity());	
+		}
 	}
 
 	/**
