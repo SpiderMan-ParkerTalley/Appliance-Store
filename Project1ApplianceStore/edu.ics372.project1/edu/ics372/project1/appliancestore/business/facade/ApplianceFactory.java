@@ -21,6 +21,14 @@ public class ApplianceFactory {
 	public static final int FURNACE = 5;
 	public static final int DISHWASHER = 6;
 
+    /**
+     * This method takes in an int type and Request object to create 
+     * the requested type of object with the attributes placed in the
+     * request object. It returns the appliance object.
+     * @param int of the type of appliance
+     * @param request Object with attributes of appliance
+     * @return Appliance object
+     */
     public static Appliance createAppliance(int type, Request request ){
         Appliance appliance = null;
         switch(type) {
@@ -43,6 +51,12 @@ public class ApplianceFactory {
         return appliance;
     }
 
+    /**
+     * This method takes in an int type and returns the associated 
+     * appliance ID prefix.
+     * @param int type of appliance
+     * @return String ID prefix of appliance
+     */
     public static String findApplianceType(int type) {
         String applianceString = null;
         switch(type) {

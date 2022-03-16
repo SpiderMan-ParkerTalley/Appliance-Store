@@ -7,7 +7,12 @@ import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 
-//TODO Emmanuel comments author
+/**
+ * This class is a singleton that keeps track of back orders of appliances.
+ * It is iterable using a safe iterator and is serializable for saving and 
+ * retrieving.
+ * @author Parker Talley
+ */
 public class BackOrderList implements Iterable<BackOrder>, Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,6 +40,9 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
         return backOrderList;
     }
 
+    /**
+     * This method clears the list of back orders to make an empty list.
+     */
     public void clear() {
         backOrders.clear();
     }

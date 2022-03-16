@@ -7,7 +7,12 @@ import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 
-//TODO Emmanuel comments author
+/**
+ * This class is a singleton that keeps track of customers.
+ * It is iterable using a safe iterator and is serializable for saving and 
+ * retrieving.
+ * @author Parker Talley
+ */
 public class CustomerList implements Iterable<Customer>, Serializable {
 
     private static final long serialVersionUID = 1L;
