@@ -11,13 +11,16 @@ import edu.ics372.project1.appliancestore.business.entities.BackOrder;
  * This class is a singleton that keeps track of back orders of appliances.
  * It is iterable using a safe iterator and is serializable for saving and 
  * retrieving.
+ * 
  * @author Parker Talley
  */
 public class BackOrderList implements Iterable<BackOrder>, Serializable {
-
+    /**
+     * For serialization/de-serialization of the data.
+     */
     private static final long serialVersionUID = 1L;
     /**
-     * A list got storing BackOrder(s).
+     * A list for storing BackOrder(s).
      */
     private List<BackOrder> backOrders = new LinkedList<BackOrder>();
     
@@ -26,11 +29,15 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
      */
     private static BackOrderList backOrderList;
 
+    /**
+     * Private constructor.
+     */
     private BackOrderList() {
     }
 
     /**
      * Retrieves a singleton of BackOrderList.
+     * 
      * @return BackOrderList singleton of BackOrderList.
      */
     public static BackOrderList getInstance() {
@@ -49,6 +56,7 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
 
     /**
      * Check whether a back order with a given back order id exists.
+     * 
      * @param backOrderId String the id of the back order.
      * @return BackOrder back order if found, null otherwise.
      */
@@ -74,7 +82,8 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
     }
 
     /**
-     * Removes a backorder from a collection.  
+     * Removes a back order from a collection.  
+     * 
      * @param backOrder BackOrder the back order to be removed.
      * @return returns true if the back order was found and removed, false if not.
      */
@@ -88,6 +97,7 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
 
     /**
      * Retrieves a list containing all back orders.
+     * 
      * @return List<BackOrder> list of back orders.
      */
     public List<BackOrder> getBackOrderList() {
