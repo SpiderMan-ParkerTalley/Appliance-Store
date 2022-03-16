@@ -11,6 +11,12 @@ import edu.ics372.project1.appliancestore.business.facade.Request;
 import edu.ics372.project1.appliancestore.business.facade.Result;
 import edu.ics372.project1.appliancestore.business.tests.AutomatedTester;
 
+/**
+ * This class acts as the interaction between the user and the ApplianceStore.
+ * 
+ * @author Sharon Shin and Jim Sawicki
+ */
+
 public class UserInterface {
 	private static UserInterface userInterface;
 	private BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));

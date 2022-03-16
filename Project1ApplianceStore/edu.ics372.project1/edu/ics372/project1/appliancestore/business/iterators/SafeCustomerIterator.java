@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 import edu.ics372.project1.appliancestore.business.facade.Result;
 
+//TODO Comments for class and author
 public class SafeCustomerIterator implements Iterator<Result> {
     private Iterator<Customer> iterator;
     private Result result = new Result();

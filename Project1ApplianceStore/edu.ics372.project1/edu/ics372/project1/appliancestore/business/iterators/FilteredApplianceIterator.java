@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 
+//TODO Comments for class and author
 public class FilteredApplianceIterator implements Iterator<Appliance> {
     private Appliance item;
     private String predicate;

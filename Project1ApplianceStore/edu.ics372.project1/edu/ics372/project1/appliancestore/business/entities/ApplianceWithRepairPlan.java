@@ -1,5 +1,6 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
+//TODO Cristian comments
 public abstract class ApplianceWithRepairPlan extends Appliance {
 	private double repairPlanAmount;
 

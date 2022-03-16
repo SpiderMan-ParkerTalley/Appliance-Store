@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import edu.ics372.project1.appliancestore.business.entities.RepairPlanTransaction;
 import edu.ics372.project1.appliancestore.business.facade.Result;
 
+//TODO Comments for class and author
 public class SafeRepairPlanTransactionIterator implements Iterator<Result> {
     private Iterator<RepairPlanTransaction> iterator;
     private Result result;

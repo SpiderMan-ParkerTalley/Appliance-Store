@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.facade.Result;
 
+//TODO Comments for class and author
 public class SafeBackOrderIterator implements Iterator<Result>{
     private Iterator<BackOrder> iterator;
     private Result result = new Result();

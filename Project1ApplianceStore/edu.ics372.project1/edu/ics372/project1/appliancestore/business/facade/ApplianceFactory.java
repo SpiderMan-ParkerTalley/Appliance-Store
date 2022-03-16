@@ -8,6 +8,11 @@ import edu.ics372.project1.appliancestore.business.entities.KitchenRange;
 import edu.ics372.project1.appliancestore.business.entities.Refrigerator;
 import edu.ics372.project1.appliancestore.business.entities.Washer;
 
+/**
+ * A class factory to create specific appliance objects based on type
+ * or match appliances by their ID prefix.
+ * @author Sharon Shin and Parker Talley
+ */
 public class ApplianceFactory {
     public static final int WASHER = 1;
 	public static final int DRYER = 2;

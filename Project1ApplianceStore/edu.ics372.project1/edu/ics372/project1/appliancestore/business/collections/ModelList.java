@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 
+//TODO Emmanuel comments
 public class ModelList implements Iterable<Appliance>, Serializable {
     private static final long serialVersionUID = 1L;
 

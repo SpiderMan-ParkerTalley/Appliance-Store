@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import edu.ics372.project1.appliancestore.business.entities.Transaction;
 import java.util.function.Predicate;
 
+//TODO Comments for class and author
 public class FilteredIterator implements Iterator<Transaction> {
     private Transaction item;
     private Predicate<Transaction> predicate;
