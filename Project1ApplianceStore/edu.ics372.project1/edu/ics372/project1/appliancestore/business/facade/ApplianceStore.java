@@ -430,11 +430,24 @@ public class ApplianceStore implements Serializable {
 	public Result purchaseModel(Request request) { 
 		Result result = new Result();
         int backOrdersNeeded = 0;
-        /* This block searches for the customer and appliance. It returns error codes
-        if either are not found. 
+		Appliance appliance;
+		Customer customer;
+        /* This block searches for the customer and appliance. It returns error
+		codes if the customer ID or appliance ID cannot be located.
         */
-		Customer customer = customers.search(request.getCustomerId());
-		Appliance appliance = models.search(request.getApplianceId());
+		result = ApplianceStore.instance().searchCustomer(Request.instance());
+		if (result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+			return result;
+		} else {
+			customer = customers.search(Request.instance().getCustomerId());
+		}
+		result = ApplianceStore.instance().searchModel(Request.instance());
+		if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+			return result;
+		} else {
+			appliance = models.search(request.getApplianceId());
+		}
+
         /*
         Here, the purchase method in the Appliance class deducts the quantity in the request
         to purchase from the actual number available. If the requested purchase amount exceeds

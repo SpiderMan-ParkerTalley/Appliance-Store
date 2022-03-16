@@ -311,9 +311,9 @@ public class UserInterface {
 		Request.instance().reset(); // TODO Watch this, I think it's a good idea to reset in the UI with each new request. Thoughts?
 		Result result = new Result();
 		do {
-			// Customer and appliance guards.
-			customerCheck(); 
-			applianceCheck();
+			// Customer and appliance input.
+			Request.instance().setCustomerId(getToken("Enter customer's ID: "));
+			Request.instance().setApplianceID(getToken("Enter appliance id"));
 			Request.instance().setQuantity(getInteger("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
 			switch(result.getResultCode()) {
@@ -330,6 +330,12 @@ public class UserInterface {
 				purchaseModelSuccessfulOutput(result);
 				System.out.println("Ineligible for back order. Partial fulfillment.");
 				break;
+			case Result.CUSTOMER_NOT_FOUND:
+				System.out.println("The customer ID was not found.");
+				break;
+			case Result.APPLIANCE_NOT_FOUND:
+				System.out.println("The appliance ID was not found.");
+				break;
 			default:
 				System.out.println("Could not process order.");
 			}
@@ -344,44 +350,6 @@ public class UserInterface {
 					" of Appliance Brand " + result.getBrandName() + ", Model " + 
 					result.getModelName() +	" bought by " + result.getCustomerName() + 
 					" on " + result.getTimeStamp());
-	}
-
-	/**
-	 * Helper method to check the validity of the applianceId.
-	 */
-	private void applianceCheck() {
-		Result result = new Result();
-		boolean applianceInputGood = false;
-		while(!applianceInputGood) {
-			Request.instance().setApplianceID(getToken("Enter appliance id"));
-			result = applianceStore.searchModel(Request.instance());
-			if(result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
-					System.out.println("Error: Appliance with id " + Request.instance().getApplianceId() +
-					" not found.");
-				}
-			else if (result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
-				applianceInputGood = true;
-			}
-		}
-	}
-
-	/**
-	 * Helper method to check the validity of the applianceId.
-	 */
-	private void customerCheck() {
-		Result result = new Result();
-		boolean customerInputGood = false;
-		while(!customerInputGood) {
-			Request.instance().setCustomerId(getToken("Enter customer's ID: "));
-			result = applianceStore.searchCustomer(Request.instance());
-			if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-				System.out.println("Error: Customer with id " + 
-					Request.instance().getCustomerId() + " not found.");
-			}
-			else if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
-				customerInputGood = true;
-			}
-		}
 	}
 
 	/**

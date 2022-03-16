@@ -133,7 +133,7 @@ public class Customer implements Serializable {
      * Charges the customer for all active repair plans.
      */
     public double chargeRepairPlans() {
-        // Stores the total amount changed for repair plans.
+        // Stores the total amount charged for repair plans.
         double amountCharged = 0.0;
         for(Iterator<RepairPlan> iterator = repairPlans.iterator(); iterator.hasNext();) {
             RepairPlan repairPlan = iterator.next();
