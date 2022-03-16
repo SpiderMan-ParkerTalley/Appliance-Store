@@ -11,6 +11,7 @@ import edu.ics372.project1.appliancestore.business.entities.Customer;
  * This class is a singleton that keeps track of customers.
  * It is iterable using a safe iterator and is serializable for saving and 
  * retrieving.
+ * 
  * @author Parker Talley
  */
 public class CustomerList implements Iterable<Customer>, Serializable {
@@ -26,16 +27,19 @@ public class CustomerList implements Iterable<Customer>, Serializable {
 	private List<Customer> customers = new LinkedList<Customer>();
 
     /**
-     *
      * Stores the singleton of CustomerList.
      */
 	private static CustomerList customerList;
 
+    /**
+     * Private constructors.
+     */
 	private CustomerList() {
 	}
 
     /**
      * Retrieves a singleton of CustomerList.
+     * 
      * @return CustomerList singleton of CustomerList.
      */
     public static CustomerList getInstance(){
@@ -45,6 +49,9 @@ public class CustomerList implements Iterable<Customer>, Serializable {
         return customerList;
     }
 
+    /**
+     * This method clears the list of all customers to make an empty list.
+     */
     public void clear() {
         customers.clear();
     }
@@ -77,8 +84,9 @@ public class CustomerList implements Iterable<Customer>, Serializable {
 	}
 
     /**
-     * Calls the hasRepairPlans method in customer to see if the customer has a repair plan.
-     * if they do, it adds it to the List of customers to be returned.
+     * Calls the hasRepairPlans method in customer to see if the customer has a 
+     * repair plan. if they do, it adds it to the List of customers to be returned.
+     * 
      * @return a LinkedList of Customer objects with a repair plan.
      */
     public List<Customer> getAllCustomersInRepairPlan() {
@@ -90,15 +98,7 @@ public class CustomerList implements Iterable<Customer>, Serializable {
         }
         return customersWithRepairPlans;        
     }
-
-    /**
-     * Retrieves list containing all customers.
-     * @return List<Customer> list of customers.
-     */
-    public List<Customer> getCustomerList() {
-        return this.customers;
-    }
-
+    
     @Override
     public Iterator<Customer> iterator() {
         return customers.iterator();
