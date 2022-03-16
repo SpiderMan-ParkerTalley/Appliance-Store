@@ -14,6 +14,9 @@ import java.util.List;
  * @author Parker Talley.
  */
 public class Customer implements Serializable {
+    /**
+     * For serialization/de-serialization of the data.
+     */
     private static final long serialVersionUID = 1L;
 
     /**

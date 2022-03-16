@@ -15,6 +15,9 @@ import edu.ics372.project1.appliancestore.business.entities.Customer;
  */
 public class CustomerList implements Iterable<Customer>, Serializable {
 
+    /**
+     * For serialization/de-serialization of the data.
+     */
     private static final long serialVersionUID = 1L;
 
     /**

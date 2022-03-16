@@ -11,6 +11,9 @@ import java.io.Serializable;
  * @author Parker Talley.
  */
 public class BackOrder implements Serializable {
+    /**
+     * For serialization/de-serialization of the data.
+     */
     private static final long serialVersionUID = 1L;
     private static final String BACK_ORDER_STRING = "BCKORD";
     private static int idCounter = 0;

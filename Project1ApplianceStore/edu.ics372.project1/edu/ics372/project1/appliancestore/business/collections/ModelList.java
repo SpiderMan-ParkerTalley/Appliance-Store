@@ -9,6 +9,9 @@ import edu.ics372.project1.appliancestore.business.entities.Appliance;
 
 //TODO Emmanuel comments author
 public class ModelList implements Iterable<Appliance>, Serializable {
+    /**
+     * For serialization/de-serialization of the data.
+     */
     private static final long serialVersionUID = 1L;
 
     /**
