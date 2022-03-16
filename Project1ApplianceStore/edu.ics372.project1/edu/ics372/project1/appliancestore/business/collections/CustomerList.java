@@ -7,7 +7,7 @@ import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.Customer;
 
-//TODO Emmanuel comments
+//TODO Emmanuel comments author
 public class CustomerList implements Iterable<Customer>, Serializable {
 
     private static final long serialVersionUID = 1L;

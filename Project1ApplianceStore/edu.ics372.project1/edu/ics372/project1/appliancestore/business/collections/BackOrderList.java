@@ -7,7 +7,7 @@ import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 
-//TODO Emmanuel comments
+//TODO Emmanuel comments author
 public class BackOrderList implements Iterable<BackOrder>, Serializable {
 
     private static final long serialVersionUID = 1L;
