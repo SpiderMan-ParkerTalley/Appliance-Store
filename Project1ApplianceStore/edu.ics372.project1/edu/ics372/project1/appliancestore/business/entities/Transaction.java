@@ -14,6 +14,9 @@ import java.util.GregorianCalendar;
  * @author Parker Talley.
  */
 public abstract class Transaction implements Serializable {
+    /**
+     * For serialization/de-serialization of the data.
+     */
     private static final long serialVersionUID = 1L;
 
     /**

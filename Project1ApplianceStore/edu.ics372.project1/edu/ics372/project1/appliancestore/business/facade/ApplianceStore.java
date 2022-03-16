@@ -31,6 +31,9 @@ import edu.ics372.project1.appliancestore.business.collections.ModelList;
  * Cristian Zendejas.
  */
 public class ApplianceStore implements Serializable {
+	/**
+     * For serialization/de-serialization of the data.
+     */
 	private static final long serialVersionUID = 1L;
 
 	/**

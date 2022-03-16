@@ -8,6 +8,9 @@ import java.io.Serializable;
  * @author Parker Talley.
  */
 public class RepairPlan implements Serializable {
+    /**
+     * For serialization/de-serialization of the data.
+     */
     private static final long serialVersionUID = 1L;
     
     /**
