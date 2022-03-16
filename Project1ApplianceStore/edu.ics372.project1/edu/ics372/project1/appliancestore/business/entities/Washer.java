@@ -1,19 +1,26 @@
 package edu.ics372.project1.appliancestore.business.entities;
 
-/*
- * @author Cristian Zendejas
- * The Washer subclass for Appliance.
+/**
+ * Washer class for creating washer objects.
+ * 
+ * @author Cristian Zendejas and Parker Talley
  */
 public class Washer extends ApplianceWithRepairPlan {
-	//Creates a unique identifier for this subclass
+	/**
+	 * Stores the washer ID code.
+	 */
 	private static final String WASHER_STRING = "WASH";
 
-	/*
-	 * Creates a washer object
-	 * @returns Washer object
+	/**
+	 * Creates washer object.
+	 * 
+	 * @param brandName String brand name of the washer.
+	 * @param model String model of the washer.
+	 * @param price double price of the washer.
+	 * @param repairPlanAmount double repair plan cost/amount of washer.
 	 */
-	public Washer(String brandName, String model, double price, int quantity, double repairPlanAmount) {
-		super(brandName, model, price, quantity, repairPlanAmount);
+	public Washer(String brandName, String model, double price, double repairPlanAmount) {
+		super(brandName, model, price, repairPlanAmount);
 		this.setEligibleForRepairPlan(true);
 		this.setEligibleForBackOrder(true);
 	}

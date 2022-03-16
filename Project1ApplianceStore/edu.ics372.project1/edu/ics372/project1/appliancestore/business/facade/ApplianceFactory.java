@@ -32,21 +32,21 @@ public class ApplianceFactory {
     public static Appliance createAppliance(int type, Request request ){
         Appliance appliance = null;
         switch(type) {
-            case WASHER:  appliance = new Washer(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
+            case WASHER:  appliance = new Washer(request.getBrandName(), request.getModelName(), request.getPrice(), 
             request.getRepairPlanAmount());
             break;
-            case DRYER: appliance =  new Dryer(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
+            case DRYER: appliance =  new Dryer(request.getBrandName(), request.getModelName(), request.getPrice(),
             request.getRepairPlanAmount());
             break;
-            case KITCHENRANGE: appliance =  new KitchenRange(request.getBrandName(), request.getModelName(), request.getPrice(), 0);
+            case KITCHENRANGE: appliance =  new KitchenRange(request.getBrandName(), request.getModelName(), request.getPrice());
             break;
-            case REFRIGERATOR: appliance =  new Refrigerator(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
+            case REFRIGERATOR: appliance =  new Refrigerator(request.getBrandName(), request.getModelName(), request.getPrice(),
             request.getCapacity());
             break;
-            case FURNACE: appliance =  new Furnace(request.getBrandName(), request.getModelName(), request.getPrice(), 0, 
+            case FURNACE: appliance =  new Furnace(request.getBrandName(), request.getModelName(), request.getPrice(),
             request.getMaxHeatingOutput());
             break;
-            case DISHWASHER: appliance =  new Dishwasher(request.getBrandName(), request.getModelName(), request.getPrice(), 0); 
+            case DISHWASHER: appliance =  new Dishwasher(request.getBrandName(), request.getModelName(), request.getPrice()); 
         }
         return appliance;
     }

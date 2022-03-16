@@ -79,6 +79,12 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 		return true;
 	}
 
+    /**
+     * Remove an appliance/model from the models list.
+     * 
+     * @param appliance Appliance appliance to be removed.
+     * @return boolean true if the appliance was removed, otherwise false.
+     */
     public boolean removeModel(Appliance appliance) {
         models.remove(appliance);
         return true;

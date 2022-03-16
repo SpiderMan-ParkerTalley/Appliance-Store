@@ -72,7 +72,13 @@ public class Customer implements Serializable {
     private List<RepairPlanTransaction> repairPlanTransactions = 
         new LinkedList<RepairPlanTransaction>();
 
-    // Constructor
+    /**
+     * Creates customer object.
+     * 
+     * @param name String name of customer.
+     * @param address String address of customer.
+     * @param phoneNumber String phone number of customer.
+     */
     public Customer(String name, String address, String phoneNumber) {
         this.name = name;
         this.address = address;
