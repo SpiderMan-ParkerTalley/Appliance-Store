@@ -282,23 +282,23 @@ public class UserInterface {
 
 	/**
 	 * Method to be called for adding inventory to a single model. The user inputs the prompted 
-	 * values and uses the appropriate ApplicationStore method for adding the model inventory.
+	 * values and the appropriate ApplicationStore method for adding the model to inventory is called.
 	 */
 	public void addInventory() {
 		Request.instance().setApplianceID(getToken("Enter appliance's ID: "));
-		Result result = applianceStore.searchModel(Request.instance());
-		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("No appliance with id " + Request.instance().getApplianceId());
-		} else {
-			Request.instance().setQuantity(getInteger("Enter the quantity to be added: "));
-			result = applianceStore.addInventory(Request.instance());
-		}
-		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("Quantity " + Request.instance().getQuantity() + 
-								"could not be added to Appliance with ID" + result.getApplianceId());
-		} else {
+		Request.instance().setQuantity(getInteger("Enter the quantity to be added: "));
+		Result result = applianceStore.addInventory(Request.instance());
+		switch (result.getResultCode()) {
+			case Result.APPLIANCE_NOT_FOUND :
+				System.out.println("No appliance with id " + Request.instance().getApplianceId());
+				break;
+			case Result.OPERATION_SUCCESSFUL :
 			System.out.println(Request.instance().getQuantity() + " units were added to the inventory of "
 								 + result.getApplianceId());
+				break;
+			default:
+				System.out.println("Quantity " + Request.instance().getQuantity() + 
+				" could not be added to Appliance with ID " + result.getApplianceId());
 		}
 	}
 
@@ -311,9 +311,9 @@ public class UserInterface {
 		Request.instance().reset(); // TODO Watch this, I think it's a good idea to reset in the UI with each new request. Thoughts?
 		Result result = new Result();
 		do {
-			// Customer and appliance guards.
-			customerCheck(); 
-			applianceCheck();
+			// Customer and appliance input.
+			Request.instance().setCustomerId(getToken("Enter customer's ID: "));
+			Request.instance().setApplianceID(getToken("Enter appliance id"));
 			Request.instance().setQuantity(getInteger("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
 			switch(result.getResultCode()) {
@@ -330,6 +330,12 @@ public class UserInterface {
 				purchaseModelSuccessfulOutput(result);
 				System.out.println("Ineligible for back order. Partial fulfillment.");
 				break;
+			case Result.CUSTOMER_NOT_FOUND:
+				System.out.println("The customer ID was not found.");
+				break;
+			case Result.APPLIANCE_NOT_FOUND:
+				System.out.println("The appliance ID was not found.");
+				break;
 			default:
 				System.out.println("Could not process order.");
 			}
@@ -344,44 +350,6 @@ public class UserInterface {
 					" of Appliance Brand " + result.getBrandName() + ", Model " + 
 					result.getModelName() +	" bought by " + result.getCustomerName() + 
 					" on " + result.getTimeStamp());
-	}
-
-	/**
-	 * Helper method to check the validity of the applianceId.
-	 */
-	private void applianceCheck() {
-		Result result = new Result();
-		boolean applianceInputGood = false;
-		while(!applianceInputGood) {
-			Request.instance().setApplianceID(getToken("Enter appliance id"));
-			result = applianceStore.searchModel(Request.instance());
-			if(result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
-					System.out.println("Error: Appliance with id " + Request.instance().getApplianceId() +
-					" not found.");
-				}
-			else if (result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
-				applianceInputGood = true;
-			}
-		}
-	}
-
-	/**
-	 * Helper method to check the validity of the applianceId.
-	 */
-	private void customerCheck() {
-		Result result = new Result();
-		boolean customerInputGood = false;
-		while(!customerInputGood) {
-			Request.instance().setCustomerId(getToken("Enter customer's ID: "));
-			result = applianceStore.searchCustomer(Request.instance());
-			if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-				System.out.println("Error: Customer with id " + 
-					Request.instance().getCustomerId() + " not found.");
-			}
-			else if(result.getResultCode() == Result.OPERATION_SUCCESSFUL) {
-				customerInputGood = true;
-			}
-		}
 	}
 
 	/**
@@ -605,7 +573,8 @@ public class UserInterface {
 			cnfe.printStackTrace();
 		}
 	}
-/**
+	
+	/**
 	 * Orchestrates the whole process. Calls the appropriate method for the
 	 * different functionalities.
 	 * 
@@ -663,6 +632,7 @@ public class UserInterface {
 			}
 		}
 	}
+
 	/**
 	 * Prints the revenues from sales and repair plan charge in a convenient
 	 * format.
@@ -671,11 +641,9 @@ public class UserInterface {
 		Result result = applianceStore.getTotalRevenue();
 		System.out.printf("Sales Revenue: $%,.2f\n" , result.getTotalRevenueFromTransactions());
 		System.out.printf("Repair Plan Revenue: $%,.2f\n", result.getTotalRevenueFromRepairPlans());
-}
+	}
 
 	public static void main(String args[]) {
 		UserInterface.instance().process();
-
-
 	}
 }
