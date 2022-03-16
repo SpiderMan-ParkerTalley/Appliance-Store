@@ -282,23 +282,23 @@ public class UserInterface {
 
 	/**
 	 * Method to be called for adding inventory to a single model. The user inputs the prompted 
-	 * values and uses the appropriate ApplicationStore method for adding the model inventory.
+	 * values and the appropriate ApplicationStore method for adding the model to inventory is called.
 	 */
 	public void addInventory() {
 		Request.instance().setApplianceID(getToken("Enter appliance's ID: "));
-		Result result = applianceStore.searchModel(Request.instance());
-		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("No appliance with id " + Request.instance().getApplianceId());
-		} else {
-			Request.instance().setQuantity(getInteger("Enter the quantity to be added: "));
-			result = applianceStore.addInventory(Request.instance());
-		}
-		if(result.getResultCode() != Result.OPERATION_SUCCESSFUL) {
-			System.out.println("Quantity " + Request.instance().getQuantity() + 
-								"could not be added to Appliance with ID" + result.getApplianceId());
-		} else {
+		Request.instance().setQuantity(getInteger("Enter the quantity to be added: "));
+		Result result = applianceStore.addInventory(Request.instance());
+		switch (result.getResultCode()) {
+			case Result.APPLIANCE_NOT_FOUND :
+				System.out.println("No appliance with id " + Request.instance().getApplianceId());
+				break;
+			case Result.OPERATION_SUCCESSFUL :
 			System.out.println(Request.instance().getQuantity() + " units were added to the inventory of "
 								 + result.getApplianceId());
+				break;
+			default:
+				System.out.println("Quantity " + Request.instance().getQuantity() + 
+				" could not be added to Appliance with ID " + result.getApplianceId());
 		}
 	}
 
