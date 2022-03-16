@@ -71,7 +71,7 @@ public abstract class Appliance implements Serializable {
 
 	/**
 	 * Generates a generic string for the appliance.
-	 * Will be overridden in each subclass to keep track of the id.
+	 * 
 	 * @return a generated ID.
 	 */
 	public abstract String createId();
