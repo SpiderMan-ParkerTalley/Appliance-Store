@@ -7,7 +7,12 @@ import java.util.List;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 
-//TODO Emmanuel comments author
+/**
+ * This class is a singleton that keeps track of appliances.
+ * It is iterable using a safe iterator and is serializable for saving and 
+ * retrieving.
+ * @author Emmanuel ojogwu
+ */
 public class ModelList implements Iterable<Appliance>, Serializable {
     /**
      * For serialization/de-serialization of the data.
@@ -15,7 +20,7 @@ public class ModelList implements Iterable<Appliance>, Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     *  A list for storing Appliance(s). 
+     *  A list for storing Appliances. 
      */
 	private List<Appliance> models = new LinkedList<Appliance>();
 
@@ -24,6 +29,10 @@ public class ModelList implements Iterable<Appliance>, Serializable {
      */
 	private static ModelList modelList;
 
+    /**
+     * This is an empty constructor that won't create an instance of this class for the purpose of singleton
+     * except through the getInstance method
+     */
 	private ModelList() {
 	}
 
@@ -38,6 +47,10 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 		return modelList;
 	}
 
+    /**This method removes all the appliance in the models list
+     * @param null
+     * @return void
+     */
     public void clear() {
         models.clear();
     }
@@ -68,17 +81,26 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 	}
 
     /**
-     * 
-     * @return
+     * This method iterates through the models list
+     * @param null
+     * @return Iterator of type Appliance
      */
     public Iterator<Appliance> getModels() {
         return models.iterator();
     }
 
+    /**
+     * This method ruturns the models in the singleton class 
+     * @param null
+     * @return List of type Appliance
+     */
     public List<Appliance> getModelList() {
         return models;
     }
 
+    /**
+     * The iterator method from the implemented class is overwritten 
+     */
     @Override
     public Iterator<Appliance> iterator() {
         return models.iterator();

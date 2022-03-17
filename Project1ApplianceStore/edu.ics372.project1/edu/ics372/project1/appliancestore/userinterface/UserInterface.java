@@ -314,7 +314,7 @@ public class UserInterface {
 	 * method purchasing the model.
 	 */
 	public void purchaseModel() {
-		Request.instance().reset(); // TODO Watch this, I think it's a good idea to reset in the UI with each new request. Thoughts?
+		Request.instance().reset(); 
 		Result result = new Result();
 		do {
 			// Customer and appliance input.
@@ -649,6 +649,11 @@ public class UserInterface {
 		System.out.printf("Repair Plan Revenue: $%,.2f\n", result.getTotalRevenueFromRepairPlans());
 	}
 
+	/**
+	 * This is the main method to run the userinterface 
+	 * @param args
+	 * @return void
+	 */
 	public static void main(String args[]) {
 		UserInterface.instance().process();
 	}
