@@ -95,6 +95,7 @@ public class UserInterface {
 	}
 
 	/**
+	 * 
 	 * Grabs input from the user using a prompt and returns it for the name field.
 	 * @param prompt The text prompt the system will display to the user.
 	 * @return The name
@@ -117,7 +118,7 @@ public class UserInterface {
 	 * @param prompt The prompt the user sees.
 	 * @return Boolean true for yes, false for no
 	 */
-	private boolean yesOrNo(String prompt) {
+	public boolean yesOrNo(String prompt) {
 		String more = getToken(prompt + " Y or y for yes or anything else for no: ");
 		if (more.charAt(0) != 'y' && more.charAt(0) != 'Y') {
 			return false;
@@ -133,7 +134,7 @@ public class UserInterface {
 	 * The prompt displayed to the user
 	 * @return The primitive int value
 	 */
-	private int getInteger(String prompt) {
+	public int getInteger(String prompt) {
 		do {
 			try {
 				String item = getToken(prompt);
@@ -158,7 +159,7 @@ public class UserInterface {
 	 * The prompt displayed to the user
 	 * @return The primitive double value
 	 */
-	private double getDouble(String prompt) {
+	public double getDouble(String prompt) {
 		do {
 			try {
 				String item = getToken(prompt);
@@ -228,18 +229,23 @@ public class UserInterface {
 		boolean goodInput = false;
 		final int  MINIMUM_MENU_INPUT = 1;
 		final int MAXIMUM_MENU_INPUT = 6;
-		modelSubMenu();
+		System.out.println("Add model selected");
+		/*
+		Displays the model submenu and checks the input for errors.
+		*/
 		while (!goodInput) {
+			modelSubMenu();
 			Request.instance().setApplianceType(getInteger("Enter appliance type number: "));  
 			if (Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT || Request.instance().getApplianceType() < MINIMUM_MENU_INPUT) {
 				System.out.println("This is not a valid menu selection. Please select from the following options.");
-				modelSubMenu();
 			}
 			else {
 				goodInput = true;
 			}
 		}
-
+		/*
+		*	Logic to fill the appropriate fields in the Request object.
+		*/
 		if(Request.instance().getApplianceType() == 1 || Request.instance().getApplianceType() == 2){
 			Request.instance().setRepairPlanAmount(getDouble("Enter repair plan price amount: "));
 		} else if(Request.instance().getApplianceType() == 4){
@@ -256,12 +262,13 @@ public class UserInterface {
 		} else {
 			System.out.println("Appliance model has been added. Appliance ID: " + result.getApplianceId());
 		}
+		Request.instance().reset();
 	}
 	/**
 	 * Helper function for addModel.
 	 */
 	private void modelSubMenu() {
-		System.out.println("\nAppliance Types:");
+		System.out.println("Appliance Types:");
 		System.out.println("1 for washer");
 		System.out.println("2 for dryer");
 		System.out.println("3 for kitchen range");
@@ -275,6 +282,7 @@ public class UserInterface {
 	 * uses the appropriate ApplicationStore method for adding the customer.
 	 */
 	public void addCustomer() {
+		System.out.println("Add customer selected");
 		Request.instance().setCustomerName(getName("Enter name: "));
 		Request.instance().setCustomerAddress(getName("Enter address: "));
 		Request.instance().setCustomerPhoneNumber(getName("Enter phone number: "));
@@ -284,6 +292,7 @@ public class UserInterface {
 		} else {
 			System.out.println(result.getCustomerName() + "'s id is " + result.getCustomerId() + ".");
 		}
+		Request.instance().reset();
 	}
 
 	/**
@@ -291,6 +300,7 @@ public class UserInterface {
 	 * values and the appropriate ApplicationStore method for adding the model to inventory is called.
 	 */
 	public void addInventory() {
+		System.out.println("Add inventory selected");
 		Request.instance().setApplianceID(getToken("Enter appliance's ID: "));
 		Request.instance().setQuantity(getInteger("Enter the quantity to be added: "));
 		Result result = applianceStore.addInventory(Request.instance());
@@ -306,23 +316,24 @@ public class UserInterface {
 				System.out.println("Quantity " + Request.instance().getQuantity() + 
 				" could not be added to Appliance with ID " + result.getApplianceId());
 		}
+		Request.instance().reset();
 	}
 
 	/**
 	 * Method to be called for purchasing one or more models for a single customer.
-	 * The user inputs the promoted values and uses the appropriate ApplicationStore 
-	 * method purchasing the model.
+	 * The user inputs the customer ID and appliance ID involved in the transaction.
+	 * The method returns a message based upon the successful fulfillment, 
+	 * partial fulfillment, or failure of the purchase.
 	 */
 	public void purchaseModel() {
-		Request.instance().reset(); // TODO Watch this, I think it's a good idea to reset in the UI with each new request. Thoughts?
 		Result result = new Result();
-		//customer ID input
+		System.out.println("Purchase model selected");
+		// user input (customerID and ApplianceID)
 		Request.instance().setCustomerId(getToken("Enter customer's ID: "));
-		do {
-			// Appliance ID and quantity input
-			Request.instance().setApplianceID(getToken("Enter appliance id"));
-			Request.instance().setQuantity(getInteger("Enter amount to buy"));
+			Request.instance().setApplianceID(getToken("Enter appliance ID:"));
+			Request.instance().setQuantity(getInteger("Enter amount to buy:"));
 			result = applianceStore.purchaseModel(Request.instance());
+			// result switch
 			switch(result.getResultCode()) {
 			case Result.OPERATION_SUCCESSFUL:
 				purchaseModelSuccessfulOutput(result);
@@ -346,7 +357,7 @@ public class UserInterface {
 			default:
 				System.out.println("Could not process order.");
 			}
-		} while (yesOrNo("Purchase more models?")); 
+		Request.instance().reset();
 	}
 
 	/**
@@ -361,10 +372,10 @@ public class UserInterface {
 
 	/**
 	 * Method to be called for fulfilling the back orders associated with the back order id.
-	 * The user inputs the back order id and uses the appropriate ApplicationStore 
-	 * method for fulfilling the back order.
+	 * The user inputs the back order id. A message is generated indicating success or failure.
 	 */
 	public void fulfillBackOrder() {
+		System.out.println("Fulfill back order selected");
 		Request.instance().setBackOrderId(getToken("Enter back order id"));
 		Result result = applianceStore.searchBackOrder(Request.instance()); 
 		result = applianceStore.fulfillBackOrder(Request.instance());
@@ -375,14 +386,16 @@ public class UserInterface {
 		} else {
 			System.out.println("Back order fulfilled.");
 		}
+		Request.instance().reset();
 	}
 
 	/**
 	 * Method to be called for enrolling a customer in a repair plan for a single appliance.
-	 * The user inputs the customer id and appliance id and uses the appropriate ApplicationStore
-	 * method for enrolling the customer in the repair plan.
+	 * The user inputs the customer id and appliance id and a result message is generated
+	 * indicating success or failure.
 	 */
 	public void enrollRepairPlan() {
+		System.out.println("Enroll repair plan selected");
 		// Gather user information.
 		Request.instance().setCustomerId(getToken("Enter customer ID: "));
 		Request.instance().setApplianceID(getToken("Enter appliance ID: "));
@@ -414,41 +427,53 @@ public class UserInterface {
 		else {
 			System.out.println("There was an error enrolling the plan.");
 		}
+		Request.instance().reset();
 	}
 
 	/**
 	 * Method for withdrawing a customer from a repair plan for a single appliance.
-	 * The user inputs the promoted values and uses the appropriate ApplicationStore
-	 * methods for withdrawing the customer from the repair plan.
+	 * The user inputs the promoted values and a result message is generated with
+	 * the outcome of the operation.
 	 */
 	public void withdrawRepairPlan() {
+		System.out.println("Withdraw repair plan selected");
 		// Gather user information.
 		Request.instance().setCustomerId(getToken("Enter customer ID: "));
 		Request.instance().setApplianceID(getToken("Enter appliance ID: "));
 		// Submit request to appliance store.
 		Result result = applianceStore.withdrawRepairPlan(Request.instance());
+		switch (result.getResultCode()) {
 		// Appliance is not eligible for repair plan.
-		if(result.getResultCode() == Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN) {
+		case Result.NOT_ELIGIBLE_FOR_REPAIR_PLAN :
 			System.out.println("Appliance not eligible for repair plan.");
-		} 
+			break;
 		// Customer ID is not in system.
-		else if(result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
-			System.out.println("Could not find customer associate with customer ID entered.");
-		} 
+		case Result.CUSTOMER_NOT_FOUND :
+			System.out.println("Customer ID was not found.");
+			break;
 		// Appliance ID is not in system.
-		else if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
-			System.out.println("Could not find appliance associate with appliance ID entered.");
-		} 
-		// Customer has not been enrolled in repair plan with appliance.
-		else if (result.getResultCode() == Result.OPERATION_FAILED) {
-			System.out.println("Customer has not been enrolled in a repair plan with that appliance.");
-		} 
+		case Result.APPLIANCE_NOT_FOUND :
+			System.out.println("Appliance ID was not found.");
+			break;
 		// Successful operation.
-		else {
+		case Result.OPERATION_SUCCESSFUL :
 			System.out.println("Repair plan successfully withdrawn for customer with ID " + 
 								Request.instance().getCustomerId() + 
 								" and Appliance ID " + Request.instance().getApplianceId());
+			break;
+		// Customer has not been enrolled in repair plan with appliance.
+		case Result.REPAIR_PLAN_NOT_FOUND :
+			System.out.println("A repair plan between customer ID " + result.getCustomerId() +
+								 " and an appliance with Appliance ID " + result.getApplianceId() +
+								 " was not found.");
+			break;
+		case Result.OPERATION_FAILED :
+			System.out.println("The operation failed.");
+			break;
+		default:
+			System.out.println("An error has occured.");
 		}
+		Request.instance().reset();
 	}
 
 	/**
@@ -456,13 +481,14 @@ public class UserInterface {
 	 * and displays a message when completed.
 	 */
 	public void chargeAllRepairPlans() {
+		System.out.println("Charge repair plans selected");
 		Result result = applianceStore.chargeRepairPlans();
-
 		if(result.getResultCode() == Result.OPERATION_FAILED) {
 			System.out.println("Error in charging repair plans");
-		} else if (result.getResultCode() == Result.OPERATION_SUCCESSFUL){ 
+		} else { 
 			System.out.println("Repair plans have been charged.");
 		}
+		Request.instance().reset();
 	}
 
 	/**
@@ -470,11 +496,12 @@ public class UserInterface {
 	 * and quantity.
 	 */
 	public void listAppliances() {
+		System.out.println("List appliances selected");
 		final int MINIMUM_MENU_INPUT = 1;
 		final int MAXIMUM_MENU_INPUT = 7;
 		boolean goodInput = false;
 		while(!goodInput) {
-			System.out.println("\nAppliance Types:");
+			System.out.println("Appliance Types:");
 			System.out.println("1 for washer");
 			System.out.println("2 for dryer");
 			System.out.println("3 for kitchen range");
@@ -487,7 +514,7 @@ public class UserInterface {
 				Request.instance().getApplianceType() > MAXIMUM_MENU_INPUT) {
 					System.out.println("Invalid input. Please input a number between " + 
 					MINIMUM_MENU_INPUT + " and " + MAXIMUM_MENU_INPUT + ".");
-				} else {
+			} else {
 					goodInput = true;
 				}
 		}
@@ -500,32 +527,37 @@ public class UserInterface {
 								result.getModelName(),result.getBrandName(),
 								result.getPrice(),result.getQuantity());	
 		}
+	Request.instance().reset();
 	}
 
 	/**
-	 * Finds all customers with repair plans and prints them out.
+	 * Finds all customers with repair plans and prints out their name, address,
+	 * phone number, and repair plan account balance.
 	 */
 	public void listAllRepairPlanCustomers() {
+		System.out.println("List all repair plan customers selected");
 		Iterator<Result> resultIterator =  applianceStore.getAllRepairPlanCustomers();
 		System.out.println("Customers currently enrolled in repair plans");
-		System.out.println("Name | Address | Phone | Has Repair Plan?");
-		System.out.println("------------------------------------------");
+		System.out.println("Name | Address | Phone | Repair Plan Account Balance");
+		System.out.println("-----------------------------------------------------");
 		while(resultIterator.hasNext()) {
 			Result result = resultIterator.next();
-			System.out.println(result.getCustomerName() + " | "
-			+ result.getCustomerAddress() + " | "
-			+ result.getCustomerPhoneNumber() + " | "
-			+ result.getCustomerHasRepairPlan());
+			System.out.printf("%s | %s | %s  | $%,.2f\n", 
+			result.getCustomerName(), result.getCustomerAddress(), 
+			result.getCustomerPhoneNumber(), result.getTotalRevenueFromRepairPlans());
 		}
+		Request.instance().reset();
 	}
 
 	/**
-	 * Prints out every customer and their details.
+	 * Prints out every customer with their name, address, phone number,
+	 * and repair plan status.
 	 */
 	public void listCustomers() {
+		System.out.println("List customers selected");
 		Iterator<Result> resultIterator = applianceStore.getAllCustomers();
 		System.out.println("Name | Address | Phone | Repair Plan Status");
-		System.out.println("-----------------------------------------------------");
+		System.out.println("---------------------------------------------");
 		while (resultIterator.hasNext()) {
 			Result result = resultIterator.next();
 			System.out.println(result.getCustomerName() + " | "
@@ -533,6 +565,7 @@ public class UserInterface {
 				+ result.getCustomerPhoneNumber() + " | "
 				+ result.getCustomerHasRepairPlan());
 		}
+		Request.instance().reset();
 	}
 
 	/**
@@ -541,6 +574,7 @@ public class UserInterface {
 	 * 
 	 */
 	public void printAllBackOrders() {
+		System.out.println("List all back orders selected");
 		Iterator<Result> iterator = applianceStore.getAllBackOrders();
 		System.out.println("Back Order ID | Appliance ID | Customer ID | Quantity");
 		System.out.println("-----------------------------------------------------");
@@ -549,6 +583,7 @@ public class UserInterface {
 			System.out.println(result.getBackOrderId() + " | " + result.getApplianceId() + " | " + result.getCustomerId()
 			+ " | " + result.getQuantity());
 		}
+		Request.instance().reset();
 	}	
 	
 	/**

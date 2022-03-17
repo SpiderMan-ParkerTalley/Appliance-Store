@@ -41,7 +41,9 @@ public class SafeCustomerIterator implements Iterator<Result> {
     @Override
     public Result next() {
         if (iterator.hasNext()) {
-            result.setCustomerFields(iterator.next());
+            Customer customer = iterator.next();
+            result.setCustomerFields(customer);
+            result.setTotalRevenueFromRepairPlans(customer.getRepairPlansTotalCost());
         } else {
             throw new NoSuchElementException("No such element");
         }
