@@ -18,7 +18,7 @@ public class RepairPlanTransaction extends Transaction {
 
     /**
      * Constructor for repair plan transactions.
-     * @param customer Customer associated with repair plan transaction.
+     * @param customer Customer customer associated with repair plan transaction.
      * @param appliance ApplianceWithRepairPlan appliance associated with repair 
      * plan transaction.
      */

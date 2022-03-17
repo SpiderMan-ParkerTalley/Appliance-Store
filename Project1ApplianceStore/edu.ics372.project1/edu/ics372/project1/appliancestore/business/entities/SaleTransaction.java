@@ -22,10 +22,11 @@ public class SaleTransaction extends Transaction {
     private Appliance appliance;
 
     /**
+     * Creates a sale transaction.
      * 
-     * @param customer Customer 
-     * @param appliance Appliance
-     * @param quantity int
+     * @param customer Customer customer associated with sale transaction.
+     * @param appliance Appliance appliance associated with sale transaction.
+     * @param quantity int quantity of appliance being ordered.
      */
     public SaleTransaction(Customer customer, Appliance appliance, int quantity) {
         super(customer);
@@ -37,6 +38,7 @@ public class SaleTransaction extends Transaction {
 
     /**
      * Generates the next sales transaction ID.
+     * 
      * @return String the next sales transaction ID.
      */
     private String generateId() {

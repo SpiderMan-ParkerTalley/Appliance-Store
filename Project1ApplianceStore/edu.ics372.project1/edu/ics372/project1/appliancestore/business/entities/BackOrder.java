@@ -15,8 +15,16 @@ public class BackOrder implements Serializable {
      * For serialization/de-serialization of the data.
      */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Unique identifier header for back orders.
+     */
     private static final String BACK_ORDER_STRING = "BCKORD";
-    private static int idCounter = 0;
+
+    /**
+     * Stores the next ID for back order.
+     */
+    private static int nextId = 0;
 
     /**
      * Stores the back order identification number.
@@ -48,7 +56,7 @@ public class BackOrder implements Serializable {
         this.setCustomer(customer);
         this.setAppliance(appliance);
         this.setQuantity(quantity);
-        id = BACK_ORDER_STRING + idCounter++;
+        id = BACK_ORDER_STRING + nextId++;
     }
 
     // Setters
@@ -82,19 +90,20 @@ public class BackOrder implements Serializable {
     }
     
     /**
-     * Saves the static idCounter.
-     * @param output
+     * Saves the static fields in BackOrder class.
+     * 
+     * @param output ObjectOutputStream object.
      */
     public static void save(ObjectOutputStream output) throws IOException {
-        output.writeObject(idCounter);
+        output.writeObject(nextId);
     }
     
     /**
-    * Retrieves the static id counter.
+    * Retrieves the static fields in BackOrder class.
     */
     public static void retrieve(ObjectInputStream input) throws IOException, 
-                            ClassNotFoundException {
-        idCounter = (int) input.readObject();
+        ClassNotFoundException {
+            nextId = (int) input.readObject();
     }
 
 }

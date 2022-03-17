@@ -5,25 +5,40 @@ import java.util.NoSuchElementException;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 
-//TODO Comments for class and author
+/**
+ * This class implements the Iterator interface to iterate only on appliances
+ * that satisfy a certain predicate.
+ * 
+ * @author Parker Talley
+ */
 public class FilteredApplianceIterator implements Iterator<Appliance> {
+    /**
+     * Stores Appliance item, the next item to be returned.
+     */
     private Appliance item;
+
+    /**
+     * Store the string predicate, what is currently needed to be found.
+     */
     private String predicate;
+
+    /**
+     * Stores the iterator for appliance.
+     */
     private Iterator<Appliance> iterator;
 
     /**
      * Sets the iterator and predicate fields and positions to the first item
      * that satisfies the predicate.
      * 
-     * @param iterator the iterator to the list.
-     * @param predicate specifies the test.
+     * @param iterator Iterator<Appliance> the iterator to the list.
+     * @param predicate String specifies the test.
      */
     public FilteredApplianceIterator(Iterator<Appliance> iterator, String predicate) {
         this.predicate = predicate; // sub string
         this.iterator = iterator; // iterator
         getNextItem();
     }
-
 
     @Override
     public boolean hasNext() {
