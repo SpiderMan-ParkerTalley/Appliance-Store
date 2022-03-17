@@ -25,6 +25,7 @@ public class ApplianceFactory {
      * This method takes in an int type and Request object to create 
      * the requested type of object with the attributes placed in the
      * request object. It returns the appliance object.
+     * 
      * @param int of the type of appliance
      * @param request Object with attributes of appliance
      * @return Appliance object
