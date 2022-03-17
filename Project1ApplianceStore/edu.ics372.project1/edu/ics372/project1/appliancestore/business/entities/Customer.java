@@ -50,11 +50,6 @@ public class Customer implements Serializable {
      */
     private String phoneNumber;
 
-    /**
-     * Stores the customer's account balance.
-     */
-    private double accountBalance;
-
     // Lists
     /**
      * A list containing all the customer's sale/purchase transactions.
@@ -219,23 +214,6 @@ public class Customer implements Serializable {
         return false;
     }
 
-    /**
-     * Generates a string using the customer's information.
-     * 
-     * @return String of customer information.
-     */
-    public String getInformation() {
-        String customerInfo = "Member name " + name + " address " + address + 
-            " id " + id + " phone number " + phoneNumber + " account balance " + 
-            accountBalance + " has repair plan: ";
-        if(this.hasRepairPlan()) {
-            customerInfo.concat("true");
-        } else {
-            customerInfo.concat("false");
-        }
-        return customerInfo;
-    }
- 
     // Setters
     public void setName(String name) {
         this.name = name;
@@ -258,10 +236,6 @@ public class Customer implements Serializable {
     
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-    
-    public double getAccountBalance() {
-        return accountBalance;
     }
 
     public String getId() {
