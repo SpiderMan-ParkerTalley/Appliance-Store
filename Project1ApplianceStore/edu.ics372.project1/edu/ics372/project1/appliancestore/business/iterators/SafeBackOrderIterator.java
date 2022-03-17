@@ -6,9 +6,22 @@ import java.util.NoSuchElementException;
 import edu.ics372.project1.appliancestore.business.entities.BackOrder;
 import edu.ics372.project1.appliancestore.business.facade.Result;
 
-//TODO Comments for class and author
-public class SafeBackOrderIterator implements Iterator<Result>{
+/**
+ * This Iterator implementation is tailor-made to supply a "read-only" version
+ * of BackOrder objects. The user should supply an iterator to BackOrder as the 
+ * parameter to the constructor.
+ * 
+ * @author Parker Talley.
+ */
+public class SafeBackOrderIterator implements Iterator<Result> {
+    /**
+     * Stores the back order iterator.
+     */
     private Iterator<BackOrder> iterator;
+
+    /**
+     * The result object to be returned.
+     */
     private Result result = new Result();
 
     /**

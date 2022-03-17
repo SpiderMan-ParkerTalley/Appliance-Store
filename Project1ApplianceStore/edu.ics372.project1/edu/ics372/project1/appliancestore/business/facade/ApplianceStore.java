@@ -7,6 +7,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Objects;
 
 import edu.ics372.project1.appliancestore.business.entities.Appliance;
 import edu.ics372.project1.appliancestore.business.entities.ApplianceWithRepairPlan;
@@ -438,19 +439,16 @@ public class ApplianceStore implements Serializable {
         /* This block searches for the customer and appliance. It returns error
 		codes if the customer ID or appliance ID cannot be located.
         */
-		result = ApplianceStore.instance().searchCustomer(Request.instance());
-		if (result.getResultCode() == Result.CUSTOMER_NOT_FOUND) {
+		customer = customers.search(Request.instance().getCustomerId());
+		if (Objects.isNull(customer)) {
+			result.setResultCode(Result.CUSTOMER_NOT_FOUND);
 			return result;
-		} else {
-			customer = customers.search(Request.instance().getCustomerId());
-		}
-		result = ApplianceStore.instance().searchModel(Request.instance());
-		if (result.getResultCode() == Result.APPLIANCE_NOT_FOUND) {
+		} 
+		appliance = models.search(request.getApplianceId());
+		if (Objects.isNull(appliance)) {
+			result.setResultCode(Result.APPLIANCE_NOT_FOUND);
 			return result;
-		} else {
-			appliance = models.search(request.getApplianceId());
 		}
-
         /*
         Here, the purchase method in the Appliance class deducts the quantity in the request
         to purchase from the actual number available. If the requested purchase amount exceeds

@@ -6,11 +6,15 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
-/*
- * @author Cristian Zendejas
- * The abstract parent class for all appliances within the store.
+/**
+ * Abstract parent class for all appliances within the store.
+ * 
+ * @author Cristian Zendejas and Parker Talley.
  */
 public abstract class Appliance implements Serializable {
+	/**
+	 * Stores the next ID for appliance/model.
+	 */
 	protected static int nextId = 0;
 	
 	/**
@@ -58,20 +62,18 @@ public abstract class Appliance implements Serializable {
 	 * @param brandName String the brand name of the appliance.
 	 * @param model String the model of the appliance.
 	 * @param price double the price of the appliance.
-	 * @param quantity int the quantity available of the appliance.
 	 */
-	public Appliance(String brandName, String model, double price, int quantity) {
+	public Appliance(String brandName, String model, double price) {
 		id = createId();
 		this.brandName = brandName;
 		this.model = model;
 		this.price = price;
-		this.quantity = quantity;
 		this.createdAt = new Timestamp(System.currentTimeMillis());
 	}
 
 	/**
 	 * Generates a generic string for the appliance.
-	 * Will be overridden in each subclass to keep track of the id.
+	 * 
 	 * @return a generated ID.
 	 */
 	public abstract String createId();
@@ -140,6 +142,7 @@ public abstract class Appliance implements Serializable {
 
 	/**
 	 * Check if the appliance is eligible for repair plan.
+	 * 
 	 * @return boolean true if eligible, false otherwise.
 	 */
 	public boolean eligibleForRepairPlan() {
@@ -148,20 +151,19 @@ public abstract class Appliance implements Serializable {
 
 	/**
 	 * Check if the appliance is eligible for back order plan.
+	 * 
 	 * @return boolean true if eligible, false otherwise.
 	 */
 	public boolean eligibleForBackOrder() {
 		return eligibleForBackOrder;
 	}
 
-	/*
-	 * Returns the quantity of appliances that need to be backordered.
-	 * If the quantity of appliances in stock is greater than the quantity
-	 * being purchased, needToBackOrder returns 0.
-	 * If there is not enough inventory on hand to fulfill the purchase,
-	 * needToBackOrder returns the amount needed to back order.
-	 * @param int - the quantity being purchased
-	 * @return int - The amount of appliances to put on back order. 
+	/**
+	 * Determines the new quantity and back order quantity (if any) when an 
+	 * appliance is purchased.
+	 * 
+	 * @param int quantity the quantity being purchased
+	 * @return int the amount of appliances to put on back order. 
 	 */
 	public int purchase(int quantity) {
 		int needToBackOrder = 0;
@@ -170,28 +172,34 @@ public abstract class Appliance implements Serializable {
 			this.setQuantity(0); 
 			return needToBackOrder;
 		} else {
-			this.setQuantity(this.getQuantity()- quantity);
+			this.setQuantity(this.getQuantity() - quantity);
 			return needToBackOrder;
 		}
 	}
 
 	 /**
-     * Saves the static idCounter.
-     * @param output
+     * Saves the static fields in Appliance class.
+     * 
+     * @param output ObjectOutputStream object.
      */
     public static void save(ObjectOutputStream output) throws IOException {
         output.writeObject(nextId);
     }
     /**
-    * Retrieves the static id counter.
+    * Retrieves the static fields in Appliance class.
     */
     public static void retrieve(ObjectInputStream input) throws IOException, 
-                            ClassNotFoundException {
-    	nextId = (int) input.readObject();
+        ClassNotFoundException {
+    		nextId = (int) input.readObject();
     }
 	
+	/**
+	 * String form of appliance.
+	 */
 	public String toString() {
-		String output = this.getClass().getSimpleName() + " id: " + this.getId() + " Brand: " + brandName + " Model: " + "Price: " + price + " Quantity: " + quantity;
+		String output = this.getClass().getSimpleName() + " id: " + this.getId() + 
+			" Brand: " + brandName + " Model: " + "Price: " + price + 
+			" Quantity: " + quantity;
 		return output;
 	}
 } 

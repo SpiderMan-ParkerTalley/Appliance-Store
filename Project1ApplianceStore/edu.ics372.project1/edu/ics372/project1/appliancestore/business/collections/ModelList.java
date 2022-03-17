@@ -12,7 +12,9 @@ import edu.ics372.project1.appliancestore.business.entities.Appliance;
  * It is iterable using a safe iterator and is serializable for saving and 
  * retrieving.
  * @author Emmanuel ojogwu
- */
+ */ 
+
+
 public class ModelList implements Iterable<Appliance>, Serializable {
     /**
      * For serialization/de-serialization of the data.
@@ -50,6 +52,9 @@ public class ModelList implements Iterable<Appliance>, Serializable {
     /**This method removes all the appliance in the models list
      * @param null
      * @return void
+    /**
+     * This method clears the list of all models/appliances. to make an empty 
+     * list.
      */
     public void clear() {
         models.clear();
@@ -57,6 +62,7 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 
     /**
      * Check whether an appliance with a given appliance id exists.
+     * 
      * @param applianceId String the id of the appliance
      * @return Appliance appliance object if found, null otherwise.
      */
@@ -72,6 +78,7 @@ public class ModelList implements Iterable<Appliance>, Serializable {
 
     /**
      * Inserts an appliance into the collection.
+     * 
      * @param appliance Appliance the appliance to be inserted.
      * @return boolean true if the appliance could be inserted. false otherwise.
      */
@@ -96,6 +103,11 @@ public class ModelList implements Iterable<Appliance>, Serializable {
      */
     public List<Appliance> getModelList() {
         return models;
+    }    
+    
+    public boolean removeModel(Appliance appliance) {
+        models.remove(appliance);
+        return true;
     }
 
     /**
