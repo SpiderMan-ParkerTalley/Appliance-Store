@@ -48,7 +48,7 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
     }
 
     /**
-     * This method clears the list of back orders to make an empty list.
+     * This method clears the list of all back orders to make an empty list.
      */
     public void clear() {
         backOrders.clear();
@@ -93,15 +93,6 @@ public class BackOrderList implements Iterable<BackOrder>, Serializable {
             return true;
         }
         return false;
-    }
-
-    /**
-     * Retrieves a list containing all back orders.
-     * 
-     * @return List<BackOrder> list of back orders.
-     */
-    public List<BackOrder> getBackOrderList() {
-        return this.backOrders;
     }
 
     @Override

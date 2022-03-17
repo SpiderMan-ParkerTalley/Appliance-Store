@@ -316,9 +316,10 @@ public class UserInterface {
 	public void purchaseModel() {
 		Request.instance().reset(); // TODO Watch this, I think it's a good idea to reset in the UI with each new request. Thoughts?
 		Result result = new Result();
+		//customer ID input
+		Request.instance().setCustomerId(getToken("Enter customer's ID: "));
 		do {
-			// Customer and appliance input.
-			Request.instance().setCustomerId(getToken("Enter customer's ID: "));
+			// Appliance ID and quantity input
 			Request.instance().setApplianceID(getToken("Enter appliance id"));
 			Request.instance().setQuantity(getInteger("Enter amount to buy"));
 			result = applianceStore.purchaseModel(Request.instance());
@@ -338,7 +339,7 @@ public class UserInterface {
 				break;
 			case Result.CUSTOMER_NOT_FOUND:
 				System.out.println("The customer ID was not found.");
-				break;
+				return;
 			case Result.APPLIANCE_NOT_FOUND:
 				System.out.println("The appliance ID was not found.");
 				break;
@@ -402,7 +403,7 @@ public class UserInterface {
 		} 
 		// Customer has not purchased the appliance.
 		else if (result.getResultCode() == Result.CUSTOMER_HAS_NOT_PURCHASED_APPLIANCE) {
-			System.out.println("Cannot enroll customer in repair plan." + 
+			System.out.println("Cannot enroll customer in repair plan. " + 
 								"This customer has not purchased this appliance.");
 		} 
 		// Appliance is not eligible for repair plan.

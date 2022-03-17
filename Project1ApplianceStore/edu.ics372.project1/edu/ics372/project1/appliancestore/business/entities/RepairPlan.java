@@ -26,8 +26,8 @@ public class RepairPlan implements Serializable {
     /**
      * Creates a repair plan with the given customer and appliance.
      * 
-     * @param customer Customer customer.
-     * @param appliance Appliance appliance.
+     * @param customer Customer customer associated with repair plan.
+     * @param appliance Appliance appliance associated with repair plan.
      */
     public RepairPlan(Customer customer, ApplianceWithRepairPlan appliance) {
         this.customer = customer;
