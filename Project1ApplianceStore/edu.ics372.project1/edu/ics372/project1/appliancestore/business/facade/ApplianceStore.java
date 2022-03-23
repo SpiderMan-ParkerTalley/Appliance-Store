@@ -315,6 +315,8 @@ public class ApplianceStore implements Serializable {
 		RepairPlan repairPlan = 
 			customers.search(request.getCustomerId()).searchRepairPlan(request.getApplianceId());
 		if (repairPlan == null) {
+			result.setCustomerId(Request.instance().getCustomerId());
+			result.setApplianceID(Request.instance().getApplianceId());
 			result.setResultCode(Result.REPAIR_PLAN_NOT_FOUND);
 			return result;
 		}
@@ -480,7 +482,8 @@ public class ApplianceStore implements Serializable {
 
 	/**
 	 * Charges all repair plans for all customers. 
-	 */
+	 * @return The Result object
+	 **/
 	public Result chargeRepairPlans() {
 		Result result = new Result();
 		Double amountCharged = 0.0;
